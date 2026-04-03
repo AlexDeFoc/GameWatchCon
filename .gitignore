@@ -1,5 +1,2 @@
-.cache/
-out/
-build/
-.vs/
-vc140.pdb
+.idea/
+Output/
