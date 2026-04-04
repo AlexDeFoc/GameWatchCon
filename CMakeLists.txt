@@ -3,7 +3,6 @@ project(GameWatchCon)
 
 set(CMAKE_CXX_STANDARD 23)
 
-add_executable(GameWatchCon Code/Core/Source/main.cpp
-        Code/Core/Source/Console.cpp)
+add_executable(GameWatchCon Code/Core/Source/Main.cpp)
 
-include_directories(Code/Core/Include Code/Interfaces/Include)
+include_directories(Code/App)
