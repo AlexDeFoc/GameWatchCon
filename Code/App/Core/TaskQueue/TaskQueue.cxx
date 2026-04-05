@@ -1,4 +1,10 @@
-#include "Core/TaskQueue/TaskQueue.hpp"
+module;
+
+#include <memory>
+#include <vector>
+
+module Core;
+import :TaskQueue;
 
 using namespace gw::con::core;
 
