@@ -16,8 +16,17 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-export module Tasks;
+module;
 
-export import :StartApp;
-export import :StopApp;
-export import :ListMainMenuOptions;
+module Tasks;
+import :ListMainMenuOptions;
+
+using namespace gw::con::tasks;
+using namespace gw::con::core;
+
+ListMainMenuOptions::ListMainMenuOptions(Context ctx) noexcept : Task{Kind::Unit, std::move(ctx)}, console_write_access_{Task::ctx.console} {}
+
+auto ListMainMenuOptions::Run() noexcept -> void {
+}
+
+auto ListMainMenuOptions::ExpandSelf() noexcept -> std::optional<std::vector<std::unique_ptr<Task>>> { return {}; }

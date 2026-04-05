@@ -27,11 +27,11 @@ import Tasks;
 using namespace gw::con::core;
 using namespace gw::con::tasks;
 
-App::App() noexcept : app_state_{}, app_config_{}, task_stack_{} {}
+App::App() noexcept : app_state_{}, app_config_{}, task_stack_{}, console_{} {}
 
 auto App::Start() noexcept -> void {
     app_state_.SetStatus(AppStatusAccess::Status::Active);
-    task_stack_.Push(std::make_unique<StartApp>(Task::Context{app_state_, app_config_}));
+    task_stack_.Push(std::make_unique<StartApp>(Task::Context{app_state_, app_config_, console_}));
 
     while (app_state_.GetStatus() == AppStatusAccess::Status::Active) {
         ExpandTask();
@@ -41,7 +41,7 @@ auto App::Start() noexcept -> void {
 
 auto App::ExpandTask() noexcept -> void {
     if (task_stack_.InspectTop() == nullptr) {
-        task_stack_.Push(std::make_unique<StopApp>(Task::Context{app_state_, app_config_}));
+        task_stack_.Push(std::make_unique<StopApp>(Task::Context{app_state_, app_config_, console_}));
         return;
     }
 

@@ -25,6 +25,7 @@ export module Core:Task;
 
 import :AppState;
 import :AppConfig;
+import :Console;
 
 export namespace gw::con::core {
 class Task {
@@ -33,11 +34,14 @@ public:
                       Unit };
 
     struct Context {
-        Context(AppState&, AppConfig&) noexcept;
+        Context(AppState&, AppConfig&, Console&) noexcept;
 
         AppState& app_state;
         AppConfig& app_config;
+        Console& console;
     };
+
+    enum class Type : int { ListMainMenuOptions }; // TODO: Keep adding tasks here!
 
     Task(Kind, Context) noexcept;
     virtual ~Task() noexcept = default;

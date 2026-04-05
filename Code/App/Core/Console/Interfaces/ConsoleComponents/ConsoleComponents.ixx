@@ -16,8 +16,21 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-export module Tasks;
+export module Core:ConsoleComponents;
 
-export import :StartApp;
-export import :StopApp;
-export import :ListMainMenuOptions;
+export namespace gw::con::core {
+class ConsoleComponents {
+public:
+    enum class MsgType : int { Info,
+                               Tip,
+                               Request,
+                               Error };
+
+    enum class InputRequestStatus : int { Success,
+                                          Cancelled,
+                                          Invalid };
+
+    enum class RequestIsCancellable : bool { No,
+                                             Yes };
+};
+} // namespace gw::con::core

@@ -16,8 +16,24 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-export module Tasks;
+module;
 
-export import :StartApp;
-export import :StopApp;
-export import :ListMainMenuOptions;
+#include <memory>
+#include <optional>
+#include <vector>
+
+export module Tasks:ListMainMenuOptions;
+
+import Core;
+
+export namespace gw::con::tasks {
+class ListMainMenuOptions : public core::Task {
+public:
+    explicit ListMainMenuOptions(Context) noexcept;
+    auto Run() noexcept -> void override;
+    [[nodiscard]] auto ExpandSelf() noexcept -> std::optional<std::vector<std::unique_ptr<Task>>> override;
+
+private:
+    core::ConsoleWriteAccess& console_write_access_;
+};
+} // namespace gw::con::tasks
