@@ -2,7 +2,7 @@
 
 #include "Core/AppConfig/AppConfig.hpp"
 #include "Core/AppState/AppState.hpp"
-#include "Core/TaskStack/TaskStack.hpp"
+#include "Core/TaskQueue/TaskQueue.hpp"
 
 namespace gw::con::core {
 class App {
@@ -15,6 +15,6 @@ public:
 private:
     AppState app_state_;
     AppConfig app_config_;
-    TaskStack task_stack_;
+    TaskQueue task_stack_;
 };
 } // namespace gw::con::core

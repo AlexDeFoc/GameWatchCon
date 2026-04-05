@@ -21,8 +21,7 @@ auto gw::con::core::App::ExpandTask() noexcept -> void {
     }
 
     if (task_stack_.InspectTop()->GetKind() == TaskKind::Bundle) {
-        for (const auto bundle = task_stack_.Pop(); auto& task : *bundle->ExpandSelf())
-            task_stack_.Push(std::move(task));
+        task_stack_.PushReversedList(*((task_stack_.Pop())->ExpandSelf()));
     }
 }
 

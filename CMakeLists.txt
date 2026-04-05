@@ -7,7 +7,7 @@ add_executable(GameWatchCon)
 target_sources(GameWatchCon PRIVATE
         Code/App/Core/AppEntryPoint/Main.cpp
         Code/App/Core/App/App.cpp
-        Code/App/Core/TaskStack/TaskStack.cpp
+        Code/App/Core/TaskQueue/TaskQueue.cpp
         Code/App/Core/AppConfig/AppConfig.cpp
 
         Code/App/Core/Task/Base.cpp

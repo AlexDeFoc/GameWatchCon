@@ -11,5 +11,6 @@ auto StartApp::Run() noexcept -> void { app_running_status_.ChangeAppRunningStat
 auto StartApp::ExpandSelf() noexcept -> std::optional<std::vector<std::unique_ptr<Task>>> {
     std::vector<std::unique_ptr<Task>> bundle{};
     bundle.emplace_back(std::make_unique<tasks::StopApp>(std::move(ctx)));
+
     return bundle;
 }
