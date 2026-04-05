@@ -2,6 +2,6 @@
 
 using namespace gw::con::core;
 
-Task::Task(TaskKind kind, std::unique_ptr<TaskContext> ctx) noexcept : kind_{kind}, ctx{std::move(ctx)} {}
+Task::Task(TaskKind kind, TaskContext ctx) noexcept : ctx{std::move(ctx)}, kind_{kind} {}
 
 auto Task::GetKind() const noexcept -> TaskKind { return kind_; }

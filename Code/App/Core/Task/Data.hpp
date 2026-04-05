@@ -4,12 +4,9 @@
 #include "Core/AppState/AppState.hpp"
 
 namespace gw::con::core {
-class TaskContext {
-public:
+struct TaskContext {
     TaskContext(AppState&, AppConfig&) noexcept;
-    virtual ~TaskContext() = default;
 
-protected:
     AppState& app_state;
     AppConfig& app_config;
 };
