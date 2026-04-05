@@ -1,17 +1,21 @@
-#include "TaskStack.hpp"
+#include "Core/TaskStack/TaskStack.hpp"
 
 using namespace gw::con::core;
 
-auto TaskStack::Push(Task task) noexcept -> void {
-    tasks_.emplace_back(task);
-}
+auto TaskStack::Push(std::unique_ptr<Task> new_task) noexcept -> void { tasks_.push_back(std::move(new_task)); };
 
-auto TaskStack::Pop() noexcept -> Task {
-    const auto top_task = tasks_.back();
+auto TaskStack::Pop() noexcept -> std::unique_ptr<Task> {
+    if (tasks_.empty())
+        return nullptr;
+
+    auto top = std::move(tasks_.back());
     tasks_.pop_back();
-    return top_task;
+    return top;
 }
 
-auto TaskStack::InspectTop() const noexcept -> Task {
-    return tasks_.back();
+auto TaskStack::InspectTop() const noexcept -> const Task* {
+    if (tasks_.empty())
+        return nullptr;
+
+    return tasks_.back().get();
 }

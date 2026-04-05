@@ -6,11 +6,18 @@ add_executable(GameWatchCon)
 
 target_sources(GameWatchCon PRIVATE
         Code/App/Core/AppEntryPoint/Main.cpp
+        Code/App/Core/App/App.cpp
         Code/App/Core/TaskStack/TaskStack.cpp
-        Code/App/Core/AppState/AppState.cpp
+        Code/App/Core/AppConfig/AppConfig.cpp
 
+        Code/App/Core/Task/Base.cpp
+        Code/App/Core/Task/Data.cpp
+
+        Code/App/Core/AppState/AppState.cpp
+        Code/App/Core/AppState/Interfaces/IAppRunningStatus/IAppRunningStatus.cpp
+
+        Code/App/Tasks/StartApp/StartApp.cpp
         Code/App/Tasks/StopApp/StopApp.cpp
-        Code/App/Tasks/StopApp/Interfaces/IAppRunningStatus.cpp
 )
 
 target_include_directories(GameWatchCon PRIVATE Code/App/)

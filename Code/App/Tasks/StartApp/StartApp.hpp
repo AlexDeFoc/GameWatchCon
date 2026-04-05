@@ -4,9 +4,9 @@
 #include "Core/Task/Base.hpp"
 
 namespace gw::con::tasks {
-class StopApp : public core::Task {
+class StartApp : public core::Task {
 public:
-    StopApp(core::TaskContext) noexcept;
+    StartApp(core::TaskContext) noexcept;
     auto Run() noexcept -> void override;
     [[nodiscard]] auto ExpandSelf() noexcept -> std::optional<std::vector<std::unique_ptr<Task>>> override;
 

@@ -1,5 +1,5 @@
 #pragma once
 
-#include "Core/AppState/AppState.hpp"
+#include "Core/App/App.hpp"
 
 using namespace gw::con::core;

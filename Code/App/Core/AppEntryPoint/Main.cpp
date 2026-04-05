@@ -1,9 +1,9 @@
 #include "Main.hpp"
 
 int main() {
-    AppState app_state{};
+    App app{};
 
-    app_state.Start();
+    app.Start();
 
     return 0;
 }
