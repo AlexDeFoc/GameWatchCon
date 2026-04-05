@@ -1,5 +1,7 @@
 export module Core;
 
+export import :Console;
+
 export import :AppConfig;
 
 export import :AppStatusAccess;
