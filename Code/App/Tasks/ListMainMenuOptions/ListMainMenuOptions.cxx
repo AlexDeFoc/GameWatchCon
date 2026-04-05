@@ -18,6 +18,9 @@
 
 module;
 
+#include <optional>
+#include <print>
+
 module Tasks;
 import :ListMainMenuOptions;
 
@@ -27,6 +30,14 @@ using namespace gw::con::core;
 ListMainMenuOptions::ListMainMenuOptions(Context ctx) noexcept : Task{Kind::Unit, std::move(ctx)}, console_write_access_{Task::ctx.console} {}
 
 auto ListMainMenuOptions::Run() noexcept -> void {
+    console_write_access_.ClearScreen();
+
+    std::println("1. List games");
+    std::println("2. Edit games");
+    std::println("3. Add new game");
+    std::println("4. Settings");
+    std::println("5. Check for updates");
+    std::println("0. Exit app");
 }
 
 auto ListMainMenuOptions::ExpandSelf() noexcept -> std::optional<std::vector<std::unique_ptr<Task>>> { return {}; }

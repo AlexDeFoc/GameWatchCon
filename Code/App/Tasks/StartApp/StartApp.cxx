@@ -24,7 +24,8 @@ module;
 
 module Tasks;
 import :StartApp;
-import :StopApp;
+import :StopApp; // TODO: Remove (reason: testing only)
+import :ListMainMenuOptions;
 
 using namespace gw::con::tasks;
 using namespace gw::con::core;
@@ -35,6 +36,7 @@ auto StartApp::Run() noexcept -> void { app_status_.SetStatus(AppStatusAccess::S
 
 auto StartApp::ExpandSelf() noexcept -> std::optional<std::vector<std::unique_ptr<Task>>> {
     std::vector<std::unique_ptr<Task>> bundle{};
-    bundle.emplace_back(std::make_unique<StopApp>(std::move(ctx)));
+    bundle.emplace_back(std::make_unique<ListMainMenuOptions>(std::move(ctx)));
+    bundle.emplace_back(std::make_unique<StopApp>(std::move(ctx))); // TODO: Remove (reason: testing only)
     return bundle;
 }
