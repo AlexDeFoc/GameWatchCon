@@ -1,13 +1,13 @@
-#pragma once
+export module Core:App;
 
-#include "Core/AppConfig/AppConfig.hpp"
-#include "Core/AppState/AppState.hpp"
-#include "Core/TaskQueue/TaskQueue.hpp"
+import :AppState;
+import :AppConfig;
+import :TaskQueue;
 
-namespace gw::con::core {
+export namespace gw::con::core {
 class App {
 public:
-    App() noexcept = default;
+    App() noexcept;
     auto Start() noexcept -> void;
     auto ExpandTask() noexcept -> void;
     auto ProcessTask() noexcept -> void;

@@ -1,4 +1,6 @@
-#include "Main.hpp"
+import Core;
+
+using namespace gw::con::core;
 
 int main() {
     App app{};
