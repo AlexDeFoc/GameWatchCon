@@ -4,9 +4,11 @@
 
 using namespace gw::con::tasks;
 
-StartApp::StartApp(core::AppState& app_state, core::AppConfig& app_config) noexcept : Task{app_state, app_config, core::TaskKind::Bundle} {}
+StartApp::Context::Context(TaskContext&& context) noexcept : TaskContext{std::move(context)}, app_running_status{app_state} {}
 
-auto StartApp::Run() noexcept -> void { app_state.ChangeAppRunningStatus(true); }
+StartApp::StartApp(core::TaskContext context) noexcept : Task{core::TaskKind::Bundle, std::make_unique<Context>(std::move(context))} {}
+
+auto StartApp::Run() noexcept -> void { (std::reinterpret_pointer_cast<Context>(ctx))->app_running_status.ChangeAppRunningStatus(true); }
 
 auto StartApp::ExpandSelf() const noexcept -> std::vector<std::shared_ptr<Task>> {
     return {};

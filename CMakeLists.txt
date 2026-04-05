@@ -9,7 +9,9 @@ target_sources(GameWatchCon PRIVATE
         Code/App/Core/App/App.cpp
         Code/App/Core/TaskStack/TaskStack.cpp
         Code/App/Core/AppConfig/AppConfig.cpp
+
         Code/App/Core/Task/Base.cpp
+        Code/App/Core/Task/Data.cpp
 
         Code/App/Core/AppState/AppState.cpp
         Code/App/Core/AppState/Interfaces/IAppRunningStatus/IAppRunningStatus.cpp
