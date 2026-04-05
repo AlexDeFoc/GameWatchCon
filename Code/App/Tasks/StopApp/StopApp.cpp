@@ -6,6 +6,6 @@ StopApp::StopApp(core::TaskContext ctx) noexcept : Task{core::TaskKind::Unit, st
 
 auto StopApp::Run() noexcept -> void { app_running_status_.ChangeAppRunningStatus(false); }
 
-auto StopApp::ExpandSelf() const noexcept -> std::vector<std::shared_ptr<Task>> {
-    return {};
+auto StopApp::ExpandSelf() noexcept -> std::optional<std::vector<std::unique_ptr<Task>>> {
+    return std::nullopt;
 }

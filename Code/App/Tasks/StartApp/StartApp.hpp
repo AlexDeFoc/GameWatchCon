@@ -8,7 +8,7 @@ class StartApp : public core::Task {
 public:
     StartApp(core::TaskContext) noexcept;
     auto Run() noexcept -> void override;
-    [[nodiscard]] auto ExpandSelf() const noexcept -> std::vector<std::shared_ptr<Task>> override;
+    [[nodiscard]] auto ExpandSelf() noexcept -> std::optional<std::vector<std::unique_ptr<Task>>> override;
 
 private:
     core::app_state_interfaces::IAppRunningStatus& app_running_status_;

@@ -8,6 +8,8 @@ StartApp::StartApp(core::TaskContext ctx) noexcept : Task{core::TaskKind::Bundle
 
 auto StartApp::Run() noexcept -> void { app_running_status_.ChangeAppRunningStatus(true); }
 
-auto StartApp::ExpandSelf() const noexcept -> std::vector<std::shared_ptr<Task>> {
-    return {std::make_shared<tasks::StopApp>(ctx)};
+auto StartApp::ExpandSelf() noexcept -> std::optional<std::vector<std::unique_ptr<Task>>> {
+    std::vector<std::unique_ptr<Task>> bundle{};
+    bundle.emplace_back(std::make_unique<tasks::StopApp>(std::move(ctx)));
+    return bundle;
 }
