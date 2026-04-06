@@ -19,11 +19,11 @@
 module;
 #include <memory>
 
-export module Core:Task;
+export module Task;
 
-import :AppState;
-import :AppConfig;
-import :Console;
+import AppState;
+import AppConfig;
+import Console;
 
 export namespace gw::con::core {
 class Task {

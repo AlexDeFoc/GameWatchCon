@@ -16,11 +16,23 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-module AppState;
-import :AppStatusAccess;
+module;
 
-using namespace gw::con::core;
+#include <string_view>
 
-auto AppStatusAccess::GetStatus() const noexcept -> Status { return app_status; }
+export module GameLibrary:ReadAccess;
 
-auto AppStatusAccess::SetStatus(const Status new_status) noexcept -> void { app_status = new_status; }
+import :Base;
+
+export namespace gw::con::core {
+class GameLibraryReadAccess : virtual public GameLibraryBase {
+public:
+    enum class GameLibraryStatus : int { Empty,
+                                         NotEmpty
+    };
+
+    [[nodiscard]] auto ListGames() const noexcept -> GameLibraryStatus;
+
+    [[nodiscard]] auto GetGameTitle(std::size_t) const noexcept -> std::string_view;
+};
+} // namespace gw::con::core

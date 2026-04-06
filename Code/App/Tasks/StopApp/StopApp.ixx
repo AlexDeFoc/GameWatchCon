@@ -22,7 +22,8 @@ module;
 
 export module Tasks:StopApp;
 
-import Core;
+import Task;
+import AppState;
 
 export namespace gw::con::tasks {
 class StopApp : public core::Task {

@@ -16,11 +16,29 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-module AppState;
-import :AppStatusAccess;
+module;
+
+#include <cassert>
+#include <print>
+
+module GameLibrary;
+import :ReadAccess;
 
 using namespace gw::con::core;
 
-auto AppStatusAccess::GetStatus() const noexcept -> Status { return app_status; }
+auto GameLibraryReadAccess::ListGames() const noexcept -> GameLibraryStatus {
+    if (games_.empty())
+        return GameLibraryStatus::Empty;
 
-auto AppStatusAccess::SetStatus(const Status new_status) noexcept -> void { app_status = new_status; }
+    for (std::size_t game_index{1}; const auto& game : games_) {
+        std::println("{}. {} - {}", game_index, game.GetTitle(), game.GetPrintableClock());
+        game_index++;
+    }
+
+    return GameLibraryStatus::NotEmpty;
+}
+
+auto GameLibraryReadAccess::GetGameTitle(const std::size_t index) const noexcept -> std::string_view {
+    assert(index < games_.size() && "Provided out of range index to GameLibraryReadAccess::GetGameTitle");
+    return games_[index].GetTitle();
+}

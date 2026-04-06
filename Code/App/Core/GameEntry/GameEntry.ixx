@@ -16,11 +16,28 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-module AppState;
-import :AppStatusAccess;
+module;
 
-using namespace gw::con::core;
+#include <chrono>
+#include <string>
 
-auto AppStatusAccess::GetStatus() const noexcept -> Status { return app_status; }
+export module GameEntry;
 
-auto AppStatusAccess::SetStatus(const Status new_status) noexcept -> void { app_status = new_status; }
+import GameClock;
+
+export namespace gw::con::core {
+class GameEntry {
+public:
+    GameEntry() noexcept = default;
+
+    auto SetTitle(std::string) noexcept -> void;
+    [[nodiscard]] auto GetTitle() const noexcept -> std::string_view;
+    auto AddTime(std::chrono::steady_clock::duration) noexcept -> void;
+    auto ResetClock() noexcept -> void;
+    auto GetPrintableClock() const noexcept -> std::string;
+
+private:
+    std::string title_;
+    GameClock clock_;
+};
+} // namespace gw::con::core

@@ -21,7 +21,7 @@ module;
 #include <cassert>
 #include <print>
 
-module Core;
+module Console;
 import :ConsoleWriteAccess;
 
 using namespace gw::con::core;

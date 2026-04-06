@@ -20,8 +20,9 @@ module;
 
 #include <memory>
 
-module Core;
-import :App;
+module App;
+
+import Task;
 import Tasks;
 
 using namespace gw::con::core;

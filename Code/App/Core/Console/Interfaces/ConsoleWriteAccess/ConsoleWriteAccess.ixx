@@ -21,7 +21,7 @@ module;
 #include <string>
 #include <vector>
 
-export module Core:ConsoleWriteAccess;
+export module Console:ConsoleWriteAccess;
 import :ConsoleComponents;
 
 export namespace gw::con::core {

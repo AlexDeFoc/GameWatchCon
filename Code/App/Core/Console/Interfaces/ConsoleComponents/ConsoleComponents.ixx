@@ -16,7 +16,7 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-export module Core:ConsoleComponents;
+export module Console:ConsoleComponents;
 
 export namespace gw::con::core {
 class ConsoleComponents {

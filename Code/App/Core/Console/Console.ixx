@@ -18,11 +18,11 @@
 
 // TODO: Might wanna configure the console for windows with unicode & vt sequences
 
-module;
+export module Console;
 
-export module Core:Console;
-import :ConsoleComponents;
-import :ConsoleReadAccess;
+export import :ConsoleComponents;
+export import :ConsoleWriteAccess;
+export import :ConsoleReadAccess;
 
 export namespace gw::con::core {
 class Console : public ConsoleComponents,

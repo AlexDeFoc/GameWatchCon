@@ -22,7 +22,8 @@ module;
 
 export module Tasks:ValidateMainMenuOptionChoice;
 
-import Core;
+import Task;
+import Console;
 
 export namespace gw::con::tasks {
 class ValidateMainMenuOptionChoice : public core::Task {

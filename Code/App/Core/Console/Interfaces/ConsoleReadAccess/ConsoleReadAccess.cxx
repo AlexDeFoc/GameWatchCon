@@ -20,7 +20,7 @@ module;
 
 #include <string_view>
 
-module Core;
+module Console;
 import :ConsoleReadAccess;
 
 using namespace gw::con::core;

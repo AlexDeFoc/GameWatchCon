@@ -20,8 +20,7 @@ module;
 
 #include <memory>
 
-module Core;
-import :TaskQueue;
+module TaskQueue;
 
 using namespace gw::con::core;
 

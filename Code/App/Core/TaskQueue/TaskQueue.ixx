@@ -21,9 +21,9 @@ module;
 #include <memory>
 #include <queue>
 
-export module Core:TaskQueue;
+export module TaskQueue;
 
-import :Task;
+import Task;
 
 export namespace gw::con::core {
 class TaskQueue {

@@ -21,7 +21,8 @@ module;
 #include <iostream>
 #include <string>
 
-export module Core:ConsoleReadAccess;
+export module Console:ConsoleReadAccess;
+
 import :ConsoleComponents;
 import :ConsoleWriteAccess;
 

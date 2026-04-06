@@ -16,19 +16,26 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-export module Core;
+module;
 
-export import :Console;
-export import :ConsoleComponents;
-export import :ConsoleWriteAccess;
-export import :ConsoleReadAccess;
+#include <chrono>
 
-export import :AppConfig;
+export module GameClock;
 
-export import :AppStatusAccess;
-export import :AppState;
+export namespace gw::con::core {
+class GameClock {
+public:
+    GameClock() noexcept;
 
-export import :Task;
-export import :TaskQueue;
+    auto AddTime(std::chrono::steady_clock::duration) noexcept -> void;
+    auto Reset() noexcept -> void;
+    [[nodiscard]] auto GetDays() const noexcept -> std::chrono::days;
+    [[nodiscard]] auto GetHours() const noexcept -> std::chrono::hours;
+    [[nodiscard]] auto GetMinutes() const noexcept -> std::chrono::minutes;
+    [[nodiscard]] auto GetSeconds() const noexcept -> std::chrono::seconds;
+    [[nodiscard]] auto GetMilliseconds() const noexcept -> std::chrono::milliseconds;
 
-export import :App;
+private:
+    std::chrono::steady_clock::duration duration_;
+};
+} // namespace gw::con::core

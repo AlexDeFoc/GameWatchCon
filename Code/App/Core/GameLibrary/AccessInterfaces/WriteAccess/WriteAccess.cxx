@@ -16,11 +16,17 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-module AppState;
-import :AppStatusAccess;
+module;
+
+#include <cassert>
+#include <string>
+
+module GameLibrary;
+import :WriteAccess;
 
 using namespace gw::con::core;
 
-auto AppStatusAccess::GetStatus() const noexcept -> Status { return app_status; }
-
-auto AppStatusAccess::SetStatus(const Status new_status) noexcept -> void { app_status = new_status; }
+auto GameLibraryWriteAccess::SetGameTitle(const std::size_t index, std::string new_title) noexcept -> void {
+    assert(index < games_.size() && "Provided out of range index to GameLibraryWriteAccess::SetGameTitle");
+    games_[index].SetTitle(std::move(new_title));
+}
