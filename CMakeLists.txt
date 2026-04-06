@@ -5,6 +5,8 @@ project(GameWatchCon LANGUAGES CXX)
 add_executable(GameWatchCon)
 
 target_sources(GameWatchCon PUBLIC FILE_SET CXX_MODULES FILES
+        Code/App/Core/GameClock/GameClock.ixx
+
         Code/App/Core/Console/Console.ixx
         Code/App/Core/Console/Interfaces/ConsoleComponents/ConsoleComponents.ixx
         Code/App/Core/Console/Interfaces/ConsoleWriteAccess/ConsoleWriteAccess.ixx
@@ -24,11 +26,12 @@ target_sources(GameWatchCon PUBLIC FILE_SET CXX_MODULES FILES
         Code/App/Tasks/ValidateMainMenuOptionChoice/ValidateMainMenuOptionChoice.ixx
         Code/App/Tasks/Tasks.ixx
 
-        Code/App/Core/Core.ixx
         Code/App/Core/App/App.ixx
 )
 
 target_sources(GameWatchCon PRIVATE
+        Code/App/Core/GameClock/GameClock.cxx
+
         Code/App/Core/Console/Interfaces/ConsoleWriteAccess/ConsoleWriteAccess.cxx
         Code/App/Core/Console/Interfaces/ConsoleReadAccess/ConsoleReadAccess.cxx
 

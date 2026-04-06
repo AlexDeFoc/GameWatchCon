@@ -22,7 +22,8 @@ module;
 
 export module Tasks:GetMainMenuOptionChoice;
 
-import Core;
+import Task;
+import Console;
 
 export namespace gw::con::tasks {
 class GetMainMenuOptionChoice : public core::Task {

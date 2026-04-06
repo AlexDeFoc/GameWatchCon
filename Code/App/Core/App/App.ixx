@@ -16,19 +16,18 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-export module Core:App;
+export module App;
 
-import :AppState;
-import :AppConfig;
-import :TaskQueue;
-import :Console;
+import AppState;
+import AppConfig;
+import TaskQueue;
+import Console;
 
 export namespace gw::con::core {
 class App {
 public:
     App() noexcept;
     auto Start() noexcept -> void;
-    auto ExpandTask() noexcept -> void;
     auto ProcessTask() noexcept -> void;
 
 private:

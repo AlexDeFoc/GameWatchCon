@@ -16,19 +16,5 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-export module Core;
-
-export import :Console;
-export import :ConsoleComponents;
-export import :ConsoleWriteAccess;
-export import :ConsoleReadAccess;
-
-export import :AppConfig;
-
-export import :AppStatusAccess;
-export import :AppState;
-
-export import :Task;
-export import :TaskQueue;
-
-export import :App;
+module Core;
+import :GameEntry;

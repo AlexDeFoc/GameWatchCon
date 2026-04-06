@@ -16,9 +16,9 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-export module Core:AppState;
+export module AppState;
 
-import :AppStatusAccess;
+export import :AppStatusAccess;
 
 export namespace gw::con::core {
 class AppState : public AppStatusAccess {

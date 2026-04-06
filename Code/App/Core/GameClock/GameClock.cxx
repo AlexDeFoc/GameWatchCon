@@ -16,11 +16,8 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-module AppState;
-import :AppStatusAccess;
+module GameClock;
 
 using namespace gw::con::core;
 
-auto AppStatusAccess::GetStatus() const noexcept -> Status { return app_status; }
-
-auto AppStatusAccess::SetStatus(const Status new_status) noexcept -> void { app_status = new_status; }
+GameClock::GameClock() noexcept : days_count_{0}, hours_count_{0}, minutes_count_{0}, seconds_count_{0}, milliseconds_count_{0} {}

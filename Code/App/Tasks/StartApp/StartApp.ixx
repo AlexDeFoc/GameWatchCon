@@ -20,9 +20,10 @@ module;
 
 #include <memory>
 
-export module Tasks:StartApp;
+import Task;
+import AppState;
 
-import Core;
+export module Tasks:StartApp;
 
 export namespace gw::con::tasks {
 class StartApp : public core::Task {

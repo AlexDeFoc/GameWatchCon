@@ -16,11 +16,22 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-module AppState;
-import :AppStatusAccess;
+module;
 
-using namespace gw::con::core;
+#include <cstdint>
 
-auto AppStatusAccess::GetStatus() const noexcept -> Status { return app_status; }
+export module GameClock;
 
-auto AppStatusAccess::SetStatus(const Status new_status) noexcept -> void { app_status = new_status; }
+export namespace gw::con::core {
+class GameClock {
+public:
+    GameClock() noexcept;
+
+private:
+    std::uint16_t days_count_;
+    std::uint8_t hours_count_;
+    std::uint8_t minutes_count_;
+    std::uint8_t seconds_count_;
+    std::uint16_t milliseconds_count_;
+};
+} // namespace gw::con::core
