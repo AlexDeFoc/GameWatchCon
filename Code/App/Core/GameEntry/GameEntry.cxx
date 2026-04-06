@@ -16,5 +16,45 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-module Core;
-import :GameEntry;
+module;
+
+#include <chrono>
+#include <string>
+
+module GameEntry;
+
+using namespace gw::con::core;
+
+auto GameEntry::SetTitle(std::string new_title) noexcept -> void { title_ = std::move(new_title); }
+
+auto GameEntry::GetTitle() const noexcept -> std::string_view { return title_; }
+
+auto GameEntry::AddTime(std::chrono::steady_clock::duration additional_time) noexcept -> void { clock_.AddTime(std::move(additional_time)); }
+
+auto GameEntry::GetPrintableClock() const noexcept -> std::string {
+    std::vector<std::string> clock_bits{};
+
+    if (clock_.GetDays() > std::chrono::days::zero())
+        clock_bits.emplace_back(std::format("{} days", clock_.GetDays()));
+    if (clock_.GetHours() > std::chrono::hours::zero())
+        clock_bits.emplace_back(std::format("{} h", clock_.GetHours()));
+    if (clock_.GetMinutes() > std::chrono::minutes::zero())
+        clock_bits.emplace_back(std::format("{} min", clock_.GetMinutes()));
+    if (clock_.GetSeconds() > std::chrono::seconds::zero())
+        clock_bits.emplace_back(std::format("{} s", clock_.GetSeconds()));
+    if (clock_.GetMilliseconds() > std::chrono::milliseconds::zero())
+        clock_bits.emplace_back(std::format("{} ms", clock_.GetMilliseconds()));
+
+    if (clock_bits.empty())
+        return "0 s";
+
+    std::string printable_clock{};
+    for (std::size_t i{0}; i < clock_bits.size(); ++i) {
+        printable_clock += clock_bits[i];
+
+        if (i < clock_bits.size() - 1)
+            printable_clock += " : ";
+    }
+
+    return printable_clock;
+}

@@ -18,6 +18,7 @@
 
 module;
 
+#include <chrono>
 #include <string>
 
 export module GameEntry;
@@ -27,7 +28,13 @@ import GameClock;
 export namespace gw::con::core {
 class GameEntry {
 public:
-    GameEntry() noexcept;
+    GameEntry() noexcept = default;
+
+    auto SetTitle(std::string) noexcept -> void;
+    [[nodiscard]] auto GetTitle() const noexcept -> std::string_view;
+    auto AddTime(std::chrono::steady_clock::duration) noexcept -> void;
+    auto ResetClock() noexcept -> void;
+    auto GetPrintableClock() const noexcept -> std::string;
 
 private:
     std::string title_;

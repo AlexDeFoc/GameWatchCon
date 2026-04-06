@@ -18,24 +18,15 @@
 
 module;
 
-#include <chrono>
+#include <cassert>
+#include <string>
 
-export module GameClock;
+module GameLibrary;
+import :WriteAccess;
 
-export namespace gw::con::core {
-class GameClock {
-public:
-    GameClock() noexcept;
+using namespace gw::con::core;
 
-    auto AddTime(std::chrono::steady_clock::duration) noexcept -> void;
-    auto Reset() noexcept -> void;
-    [[nodiscard]] auto GetDays() const noexcept -> std::chrono::days;
-    [[nodiscard]] auto GetHours() const noexcept -> std::chrono::hours;
-    [[nodiscard]] auto GetMinutes() const noexcept -> std::chrono::minutes;
-    [[nodiscard]] auto GetSeconds() const noexcept -> std::chrono::seconds;
-    [[nodiscard]] auto GetMilliseconds() const noexcept -> std::chrono::milliseconds;
-
-private:
-    std::chrono::steady_clock::duration duration_;
-};
-} // namespace gw::con::core
+auto GameLibraryWriteAccess::SetGameTitle(const std::size_t index, std::string new_title) noexcept -> void {
+    assert(index < games_.size() && "Provided out of range index to GameLibraryWriteAccess::SetGameTitle");
+    games_[index].SetTitle(std::move(new_title));
+}

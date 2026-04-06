@@ -18,24 +18,27 @@
 
 module;
 
-#include <chrono>
+#include <cassert>
+#include <print>
 
-export module GameClock;
+module GameLibrary;
+import :ReadAccess;
 
-export namespace gw::con::core {
-class GameClock {
-public:
-    GameClock() noexcept;
+using namespace gw::con::core;
 
-    auto AddTime(std::chrono::steady_clock::duration) noexcept -> void;
-    auto Reset() noexcept -> void;
-    [[nodiscard]] auto GetDays() const noexcept -> std::chrono::days;
-    [[nodiscard]] auto GetHours() const noexcept -> std::chrono::hours;
-    [[nodiscard]] auto GetMinutes() const noexcept -> std::chrono::minutes;
-    [[nodiscard]] auto GetSeconds() const noexcept -> std::chrono::seconds;
-    [[nodiscard]] auto GetMilliseconds() const noexcept -> std::chrono::milliseconds;
+auto GameLibraryReadAccess::ListGames() const noexcept -> GameLibraryStatus {
+    if (games_.empty())
+        return GameLibraryStatus::Empty;
 
-private:
-    std::chrono::steady_clock::duration duration_;
-};
-} // namespace gw::con::core
+    for (std::size_t game_index{1}; const auto& game : games_) {
+        std::println("{}. {} - {}", game_index, game.GetTitle(), game.GetPrintableClock());
+        game_index++;
+    }
+
+    return GameLibraryStatus::NotEmpty;
+}
+
+auto GameLibraryReadAccess::GetGameTitle(const std::size_t index) const noexcept -> std::string_view {
+    assert(index < games_.size() && "Provided out of range index to GameLibraryReadAccess::GetGameTitle");
+    return games_[index].GetTitle();
+}

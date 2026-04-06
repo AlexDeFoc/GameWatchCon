@@ -5,38 +5,50 @@ project(GameWatchCon LANGUAGES CXX)
 add_executable(GameWatchCon)
 
 target_sources(GameWatchCon PUBLIC FILE_SET CXX_MODULES FILES
+        Code/App/Core/GameLibrary/GameLibrary.ixx
+        Code/App/Core/GameLibrary/Partitions/Base.ixx
+        Code/App/Core/GameLibrary/AccessInterfaces/ReadAccess/ReadAccess.ixx
+        Code/App/Core/GameLibrary/AccessInterfaces/WriteAccess/WriteAccess.ixx
+
         Code/App/Core/GameClock/GameClock.ixx
+        Code/App/Core/GameEntry/GameEntry.ixx
 
         Code/App/Core/Console/Console.ixx
         Code/App/Core/Console/Interfaces/ConsoleComponents/ConsoleComponents.ixx
         Code/App/Core/Console/Interfaces/ConsoleWriteAccess/ConsoleWriteAccess.ixx
         Code/App/Core/Console/Interfaces/ConsoleReadAccess/ConsoleReadAccess.ixx
 
-        Code/App/Core/TaskQueue/TaskQueue.ixx
         Code/App/Core/Task/Task.ixx
+
+        Code/App/Core/TaskQueue/TaskQueue.ixx
 
         Code/App/Core/AppConfig/AppConfig.ixx
 
-        Code/App/Core/AppState/Interfaces/AppStatusAccess/AppStatusAccess.ixx
         Code/App/Core/AppState/AppState.ixx
+        Code/App/Core/AppState/Interfaces/AppStatusAccess/AppStatusAccess.ixx
 
+        Code/App/Tasks/Tasks.ixx
         Code/App/Tasks/StartApp/StartApp.ixx
         Code/App/Tasks/StopApp/StopApp.ixx
         Code/App/Tasks/GetMainMenuOptionChoice/GetMainMenuOptionChoice.ixx
         Code/App/Tasks/ValidateMainMenuOptionChoice/ValidateMainMenuOptionChoice.ixx
-        Code/App/Tasks/Tasks.ixx
 
         Code/App/Core/App/App.ixx
 )
 
 target_sources(GameWatchCon PRIVATE
+        Code/App/Core/GameLibrary/AccessInterfaces/ReadAccess/ReadAccess.cxx
+        Code/App/Core/GameLibrary/AccessInterfaces/WriteAccess/WriteAccess.cxx
+
         Code/App/Core/GameClock/GameClock.cxx
+        Code/App/Core/GameEntry/GameEntry.cxx
 
         Code/App/Core/Console/Interfaces/ConsoleWriteAccess/ConsoleWriteAccess.cxx
         Code/App/Core/Console/Interfaces/ConsoleReadAccess/ConsoleReadAccess.cxx
 
-        Code/App/Core/TaskQueue/TaskQueue.cxx
         Code/App/Core/Task/Task.cxx
+
+        Code/App/Core/TaskQueue/TaskQueue.cxx
 
         Code/App/Core/AppState/Interfaces/AppStatusAccess/AppStatusAccess.cxx
 

@@ -18,24 +18,15 @@
 
 module;
 
-#include <chrono>
+#include <vector>
 
-export module GameClock;
+export module GameLibrary:Base;
+
+import GameEntry;
 
 export namespace gw::con::core {
-class GameClock {
-public:
-    GameClock() noexcept;
-
-    auto AddTime(std::chrono::steady_clock::duration) noexcept -> void;
-    auto Reset() noexcept -> void;
-    [[nodiscard]] auto GetDays() const noexcept -> std::chrono::days;
-    [[nodiscard]] auto GetHours() const noexcept -> std::chrono::hours;
-    [[nodiscard]] auto GetMinutes() const noexcept -> std::chrono::minutes;
-    [[nodiscard]] auto GetSeconds() const noexcept -> std::chrono::seconds;
-    [[nodiscard]] auto GetMilliseconds() const noexcept -> std::chrono::milliseconds;
-
-private:
-    std::chrono::steady_clock::duration duration_;
+class GameLibraryBase {
+protected:
+    std::vector<GameEntry> games_;
 };
 } // namespace gw::con::core
