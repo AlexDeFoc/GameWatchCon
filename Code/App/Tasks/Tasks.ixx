@@ -20,4 +20,5 @@ export module Tasks;
 
 export import :StartApp;
 export import :StopApp;
-export import :ListMainMenuOptions;
+export import :GetMainMenuOptionChoice;
+export import :ValidateMainMenuOptionChoice;

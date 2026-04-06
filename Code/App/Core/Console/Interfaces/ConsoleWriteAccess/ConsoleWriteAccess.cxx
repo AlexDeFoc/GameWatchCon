@@ -26,17 +26,9 @@ import :ConsoleWriteAccess;
 
 using namespace gw::con::core;
 
-auto ConsoleWriteAccess::WriteLineAndCache(const ConsoleComponents::MsgType msg_type, std::string_view msg) noexcept -> void {
-    auto full_msg = std::format("{}: {}\n", GetDecoratedMsgTag(msg_type), msg);
-    cached_msgs_.push_back(full_msg);
-    std::print("{}", full_msg);
-}
+auto ConsoleWriteAccess::WriteLineToCache(const ConsoleComponents::MsgType msg_type, std::string_view msg) noexcept -> void { cached_msgs_.push_back(std::format("{}: {}\n", GetDecoratedMsgTag(msg_type), msg)); }
 
-auto ConsoleWriteAccess::WriteAndCache(const ConsoleComponents::MsgType msg_type, std::string_view msg) noexcept -> void {
-    auto full_msg = std::format("{}: {}", GetDecoratedMsgTag(msg_type), msg);
-    cached_msgs_.push_back(full_msg);
-    std::print("{}", full_msg);
-}
+auto ConsoleWriteAccess::WriteToCache(const ConsoleComponents::MsgType msg_type, std::string_view msg) noexcept -> void { cached_msgs_.push_back(std::format("{}: {}", GetDecoratedMsgTag(msg_type), msg)); }
 
 auto ConsoleWriteAccess::WriteCachedMsgs() noexcept -> void {
     for (const auto& msg : cached_msgs_)
@@ -46,7 +38,9 @@ auto ConsoleWriteAccess::WriteCachedMsgs() noexcept -> void {
 }
 
 // Static Methods
-auto ConsoleWriteAccess::ClearScreen() noexcept -> void { std::print("\x1b[2J\x1b[H"); }
+auto ConsoleWriteAccess::ClearScreen() noexcept -> void {
+    std::print("\x1b[2J\x1b[3J\x1b[H");
+}
 
 auto ConsoleWriteAccess::WriteLine(const ConsoleComponents::MsgType msg_type, std::string_view msg) noexcept -> void { std::println("{}: {}", GetDecoratedMsgTag(msg_type), msg); }
 

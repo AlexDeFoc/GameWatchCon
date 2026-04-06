@@ -27,30 +27,16 @@ import Tasks;
 using namespace gw::con::core;
 using namespace gw::con::tasks;
 
-App::App() noexcept : app_state_{}, app_config_{}, task_stack_{}, console_{} {}
+App::App() noexcept : app_state_{} {}
 
 auto App::Start() noexcept -> void {
-    app_state_.SetStatus(AppStatusAccess::Status::Active);
-    task_stack_.Push(std::make_unique<StartApp>(Task::Context{app_state_, app_config_, console_}));
+    task_stack_.Push(std::make_unique<StartApp>(std::make_shared<Task::Context>(app_state_, app_config_, console_)));
 
-    while (app_state_.GetStatus() == AppStatusAccess::Status::Active) {
-        ExpandTask();
+    do {
         ProcessTask();
-    }
-}
-
-auto App::ExpandTask() noexcept -> void {
-    if (task_stack_.InspectTop() == nullptr) {
-        task_stack_.Push(std::make_unique<StopApp>(Task::Context{app_state_, app_config_, console_}));
-        return;
-    }
-
-    if (task_stack_.InspectTop()->GetKind() == Task::Kind::Bundle) {
-        task_stack_.PushReversedList(*((task_stack_.Pop())->ExpandSelf()));
-    }
+    } while (app_state_.GetStatus() == AppStatusAccess::Status::Active);
 }
 
 auto App::ProcessTask() noexcept -> void {
-    if (const auto task = task_stack_.Pop())
-        task->Run();
+    task_stack_.Push(task_stack_.Pop()->Run());
 }

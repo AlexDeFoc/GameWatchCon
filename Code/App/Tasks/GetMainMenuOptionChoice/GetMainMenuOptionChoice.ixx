@@ -19,21 +19,18 @@
 module;
 
 #include <memory>
-#include <optional>
-#include <vector>
 
-export module Tasks:ListMainMenuOptions;
+export module Tasks:GetMainMenuOptionChoice;
 
 import Core;
 
 export namespace gw::con::tasks {
-class ListMainMenuOptions : public core::Task {
+class GetMainMenuOptionChoice : public core::Task {
 public:
-    explicit ListMainMenuOptions(Context) noexcept;
-    auto Run() noexcept -> void override;
-    [[nodiscard]] auto ExpandSelf() noexcept -> std::optional<std::vector<std::unique_ptr<Task>>> override;
+    explicit GetMainMenuOptionChoice(const std::shared_ptr<Context>&) noexcept;
+    [[nodiscard]] auto Run() noexcept -> std::unique_ptr<Task> override;
 
 private:
-    core::ConsoleWriteAccess& console_write_access_;
+    core::Console& console;
 };
 } // namespace gw::con::tasks
