@@ -18,20 +18,29 @@
 
 module;
 
-#include <memory>
+#include <print>
 
-module Core;
-import :TaskQueue;
+module Tasks;
+import :GetMainMenuOptionChoice;
 
+using namespace gw::con::tasks;
 using namespace gw::con::core;
 
-auto TaskQueue::Push(std::unique_ptr<Task> new_task) noexcept -> void { tasks_.push(std::move(new_task)); };
+GetMainMenuOptionChoice::GetMainMenuOptionChoice(const std::shared_ptr<Context>& ctx) noexcept : Task{ctx}, console{Task::ctx->console} {}
 
-auto TaskQueue::Pop() noexcept -> std::unique_ptr<Task> {
-    if (tasks_.empty())
-        return nullptr;
+auto GetMainMenuOptionChoice::Run() noexcept -> std::unique_ptr<Task> {
+    static auto list_opts = [] {
+        std::println("1. List games");
+        std::println("2. Edit games");
+        std::println("3. Add new game");
+        std::println("4. Settings");
+        std::println("5. Check for updates");
+        std::println("0. Exit app");
+    };
 
-    auto top = std::move(tasks_.front());
-    tasks_.pop();
-    return top;
+    console.ClearScreen();
+    console.WriteCachedMsgs();
+    console.RequestMenuOptionID(list_opts, {0, 5}, ConsoleComponents::RequestIsCancellable::No);
+
+    return std::make_unique<ValidateMainMenuOptionChoice>(ctx);
 }

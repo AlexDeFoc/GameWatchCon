@@ -18,37 +18,29 @@
 
 module;
 #include <memory>
-#include <optional>
-#include <vector>
 
 export module Core:Task;
 
 import :AppState;
 import :AppConfig;
+import :Console;
 
 export namespace gw::con::core {
 class Task {
 public:
-    enum class Kind { Bundle,
-                      Unit };
-
     struct Context {
-        Context(AppState&, AppConfig&) noexcept;
+        Context(AppState&, AppConfig&, Console&) noexcept;
 
         AppState& app_state;
         AppConfig& app_config;
+        Console& console;
     };
 
-    Task(Kind, Context) noexcept;
+    explicit Task(const std::shared_ptr<Context>&) noexcept;
     virtual ~Task() noexcept = default;
-    virtual auto Run() noexcept -> void = 0;
-    [[nodiscard]] virtual auto ExpandSelf() noexcept -> std::optional<std::vector<std::unique_ptr<Task>>> = 0;
-    [[nodiscard]] virtual auto GetKind() const noexcept -> Kind;
+    [[nodiscard]] virtual auto Run() noexcept -> std::unique_ptr<Task> = 0;
 
 protected:
-    Context ctx;
-
-private:
-    Kind kind_;
+    std::shared_ptr<Context> ctx;
 };
 } // namespace gw::con::core

@@ -18,15 +18,13 @@
 
 module;
 
-#include <utility>
+#include <memory>
 
 module Core;
 import :Task;
 
 using namespace gw::con::core;
 
-Task::Context::Context(AppState& app_state, AppConfig& app_config) noexcept : app_state{app_state}, app_config{app_config} {}
+Task::Context::Context(AppState& app_state, AppConfig& app_config, Console& console) noexcept : app_state{app_state}, app_config{app_config}, console{console} {}
 
-Task::Task(const Kind kind, Context ctx) noexcept : ctx{std::move(ctx)}, kind_{kind} {}
-
-auto Task::GetKind() const noexcept -> Kind { return kind_; }
+Task::Task(const std::shared_ptr<Context>& ctx) noexcept : ctx{ctx} {}

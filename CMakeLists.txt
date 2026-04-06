@@ -6,6 +6,9 @@ add_executable(GameWatchCon)
 
 target_sources(GameWatchCon PUBLIC FILE_SET CXX_MODULES FILES
         Code/App/Core/Console/Console.ixx
+        Code/App/Core/Console/Interfaces/ConsoleComponents/ConsoleComponents.ixx
+        Code/App/Core/Console/Interfaces/ConsoleWriteAccess/ConsoleWriteAccess.ixx
+        Code/App/Core/Console/Interfaces/ConsoleReadAccess/ConsoleReadAccess.ixx
 
         Code/App/Core/TaskQueue/TaskQueue.ixx
         Code/App/Core/Task/Task.ixx
@@ -17,6 +20,8 @@ target_sources(GameWatchCon PUBLIC FILE_SET CXX_MODULES FILES
 
         Code/App/Tasks/StartApp/StartApp.ixx
         Code/App/Tasks/StopApp/StopApp.ixx
+        Code/App/Tasks/GetMainMenuOptionChoice/GetMainMenuOptionChoice.ixx
+        Code/App/Tasks/ValidateMainMenuOptionChoice/ValidateMainMenuOptionChoice.ixx
         Code/App/Tasks/Tasks.ixx
 
         Code/App/Core/Core.ixx
@@ -24,7 +29,8 @@ target_sources(GameWatchCon PUBLIC FILE_SET CXX_MODULES FILES
 )
 
 target_sources(GameWatchCon PRIVATE
-        Code/App/Core/Console/Console.cxx
+        Code/App/Core/Console/Interfaces/ConsoleWriteAccess/ConsoleWriteAccess.cxx
+        Code/App/Core/Console/Interfaces/ConsoleReadAccess/ConsoleReadAccess.cxx
 
         Code/App/Core/TaskQueue/TaskQueue.cxx
         Code/App/Core/Task/Task.cxx
@@ -33,6 +39,8 @@ target_sources(GameWatchCon PRIVATE
 
         Code/App/Tasks/StartApp/StartApp.cxx
         Code/App/Tasks/StopApp/StopApp.cxx
+        Code/App/Tasks/GetMainMenuOptionChoice/GetMainMenuOptionChoice.cxx
+        Code/App/Tasks/ValidateMainMenuOptionChoice/ValidateMainMenuOptionChoice.cxx
 
         Code/App/Core/App/App.cxx
 

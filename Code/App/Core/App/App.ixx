@@ -21,6 +21,7 @@ export module Core:App;
 import :AppState;
 import :AppConfig;
 import :TaskQueue;
+import :Console;
 
 export namespace gw::con::core {
 class App {
@@ -34,5 +35,6 @@ private:
     AppState app_state_;
     AppConfig app_config_;
     TaskQueue task_stack_;
+    Console console_;
 };
 } // namespace gw::con::core

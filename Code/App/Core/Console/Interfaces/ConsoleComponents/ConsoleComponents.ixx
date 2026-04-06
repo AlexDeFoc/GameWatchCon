@@ -16,22 +16,21 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-module;
+export module Core:ConsoleComponents;
 
-#include <memory>
+export namespace gw::con::core {
+class ConsoleComponents {
+public:
+    enum class MsgType : int { Info,
+                               Tip,
+                               Request,
+                               Error };
 
-module Core;
-import :TaskQueue;
+    enum class InputRequestStatus : int { Success,
+                                          Cancelled,
+                                          Invalid };
 
-using namespace gw::con::core;
-
-auto TaskQueue::Push(std::unique_ptr<Task> new_task) noexcept -> void { tasks_.push(std::move(new_task)); };
-
-auto TaskQueue::Pop() noexcept -> std::unique_ptr<Task> {
-    if (tasks_.empty())
-        return nullptr;
-
-    auto top = std::move(tasks_.front());
-    tasks_.pop();
-    return top;
-}
+    enum class RequestIsCancellable : bool { No,
+                                             Yes };
+};
+} // namespace gw::con::core

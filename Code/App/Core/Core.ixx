@@ -19,6 +19,9 @@
 export module Core;
 
 export import :Console;
+export import :ConsoleComponents;
+export import :ConsoleWriteAccess;
+export import :ConsoleReadAccess;
 
 export import :AppConfig;
 

@@ -20,18 +20,17 @@ module;
 
 #include <memory>
 
-module Core;
-import :TaskQueue;
+export module Tasks:ValidateMainMenuOptionChoice;
 
-using namespace gw::con::core;
+import Core;
 
-auto TaskQueue::Push(std::unique_ptr<Task> new_task) noexcept -> void { tasks_.push(std::move(new_task)); };
+export namespace gw::con::tasks {
+class ValidateMainMenuOptionChoice : public core::Task {
+public:
+    explicit ValidateMainMenuOptionChoice(const std::shared_ptr<Context>&) noexcept;
+    [[nodiscard]] auto Run() noexcept -> std::unique_ptr<Task> override;
 
-auto TaskQueue::Pop() noexcept -> std::unique_ptr<Task> {
-    if (tasks_.empty())
-        return nullptr;
-
-    auto top = std::move(tasks_.front());
-    tasks_.pop();
-    return top;
-}
+private:
+    core::Console& console;
+};
+} // namespace gw::con::tasks
