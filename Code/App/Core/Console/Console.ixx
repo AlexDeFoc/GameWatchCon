@@ -16,6 +16,8 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+// TODO: Might wanna configure the console for windows with unicode & vt sequences
+
 module;
 
 export module Core:Console;
