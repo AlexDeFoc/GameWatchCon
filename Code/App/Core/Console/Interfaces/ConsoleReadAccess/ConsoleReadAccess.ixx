@@ -42,6 +42,8 @@ public:
     [[nodiscard]] auto GetNumberInputResult() const noexcept -> int;
     [[nodiscard]] auto GetStringInputResult() const noexcept -> std::string_view;
 
+    static auto RequestKeyPress() noexcept -> void;
+
 private:
     template <typename RequestMsgFunc>
     auto RequestStringInput(RequestMsgFunc, ConsoleComponents::RequestIsCancellable = ConsoleComponents::RequestIsCancellable::Yes) noexcept -> void;

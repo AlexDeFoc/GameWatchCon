@@ -22,3 +22,5 @@ export import :StartApp;
 export import :StopApp;
 export import :GetMainMenuOptionChoice;
 export import :ValidateMainMenuOptionChoice;
+export import :ForwardUserFromMainMenu;
+export import :ListGames;

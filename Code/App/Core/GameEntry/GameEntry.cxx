@@ -25,11 +25,15 @@ module GameEntry;
 
 using namespace gw::con::core;
 
+GameEntry::GameEntry(std::string title) noexcept : title_{std::move(title)} {}
+
 auto GameEntry::SetTitle(std::string new_title) noexcept -> void { title_ = std::move(new_title); }
 
 auto GameEntry::GetTitle() const noexcept -> std::string_view { return title_; }
 
 auto GameEntry::AddTime(std::chrono::steady_clock::duration additional_time) noexcept -> void { clock_.AddTime(std::move(additional_time)); }
+
+auto GameEntry::ResetClock() noexcept -> void { clock_.Reset(); }
 
 auto GameEntry::GetPrintableClock() const noexcept -> std::string {
     std::vector<std::string> clock_bits{};

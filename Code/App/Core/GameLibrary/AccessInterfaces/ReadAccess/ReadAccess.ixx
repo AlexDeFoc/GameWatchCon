@@ -27,11 +27,9 @@ import :Base;
 export namespace gw::con::core {
 class GameLibraryReadAccess : virtual public GameLibraryBase {
 public:
-    enum class GameLibraryStatus : int { Empty,
-                                         NotEmpty
-    };
+    auto ListGames() const noexcept -> void;
 
-    [[nodiscard]] auto ListGames() const noexcept -> GameLibraryStatus;
+    [[nodiscard]] auto IsEmpty() const noexcept -> bool;
 
     [[nodiscard]] auto GetGameTitle(std::size_t) const noexcept -> std::string_view;
 };

@@ -36,7 +36,7 @@ auto ValidateMainMenuOptionChoice::Run() noexcept -> std::unique_ptr<Task> {
             return std::make_unique<GetMainMenuOptionChoice>(ctx);
 
         case ConsoleComponents::InputRequestStatus::Success:
-            return std::make_unique<StopApp>(ctx); // TODO: Change to 'ForwardBasedOnMainMenuOptionChoice'
+            return std::make_unique<ForwardUserFromMainMenu>(ctx);
 
         default:
             break;

@@ -18,27 +18,20 @@
 
 module;
 
-#include <chrono>
-#include <string>
+#include <memory>
 
-export module GameEntry;
+export module Tasks:ForwardUserFromMainMenu;
 
-import GameClock;
+import Task;
+import Console;
 
-export namespace gw::con::core {
-class GameEntry {
+export namespace gw::con::tasks {
+class ForwardUserFromMainMenu : public core::Task {
 public:
-    GameEntry() noexcept = default;
-    explicit GameEntry(std::string) noexcept;
-
-    auto SetTitle(std::string) noexcept -> void;
-    [[nodiscard]] auto GetTitle() const noexcept -> std::string_view;
-    auto AddTime(std::chrono::steady_clock::duration) noexcept -> void;
-    auto ResetClock() noexcept -> void;
-    auto GetPrintableClock() const noexcept -> std::string;
+    explicit ForwardUserFromMainMenu(const std::shared_ptr<Context>&) noexcept;
+    [[nodiscard]] auto Run() noexcept -> std::unique_ptr<Task> override;
 
 private:
-    std::string title_;
-    GameClock clock_;
+    core::ConsoleReadAccess& console_;
 };
-} // namespace gw::con::core
+} // namespace gw::con::tasks

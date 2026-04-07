@@ -18,7 +18,8 @@
 
 module;
 
-#include <string_view>
+#include <iostream>
+#include <string>
 
 module Console;
 import :ConsoleReadAccess;
@@ -40,3 +41,8 @@ auto ConsoleReadAccess::GetInputRequestStatus() const noexcept -> ConsoleCompone
 auto ConsoleReadAccess::GetNumberInputResult() const noexcept -> int { return number_input_result_; }
 
 auto ConsoleReadAccess::GetStringInputResult() const noexcept -> std::string_view { return string_input_result_; }
+
+auto ConsoleReadAccess::RequestKeyPress() noexcept -> void {
+    std::string _{};
+    std::getline(std::cin, _);
+}

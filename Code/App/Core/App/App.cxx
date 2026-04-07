@@ -31,7 +31,7 @@ using namespace gw::con::tasks;
 App::App() noexcept : app_state_{} {}
 
 auto App::Start() noexcept -> void {
-    task_stack_.Push(std::make_unique<StartApp>(std::make_shared<Task::Context>(app_state_, app_config_, console_)));
+    task_stack_.Push(std::make_unique<StartApp>(std::make_shared<Task::Context>(app_state_, app_config_, console_, game_library_)));
 
     do {
         ProcessTask();

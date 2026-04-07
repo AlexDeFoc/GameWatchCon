@@ -18,27 +18,27 @@
 
 module;
 
-#include <chrono>
-#include <string>
+#include <cassert>
+#include <memory>
 
-export module GameEntry;
+module Tasks;
+import :ForwardUserFromMainMenu;
 
-import GameClock;
+using namespace gw::con::tasks;
+using namespace gw::con::core;
 
-export namespace gw::con::core {
-class GameEntry {
-public:
-    GameEntry() noexcept = default;
-    explicit GameEntry(std::string) noexcept;
+ForwardUserFromMainMenu::ForwardUserFromMainMenu(const std::shared_ptr<Context>& ctx) noexcept : Task{ctx}, console_{Task::ctx->console} {}
 
-    auto SetTitle(std::string) noexcept -> void;
-    [[nodiscard]] auto GetTitle() const noexcept -> std::string_view;
-    auto AddTime(std::chrono::steady_clock::duration) noexcept -> void;
-    auto ResetClock() noexcept -> void;
-    auto GetPrintableClock() const noexcept -> std::string;
+auto ForwardUserFromMainMenu::Run() noexcept -> std::unique_ptr<Task> {
+    switch (console_.GetNumberInputResult()) {
+        case 0:
+            return std::make_unique<StopApp>(ctx);
+        case 1:
+            return std::make_unique<ListGames>(ctx);
+        default:
+            break;
+    }
 
-private:
-    std::string title_;
-    GameClock clock_;
-};
-} // namespace gw::con::core
+    assert(false && "Unhandled option index in ForwardUserFromMainMenu::Run");
+    std::terminate();
+}

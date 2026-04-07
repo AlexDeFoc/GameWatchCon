@@ -18,27 +18,25 @@
 
 module;
 
-#include <chrono>
-#include <string>
+#include <memory>
 
-export module GameEntry;
+module Tasks;
+import :ListGames;
 
-import GameClock;
+using namespace gw::con::tasks;
+using namespace gw::con::core;
 
-export namespace gw::con::core {
-class GameEntry {
-public:
-    GameEntry() noexcept = default;
-    explicit GameEntry(std::string) noexcept;
+ListGames::ListGames(const std::shared_ptr<Context>& ctx) noexcept : Task{ctx}, game_library_{Task::ctx->game_library}, console_{Task::ctx->console} {}
 
-    auto SetTitle(std::string) noexcept -> void;
-    [[nodiscard]] auto GetTitle() const noexcept -> std::string_view;
-    auto AddTime(std::chrono::steady_clock::duration) noexcept -> void;
-    auto ResetClock() noexcept -> void;
-    auto GetPrintableClock() const noexcept -> std::string;
+auto ListGames::Run() noexcept -> std::unique_ptr<Task> {
+    if (game_library_.IsEmpty()) {
+        console_.WriteLineToCache(ConsoleComponents::MsgType::Error, "No entries found");
+        return std::make_unique<GetMainMenuOptionChoice>(ctx);
+    }
 
-private:
-    std::string title_;
-    GameClock clock_;
-};
-} // namespace gw::con::core
+    console_.ClearScreen();
+    game_library_.ListGames();
+    console_.WriteLine(ConsoleComponents::MsgType::Tip, "Press any key to go back");
+    Console::RequestKeyPress();
+    return std::make_unique<GetMainMenuOptionChoice>(ctx);
+}
