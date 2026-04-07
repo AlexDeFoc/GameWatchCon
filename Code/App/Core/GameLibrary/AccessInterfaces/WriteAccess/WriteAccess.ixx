@@ -28,6 +28,7 @@ export namespace gw::con::core {
 class GameLibraryWriteAccess : virtual public GameLibraryBase {
 public:
     auto SetGameTitle(std::size_t, std::string) noexcept -> void;
+    auto SetGameTitle(std::size_t, std::string_view) noexcept -> void;
     auto AddGame(std::string_view) noexcept -> void;
     auto AddGame(std::string) noexcept -> void;
 };

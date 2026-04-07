@@ -18,21 +18,20 @@
 
 module;
 
-#include <string_view>
+#include <memory>
 
-export module GameLibrary:ReadAccess;
+export module Task_ForwardUserFromEditGamesMenu;
 
-import :Base;
+import Task;
+import Console;
 
-export namespace gw::con::core {
-class GameLibraryReadAccess : virtual public GameLibraryBase {
+export namespace gw::con::tasks {
+class ForwardUserFromEditGamesMenu : public core::Task {
 public:
-    auto ListGames() const noexcept -> void;
+    explicit ForwardUserFromEditGamesMenu(const std::shared_ptr<Context>&) noexcept;
+    [[nodiscard]] auto Run() noexcept -> std::unique_ptr<Task> override;
 
-    [[nodiscard]] auto IsEmpty() const noexcept -> bool;
-
-    [[nodiscard]] auto GetGameTitle(std::size_t) const noexcept -> std::string_view;
-
-    [[nodiscard]] auto GamesCount() const noexcept -> std::size_t;
+private:
+    core::ConsoleReadAccess& console_;
 };
-} // namespace gw::con::core
+} // namespace gw::con::tasks

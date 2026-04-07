@@ -39,3 +39,5 @@ auto GameLibraryReadAccess::GetGameTitle(const std::size_t index) const noexcept
     assert(index < games_.size() && "Provided out of range index to GameLibraryReadAccess::GetGameTitle");
     return games_[index].GetTitle();
 }
+
+auto GameLibraryReadAccess::GamesCount() const noexcept -> std::size_t { return games_.size(); }

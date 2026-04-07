@@ -19,38 +19,31 @@
 module;
 
 #include <cassert>
-#include <memory>
+#include <print>
 
-module Task_ForwardUserFromMainMenu;
+module Task_ValidateEditGamesMenuOptionChoice;
 
-import Task_StopApp;
-import Task_ListGames;
-import Task_AddNewGame;
 import Task_GetEditGamesMenuOptionChoice;
+import Task_ForwardUserFromEditGamesMenu;
 
 using namespace gw::con::tasks;
 using namespace gw::con::core;
 
-ForwardUserFromMainMenu::ForwardUserFromMainMenu(const std::shared_ptr<Context>& ctx) noexcept : Task{ctx}, console_{Task::ctx->console} {}
+ValidateEditGamesMenuOptionChoice::ValidateEditGamesMenuOptionChoice(const std::shared_ptr<Context>& ctx) noexcept : Task{ctx}, console{Task::ctx->console} {}
 
-auto ForwardUserFromMainMenu::Run() noexcept -> std::unique_ptr<Task> {
-    switch (console_.GetNumberInputResult()) {
-        case 0:
-            return std::make_unique<StopApp>(ctx);
-
-        case 1:
-            return std::make_unique<ListGames>(ctx);
-
-        case 3:
+auto ValidateEditGamesMenuOptionChoice::Run() noexcept -> std::unique_ptr<Task> {
+    switch (console.GetInputRequestStatus()) {
+        case ConsoleComponents::InputRequestStatus::Invalid:
+            console.WriteLineToCache(ConsoleComponents::MsgType::Error, "Invalid input!");
             return std::make_unique<GetEditGamesMenuOptionChoice>(ctx);
 
-        case 4:
-            return std::make_unique<AddNewGame>(ctx);
+        case ConsoleComponents::InputRequestStatus::Success:
+            return std::make_unique<ForwardUserFromEditGamesMenu>(ctx);
 
         default:
             break;
     }
 
-    assert(false && "Unhandled option index in ForwardUserFromMainMenu::Run");
+    assert(false && "Unhandled ConsoleComponents::InputRequestStatus in ValidateEditGamesMenuOptionChoice::Run");
     std::terminate();
 }

@@ -18,21 +18,30 @@
 
 module;
 
-#include <string_view>
+#include <cassert>
+#include <memory>
 
-export module GameLibrary:ReadAccess;
+module Task_ForwardUserFromEditGamesMenu;
 
-import :Base;
+import Task_GetMainMenuOptionChoice;
+import Task_ChangeGameTitle;
 
-export namespace gw::con::core {
-class GameLibraryReadAccess : virtual public GameLibraryBase {
-public:
-    auto ListGames() const noexcept -> void;
+using namespace gw::con::tasks;
+using namespace gw::con::core;
 
-    [[nodiscard]] auto IsEmpty() const noexcept -> bool;
+ForwardUserFromEditGamesMenu::ForwardUserFromEditGamesMenu(const std::shared_ptr<Context>& ctx) noexcept : Task{ctx}, console_{Task::ctx->console} {}
 
-    [[nodiscard]] auto GetGameTitle(std::size_t) const noexcept -> std::string_view;
+auto ForwardUserFromEditGamesMenu::Run() noexcept -> std::unique_ptr<Task> {
+    switch (console_.GetNumberInputResult()) {
+        case 0:
+            return std::make_unique<GetMainMenuOptionChoice>(ctx);
 
-    [[nodiscard]] auto GamesCount() const noexcept -> std::size_t;
-};
-} // namespace gw::con::core
+        case 1:
+            return std::make_unique<ChangeGameTitle>(ctx);
+        default:
+            break;
+    }
+
+    assert(false && "Unhandled option index in ForwardUserFromEditGamesMenu::Run");
+    std::terminate();
+}
