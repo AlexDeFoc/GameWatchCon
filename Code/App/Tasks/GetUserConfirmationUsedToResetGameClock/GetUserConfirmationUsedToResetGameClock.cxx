@@ -18,25 +18,20 @@
 
 module;
 
-#include <cassert>
 #include <memory>
 
-module Task_ResetGameClock;
+module Task_GetUserConfirmationUsedToResetGameClock;
 
-import Task_GetEditGamesMenuOptionChoice;
+import Task_ValidateUserConfirmationUsedToResetGameClock;
 
 using namespace gw::con::tasks;
 using namespace gw::con::core;
 
-ResetGameClock::ResetGameClock(const std::shared_ptr<Context>& ctx) noexcept : Task{ctx}, game_library_{Task::ctx->game_library}, console_{Task::ctx->console} {}
+GetUserConfirmationUsedToResetGameClock::GetUserConfirmationUsedToResetGameClock(const std::shared_ptr<Context>& ctx) noexcept : Task{ctx}, game_library_{Task::ctx->game_library}, console_{Task::ctx->console} {}
 
-auto ResetGameClock::Run() noexcept -> std::unique_ptr<Task> {
-    if (console_.GetUserConfirmationStatus() == true) {
-        game_library_.ResetGameClock(console_.GetNumberInputResult() - 1);
-        console_.WriteLineToCache(ConsoleComponents::MsgType::Info, "Reset game clock");
-    } else {
-        console_.WriteLineToCache(ConsoleComponents::MsgType::Info, "Action cancelled");
-    }
-
-    return std::make_unique<GetEditGamesMenuOptionChoice>(ctx);
+auto GetUserConfirmationUsedToResetGameClock::Run() noexcept -> std::unique_ptr<Task> {
+    console_.ClearScreen();
+    console_.WriteCachedMsgs();
+    console_.RequestUserConfirmation();
+    return std::make_unique<ValidateUserConfirmationUsedToResetGameClock>(ctx);
 }

@@ -25,7 +25,7 @@ module Task_ForwardUserFromEditGamesMenu;
 
 import Task_GetMainMenuOptionChoice;
 import Task_GetGameIDUsedToChangeGameTitle;
-import Task_ResetGameClock;
+import Task_GetGameIDUsedToResetGameClock;
 
 using namespace gw::con::tasks;
 using namespace gw::con::core;
@@ -41,7 +41,7 @@ auto ForwardUserFromEditGamesMenu::Run() noexcept -> std::unique_ptr<Task> {
             return std::make_unique<GetGameIDUsedToChangeGameTitle>(ctx);
 
         case 2:
-            return std::make_unique<ResetGameClock>(ctx);
+            return std::make_unique<GetGameIDUsedToResetGameClock>(ctx);
 
         default:
             break;
