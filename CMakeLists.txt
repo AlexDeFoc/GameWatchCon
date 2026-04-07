@@ -33,10 +33,6 @@ target_sources(GameWatchCon PUBLIC FILE_SET CXX_MODULES FILES
         Code/App/Tasks/EditGamesMenu/EditGamesMenu.ixx
         Code/App/Tasks/ListGames/ListGames.ixx
         Code/App/Tasks/AddNewGame/AddNewGame.ixx
-        Code/App/Tasks/GetGameIDUsedToChangeGameTitle/GetGameIDUsedToChangeGameTitle.ixx
-        Code/App/Tasks/ValidateGameIDUsedToChangeGameTitle/ValidateGameIDUsedToChangeGameTitle.ixx
-        Code/App/Tasks/GetGameTitleUsedToChangeGameTitle/GetGameTitleUsedToChangeGameTitle.ixx
-        Code/App/Tasks/ValidateGameTitleUsedToChangeGameTitle/ValidateGameTitleUsedToChangeGameTitle.ixx
         Code/App/Tasks/ChangeGameTitle/ChangeGameTitle.ixx
         Code/App/Tasks/ResetGameClock/ResetGameClock.ixx
 
@@ -65,10 +61,6 @@ target_sources(GameWatchCon PRIVATE
         Code/App/Tasks/EditGamesMenu/EditGamesMenu.cxx
         Code/App/Tasks/ListGames/ListGames.cxx
         Code/App/Tasks/AddNewGame/AddNewGame.cxx
-        Code/App/Tasks/GetGameIDUsedToChangeGameTitle/GetGameIDUsedToChangeGameTitle.cxx
-        Code/App/Tasks/ValidateGameIDUsedToChangeGameTitle/ValidateGameIDUsedToChangeGameTitle.cxx
-        Code/App/Tasks/GetGameTitleUsedToChangeGameTitle/GetGameTitleUsedToChangeGameTitle.cxx
-        Code/App/Tasks/ValidateGameTitleUsedToChangeGameTitle/ValidateGameTitleUsedToChangeGameTitle.cxx
         Code/App/Tasks/ChangeGameTitle/ChangeGameTitle.cxx
         Code/App/Tasks/ResetGameClock/ResetGameClock.cxx
 

@@ -18,6 +18,7 @@
 
 module;
 
+#include <cassert>
 #include <memory>
 
 module Task_ChangeGameTitle;
@@ -30,6 +31,52 @@ using namespace gw::con::core;
 ChangeGameTitle::ChangeGameTitle(const std::shared_ptr<Context>& ctx) noexcept : Task{ctx}, console_{Task::ctx->console}, game_library_{Task::ctx->game_library} {}
 
 auto ChangeGameTitle::Run() noexcept -> std::unique_ptr<Task> {
+    auto next_task = [&] -> std::unique_ptr<Task> {
+        while (true) {
+            console_.ClearScreen();
+            console_.WriteCachedMsgs();
+
+            const auto list_func = [&] { game_library_.ListGames(); };
+            console_.RequestGameID(list_func, {1, game_library_.GamesCount()});
+
+            switch (console_.GetInputRequestStatus()) {
+                case ConsoleComponents::InputRequestStatus::Success:
+                    return nullptr;
+
+                case ConsoleComponents::InputRequestStatus::Cancelled:
+                    console_.WriteLineToCache(ConsoleComponents::MsgType::Info, "Action cancelled");
+                    return std::make_unique<EditGamesMenu>(ctx);
+
+                case ConsoleComponents::InputRequestStatus::Invalid:
+                    console_.WriteLineToCache(ConsoleComponents::MsgType::Info, "Invalid input");
+                    break;
+
+                default:
+                    assert(false && "Unhandled ConsoleComponents::InputRequestStatus");
+                    std::terminate();
+            }
+        }
+    }();
+
+    if (next_task != nullptr)
+        return next_task;
+
+    console_.ClearScreen();
+    console_.WriteCachedMsgs();
+    console_.RequestGameTitle();
+    switch (console_.GetInputRequestStatus()) {
+        case ConsoleComponents::InputRequestStatus::Success:
+            break;
+
+        case ConsoleComponents::InputRequestStatus::Cancelled:
+            console_.WriteLineToCache(ConsoleComponents::MsgType::Info, "Action cancelled");
+            return std::make_unique<EditGamesMenu>(ctx);
+
+        default:
+            assert(false && "Unhandled ConsoleComponents::InputRequestStatus");
+            std::terminate();
+    }
+
     game_library_.SetGameTitle(console_.GetNumberInputResult() - 1, console_.GetStringInputResult());
     console_.WriteLineToCache(ConsoleComponents::MsgType::Info, "Changed game title");
     return std::make_unique<EditGamesMenu>(ctx);
