@@ -25,7 +25,7 @@ module Task_ValidateGameTitleUsedToChangeGameTitle;
 
 import Task_ChangeGameTitle;
 import Task_GetGameTitleUsedToChangeGameTitle;
-import Task_GetEditGamesMenuOptionChoice;
+import Task_EditGamesMenu;
 
 using namespace gw::con::tasks;
 using namespace gw::con::core;
@@ -39,7 +39,7 @@ auto ValidateGameTitleUsedToChangeGameTitle::Run() noexcept -> std::unique_ptr<T
 
         case ConsoleComponents::InputRequestStatus::Cancelled:
             console_.WriteLineToCache(ConsoleComponents::MsgType::Info, "Action cancelled");
-            return std::make_unique<GetEditGamesMenuOptionChoice>(ctx);
+            return std::make_unique<EditGamesMenu>(ctx);
 
         default:
             assert(false && "Unhandled ConsoleComponents::InputRequestStatus in ValidateGameIDUsedToChangeGameTitle::Run");

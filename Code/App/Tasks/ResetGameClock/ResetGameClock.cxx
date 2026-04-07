@@ -23,7 +23,7 @@ module;
 
 module Task_ResetGameClock;
 
-import Task_GetEditGamesMenuOptionChoice;
+import Task_EditGamesMenu;
 
 using namespace gw::con::tasks;
 using namespace gw::con::core;
@@ -38,5 +38,5 @@ auto ResetGameClock::Run() noexcept -> std::unique_ptr<Task> {
         console_.WriteLineToCache(ConsoleComponents::MsgType::Info, "Action cancelled");
     }
 
-    return std::make_unique<GetEditGamesMenuOptionChoice>(ctx);
+    return std::make_unique<EditGamesMenu>(ctx);
 }

@@ -21,38 +21,39 @@ module;
 #include <cassert>
 #include <print>
 
-module Task_MainMenu;
+module Task_EditGamesMenu;
 
-import Task_StopApp;
-import Task_ListGames;
-import Task_AddNewGame;
-import Task_EditGamesMenu;
+import Task_MainMenu;
+import Task_GetGameIDUsedToChangeGameTitle;
+import Task_GetGameIDUsedToResetGameClock;
 
 using namespace gw::con::tasks;
 using namespace gw::con::core;
 
-MainMenu::MainMenu(const std::shared_ptr<Context>& ctx) noexcept : Task{ctx}, console_{Task::ctx->console} {}
+EditGamesMenu::EditGamesMenu(const std::shared_ptr<Context>& ctx) noexcept : Task{ctx}, game_library_{Task::ctx->game_library}, console_{Task::ctx->console} {}
 
-auto MainMenu::Run() noexcept -> std::unique_ptr<Task> {
+auto EditGamesMenu::Run() noexcept -> std::unique_ptr<Task> {
+    if (game_library_.IsEmpty()) {
+        console_.WriteLineToCache(ConsoleComponents::MsgType::Error, "No entries found");
+        return std::make_unique<MainMenu>(ctx);
+    }
+
     static auto list_opts = [] {
-        std::println("1. List games");
-        std::println("2. Start game");
-        std::println("3. Edit games");
-        std::println("4. Add new game");
-        std::println("5. Settings");
-        std::println("6. Check for updates");
-        std::println("0. Exit app");
+        std::println("1. Change game title");
+        std::println("2. Reset game clock");
+        std::println("3. Delete game");
+        std::println("0. Go back");
     };
 
     [&] {
         while (true) {
             console_.ClearScreen();
             console_.WriteCachedMsgs();
-            console_.RequestMenuOptionID(list_opts, {0, 6}, ConsoleComponents::RequestIsCancellable::No);
+            console_.RequestMenuOptionID(list_opts, {0, 3}, ConsoleComponents::RequestIsCancellable::No);
 
             switch (console_.GetInputRequestStatus()) {
                 case ConsoleComponents::InputRequestStatus::Invalid:
-                    console_.WriteLineToCache(ConsoleComponents::MsgType::Error, "Invalid input");
+                    console_.WriteLineToCache(ConsoleComponents::MsgType::Error, "Invalid input!");
                     break;
 
                 case ConsoleComponents::InputRequestStatus::Success:
@@ -67,16 +68,13 @@ auto MainMenu::Run() noexcept -> std::unique_ptr<Task> {
 
     switch (console_.GetNumberInputResult()) {
         case 0:
-            return std::make_unique<StopApp>(ctx);
+            return std::make_unique<MainMenu>(ctx);
 
         case 1:
-            return std::make_unique<ListGames>(ctx);
+            return std::make_unique<GetGameIDUsedToChangeGameTitle>(ctx);
 
-        case 3:
-            return std::make_unique<EditGamesMenu>(ctx);
-
-        case 4:
-            return std::make_unique<AddNewGame>(ctx);
+        case 2:
+            return std::make_unique<GetGameIDUsedToResetGameClock>(ctx);
 
         default:
             assert(false && "Unhandled option index");

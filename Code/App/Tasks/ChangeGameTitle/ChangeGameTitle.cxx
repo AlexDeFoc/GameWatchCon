@@ -22,7 +22,7 @@ module;
 
 module Task_ChangeGameTitle;
 
-import Task_GetEditGamesMenuOptionChoice;
+import Task_EditGamesMenu;
 
 using namespace gw::con::tasks;
 using namespace gw::con::core;
@@ -32,5 +32,5 @@ ChangeGameTitle::ChangeGameTitle(const std::shared_ptr<Context>& ctx) noexcept :
 auto ChangeGameTitle::Run() noexcept -> std::unique_ptr<Task> {
     game_library_.SetGameTitle(console_.GetNumberInputResult() - 1, console_.GetStringInputResult());
     console_.WriteLineToCache(ConsoleComponents::MsgType::Info, "Changed game title");
-    return std::make_unique<GetEditGamesMenuOptionChoice>(ctx);
+    return std::make_unique<EditGamesMenu>(ctx);
 }

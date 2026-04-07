@@ -20,18 +20,20 @@ module;
 
 #include <memory>
 
-export module Task_ValidateEditGamesMenuOptionChoice;
+export module Task_EditGamesMenu;
 
 import Task;
 import Console;
+import GameLibrary;
 
 export namespace gw::con::tasks {
-class ValidateEditGamesMenuOptionChoice : public core::Task {
+class EditGamesMenu : public core::Task {
 public:
-    explicit ValidateEditGamesMenuOptionChoice(const std::shared_ptr<Context>&) noexcept;
+    explicit EditGamesMenu(const std::shared_ptr<Context>&) noexcept;
     [[nodiscard]] auto Run() noexcept -> std::unique_ptr<Task> override;
 
 private:
-    core::Console& console;
+    core::GameLibraryReadAccess& game_library_;
+    core::Console& console_;
 };
 } // namespace gw::con::tasks
