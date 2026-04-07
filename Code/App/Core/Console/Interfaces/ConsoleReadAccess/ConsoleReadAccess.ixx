@@ -29,20 +29,22 @@ import :ConsoleWriteAccess;
 export namespace gw::con::core {
 class ConsoleReadAccess {
 public:
+    ConsoleReadAccess() noexcept;
+
     template <typename ListOptsFunc>
     auto RequestGameID(ListOptsFunc, std::pair<int, int>) noexcept -> void;
 
     template <typename ListOptsFunc>
     auto RequestMenuOptionID(ListOptsFunc, std::pair<int, int>, ConsoleComponents::RequestIsCancellable = ConsoleComponents::RequestIsCancellable::Yes) noexcept -> void;
 
-    ConsoleReadAccess() noexcept;
+    auto RequestUserConfirmation() noexcept -> void;
     auto RequestGameTitle(ConsoleComponents::RequestIsCancellable = ConsoleComponents::RequestIsCancellable::Yes) noexcept -> void; // TODO: Add more context to the function
+    static auto RequestKeyPress() noexcept -> void;
     auto SetInputRequestStatus(ConsoleComponents::InputRequestStatus) noexcept -> void;
     [[nodiscard]] auto GetInputRequestStatus() const noexcept -> ConsoleComponents::InputRequestStatus;
     [[nodiscard]] auto GetNumberInputResult() const noexcept -> int;
     [[nodiscard]] auto GetStringInputResult() const noexcept -> std::string_view;
-
-    static auto RequestKeyPress() noexcept -> void;
+    [[nodiscard]] auto GetUserConfirmationStatus() const noexcept -> bool;
 
 private:
     template <typename RequestMsgFunc>
@@ -54,6 +56,7 @@ private:
     ConsoleComponents::InputRequestStatus input_request_status_;
     int number_input_result_;
     std::string string_input_result_;
+    bool user_confirmed_;
 };
 
 template <typename RequestMsgFunc>

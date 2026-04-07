@@ -28,7 +28,7 @@ export namespace gw::con::core {
 class ConsoleWriteAccess {
 public:
     ConsoleWriteAccess() noexcept = default;
-    auto WriteLineToCache(ConsoleComponents::MsgType, std::string_view) noexcept -> void; // TODO: Check usage (may need to remove)
+    auto WriteLineToCache(ConsoleComponents::MsgType, std::string_view) noexcept -> void;
     auto WriteToCache(ConsoleComponents::MsgType, std::string_view) noexcept -> void; // TODO: Check usage (may need to remove)
     auto WriteCachedMsgs() noexcept -> void;
 

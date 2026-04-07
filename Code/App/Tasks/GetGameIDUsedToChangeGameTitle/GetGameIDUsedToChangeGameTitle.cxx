@@ -20,20 +20,21 @@ module;
 
 #include <memory>
 
-export module Task_ChangeGameTitle;
+module Task_GetGameIDUsedToChangeGameTitle;
 
-import Task;
-import Console;
-import GameLibrary;
+import Task_ValidateGameIDUsedToChangeGameTitle;
 
-export namespace gw::con::tasks {
-class ChangeGameTitle : public core::Task {
-public:
-    explicit ChangeGameTitle(const std::shared_ptr<Context>&) noexcept;
-    [[nodiscard]] auto Run() noexcept -> std::unique_ptr<Task> override;
+using namespace gw::con::tasks;
+using namespace gw::con::core;
 
-private:
-    core::Console& console_;
-    core::GameLibraryWriteAccess& game_library_;
-};
-} // namespace gw::con::tasks
+GetGameIDUsedToChangeGameTitle::GetGameIDUsedToChangeGameTitle(const std::shared_ptr<Context>& ctx) noexcept : Task{ctx}, game_library_{Task::ctx->game_library}, console_{Task::ctx->console} {}
+
+auto GetGameIDUsedToChangeGameTitle::Run() noexcept -> std::unique_ptr<Task> {
+    console_.ClearScreen();
+    console_.WriteCachedMsgs();
+
+    const auto list_func = [&] { game_library_.ListGames(); };
+    console_.RequestGameID(list_func, {1, game_library_.GamesCount()});
+
+    return std::make_unique<ValidateGameIDUsedToChangeGameTitle>(ctx);
+}

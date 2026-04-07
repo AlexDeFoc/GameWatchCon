@@ -1,5 +1,5 @@
 /*
-    GameWatchCon - Keep track of your in-game time
+GameWatchCon - Keep track of your in-game time
     Copyright (C) 2026  Sava Alexandru-Andrei
 
     This program is free software: you can redistribute it and/or modify
@@ -20,20 +20,18 @@ module;
 
 #include <memory>
 
-export module Task_ChangeGameTitle;
+module Task_GetGameTitleUsedToChangeGameTitle;
 
-import Task;
-import Console;
-import GameLibrary;
+import Task_ValidateGameTitleUsedToChangeGameTitle;
 
-export namespace gw::con::tasks {
-class ChangeGameTitle : public core::Task {
-public:
-    explicit ChangeGameTitle(const std::shared_ptr<Context>&) noexcept;
-    [[nodiscard]] auto Run() noexcept -> std::unique_ptr<Task> override;
+using namespace gw::con::tasks;
+using namespace gw::con::core;
 
-private:
-    core::Console& console_;
-    core::GameLibraryWriteAccess& game_library_;
-};
-} // namespace gw::con::tasks
+GetGameTitleUsedToChangeGameTitle::GetGameTitleUsedToChangeGameTitle(const std::shared_ptr<Context>& ctx) noexcept : Task{ctx}, console_{Task::ctx->console} {}
+
+auto GetGameTitleUsedToChangeGameTitle::Run() noexcept -> std::unique_ptr<Task> {
+    console_.ClearScreen();
+    console_.WriteCachedMsgs();
+    console_.RequestGameTitle();
+    return std::make_unique<ValidateGameTitleUsedToChangeGameTitle>(ctx);
+}
