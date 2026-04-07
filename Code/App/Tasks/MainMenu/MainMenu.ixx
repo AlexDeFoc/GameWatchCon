@@ -20,18 +20,18 @@ module;
 
 #include <memory>
 
-export module Task_ValidateMainMenuOptionChoice;
+export module Task_MainMenu;
 
 import Task;
 import Console;
 
 export namespace gw::con::tasks {
-class ValidateMainMenuOptionChoice : public core::Task {
+class MainMenu : public core::Task {
 public:
-    explicit ValidateMainMenuOptionChoice(const std::shared_ptr<Context>&) noexcept;
+    explicit MainMenu(const std::shared_ptr<Context>&) noexcept;
     [[nodiscard]] auto Run() noexcept -> std::unique_ptr<Task> override;
 
 private:
-    core::Console& console;
+    core::Console& console_;
 };
 } // namespace gw::con::tasks

@@ -22,7 +22,7 @@ module;
 
 module Task_GetEditGamesMenuOptionChoice;
 
-import Task_GetMainMenuOptionChoice;
+import Task_MainMenu;
 import Task_ValidateEditGamesMenuOptionChoice;
 
 using namespace gw::con::tasks;
@@ -33,7 +33,7 @@ GetEditGamesMenuOptionChoice::GetEditGamesMenuOptionChoice(const std::shared_ptr
 auto GetEditGamesMenuOptionChoice::Run() noexcept -> std::unique_ptr<Task> {
     if (game_library_.IsEmpty()) {
         console_.WriteLineToCache(ConsoleComponents::MsgType::Error, "No entries found");
-        return std::make_unique<GetMainMenuOptionChoice>(ctx);
+        return std::make_unique<MainMenu>(ctx);
     }
 
     static auto list_opts = [] {

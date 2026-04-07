@@ -23,7 +23,7 @@ module;
 
 module Task_ForwardUserFromEditGamesMenu;
 
-import Task_GetMainMenuOptionChoice;
+import Task_MainMenu;
 import Task_GetGameIDUsedToChangeGameTitle;
 import Task_GetGameIDUsedToResetGameClock;
 
@@ -35,7 +35,7 @@ ForwardUserFromEditGamesMenu::ForwardUserFromEditGamesMenu(const std::shared_ptr
 auto ForwardUserFromEditGamesMenu::Run() noexcept -> std::unique_ptr<Task> {
     switch (console_.GetNumberInputResult()) {
         case 0:
-            return std::make_unique<GetMainMenuOptionChoice>(ctx);
+            return std::make_unique<MainMenu>(ctx);
 
         case 1:
             return std::make_unique<GetGameIDUsedToChangeGameTitle>(ctx);

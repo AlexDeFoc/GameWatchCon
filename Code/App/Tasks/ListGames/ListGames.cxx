@@ -22,7 +22,7 @@ module;
 
 module Task_ListGames;
 
-import Task_GetMainMenuOptionChoice;
+import Task_MainMenu;
 
 using namespace gw::con::tasks;
 using namespace gw::con::core;
@@ -32,12 +32,12 @@ ListGames::ListGames(const std::shared_ptr<Context>& ctx) noexcept : Task{ctx}, 
 auto ListGames::Run() noexcept -> std::unique_ptr<Task> {
     if (game_library_.IsEmpty()) {
         console_.WriteLineToCache(ConsoleComponents::MsgType::Error, "No entries found");
-        return std::make_unique<GetMainMenuOptionChoice>(ctx);
+        return std::make_unique<MainMenu>(ctx);
     }
 
     console_.ClearScreen();
     game_library_.ListGames();
     console_.WriteLine(ConsoleComponents::MsgType::Tip, "Press any key to go back");
     Console::RequestKeyPress();
-    return std::make_unique<GetMainMenuOptionChoice>(ctx);
+    return std::make_unique<MainMenu>(ctx);
 }

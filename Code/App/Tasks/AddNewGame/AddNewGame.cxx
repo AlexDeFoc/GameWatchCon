@@ -24,7 +24,7 @@ module;
 
 module Task_AddNewGame;
 
-import Task_GetMainMenuOptionChoice;
+import Task_MainMenu;
 
 using namespace gw::con::tasks;
 using namespace gw::con::core;
@@ -39,15 +39,15 @@ auto AddNewGame::Run() noexcept -> std::unique_ptr<Task> {
         case ConsoleComponents::InputRequestStatus::Success:
             game_library_.AddGame(console_.GetStringInputResult());
             console_.WriteLineToCache(ConsoleComponents::MsgType::Info, "Added game");
-            return std::make_unique<GetMainMenuOptionChoice>(ctx);
+            return std::make_unique<MainMenu>(ctx);
 
         case ConsoleComponents::InputRequestStatus::Cancelled:
             console_.WriteLineToCache(ConsoleComponents::MsgType::Info, "Action cancelled");
-            return std::make_unique<GetMainMenuOptionChoice>(ctx);
+            return std::make_unique<MainMenu>(ctx);
 
         case ConsoleComponents::InputRequestStatus::Invalid:
             console_.WriteLineToCache(ConsoleComponents::MsgType::Info, "An issue has occurred with adding the game");
-            return std::make_unique<GetMainMenuOptionChoice>(ctx);
+            return std::make_unique<MainMenu>(ctx);
 
         default:
             break;
