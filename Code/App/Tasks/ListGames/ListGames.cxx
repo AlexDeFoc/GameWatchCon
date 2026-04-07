@@ -20,8 +20,9 @@ module;
 
 #include <memory>
 
-module Tasks;
-import :ListGames;
+module Task_ListGames;
+
+import Task_GetMainMenuOptionChoice;
 
 using namespace gw::con::tasks;
 using namespace gw::con::core;

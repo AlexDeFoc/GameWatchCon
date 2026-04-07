@@ -27,13 +27,13 @@ target_sources(GameWatchCon PUBLIC FILE_SET CXX_MODULES FILES
         Code/App/Core/AppState/AppState.ixx
         Code/App/Core/AppState/Interfaces/AppStatusAccess/AppStatusAccess.ixx
 
-        Code/App/Tasks/Tasks.ixx
         Code/App/Tasks/StartApp/StartApp.ixx
         Code/App/Tasks/StopApp/StopApp.ixx
         Code/App/Tasks/GetMainMenuOptionChoice/GetMainMenuOptionChoice.ixx
         Code/App/Tasks/ValidateMainMenuOptionChoice/ValidateMainMenuOptionChoice.ixx
         Code/App/Tasks/ForwardUserFromMainMenu/ForwardUserFromMainMenu.ixx
         Code/App/Tasks/ListGames/ListGames.ixx
+        Code/App/Tasks/AddNewGame/AddNewGame.ixx
 
         Code/App/Core/App/App.ixx
 )
@@ -60,6 +60,7 @@ target_sources(GameWatchCon PRIVATE
         Code/App/Tasks/ValidateMainMenuOptionChoice/ValidateMainMenuOptionChoice.cxx
         Code/App/Tasks/ForwardUserFromMainMenu/ForwardUserFromMainMenu.cxx
         Code/App/Tasks/ListGames/ListGames.cxx
+        Code/App/Tasks/AddNewGame/AddNewGame.cxx
 
         Code/App/Core/App/App.cxx
 

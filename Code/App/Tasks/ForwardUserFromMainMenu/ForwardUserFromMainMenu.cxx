@@ -21,8 +21,11 @@ module;
 #include <cassert>
 #include <memory>
 
-module Tasks;
-import :ForwardUserFromMainMenu;
+module Task_ForwardUserFromMainMenu;
+
+import Task_StopApp;
+import Task_ListGames;
+import Task_AddNewGame;
 
 using namespace gw::con::tasks;
 using namespace gw::con::core;
@@ -35,6 +38,8 @@ auto ForwardUserFromMainMenu::Run() noexcept -> std::unique_ptr<Task> {
             return std::make_unique<StopApp>(ctx);
         case 1:
             return std::make_unique<ListGames>(ctx);
+        case 4:
+            return std::make_unique<AddNewGame>(ctx);
         default:
             break;
     }

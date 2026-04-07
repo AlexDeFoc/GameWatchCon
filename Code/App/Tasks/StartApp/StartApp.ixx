@@ -23,7 +23,7 @@ module;
 import Task;
 import AppState;
 
-export module Tasks:StartApp;
+export module Task_StartApp;
 
 export namespace gw::con::tasks {
 class StartApp : public core::Task {

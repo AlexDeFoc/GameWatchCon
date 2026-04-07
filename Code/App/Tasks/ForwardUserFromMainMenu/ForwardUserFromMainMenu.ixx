@@ -20,7 +20,7 @@ module;
 
 #include <memory>
 
-export module Tasks:ForwardUserFromMainMenu;
+export module Task_ForwardUserFromMainMenu;
 
 import Task;
 import Console;

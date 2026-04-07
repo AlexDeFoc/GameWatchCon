@@ -20,8 +20,10 @@ module;
 
 #include <memory>
 
-module Tasks;
-import :StartApp;
+module Task_StartApp;
+
+import Task_GetMainMenuOptionChoice;
+import AppState;
 
 using namespace gw::con::tasks;
 using namespace gw::con::core;

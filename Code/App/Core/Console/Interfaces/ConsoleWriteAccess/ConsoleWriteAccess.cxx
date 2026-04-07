@@ -67,7 +67,7 @@ auto ConsoleWriteAccess::GetMsgTag(const ConsoleComponents::MsgType msg_type) no
 auto ConsoleWriteAccess::GetMsgTagColor(const ConsoleComponents::MsgType msg_type) noexcept -> std::string_view {
     switch (msg_type) {
         case ConsoleComponents::MsgType::Info:
-            return "\x1b[37m";
+            return "\x1b[90m";
         case ConsoleComponents::MsgType::Tip:
             return "\x1b[32m";
         case ConsoleComponents::MsgType::Request:

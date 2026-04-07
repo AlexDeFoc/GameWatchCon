@@ -21,8 +21,10 @@ module;
 #include <cassert>
 #include <print>
 
-module Tasks;
-import :ValidateMainMenuOptionChoice;
+module Task_ValidateMainMenuOptionChoice;
+
+import Task_GetMainMenuOptionChoice;
+import Task_ForwardUserFromMainMenu;
 
 using namespace gw::con::tasks;
 using namespace gw::con::core;

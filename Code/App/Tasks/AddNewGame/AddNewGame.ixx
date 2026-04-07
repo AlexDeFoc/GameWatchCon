@@ -16,11 +16,24 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-export module Tasks;
+module;
 
-export import :StartApp;
-export import :StopApp;
-export import :GetMainMenuOptionChoice;
-export import :ValidateMainMenuOptionChoice;
-export import :ForwardUserFromMainMenu;
-export import :ListGames;
+#include <memory>
+
+export module Task_AddNewGame;
+
+import Task;
+import Console;
+import GameLibrary;
+
+export namespace gw::con::tasks {
+class AddNewGame : public core::Task {
+public:
+    explicit AddNewGame(const std::shared_ptr<Context>&) noexcept;
+    [[nodiscard]] auto Run() noexcept -> std::unique_ptr<Task> override;
+
+private:
+    core::Console& console_;
+    core::GameLibraryWriteAccess& game_library_;
+};
+} // namespace gw::con::tasks

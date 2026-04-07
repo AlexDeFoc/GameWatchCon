@@ -20,8 +20,9 @@ module;
 
 #include <print>
 
-module Tasks;
-import :GetMainMenuOptionChoice;
+module Task_GetMainMenuOptionChoice;
+
+import Task_ValidateMainMenuOptionChoice;
 
 using namespace gw::con::tasks;
 using namespace gw::con::core;
@@ -31,16 +32,17 @@ GetMainMenuOptionChoice::GetMainMenuOptionChoice(const std::shared_ptr<Context>&
 auto GetMainMenuOptionChoice::Run() noexcept -> std::unique_ptr<Task> {
     static auto list_opts = [] {
         std::println("1. List games");
-        std::println("2. Edit games");
-        std::println("3. Add new game");
-        std::println("4. Settings");
-        std::println("5. Check for updates");
+        std::println("2. Start game");
+        std::println("3. Edit games");
+        std::println("4. Add new game");
+        std::println("5. Settings");
+        std::println("6. Check for updates");
         std::println("0. Exit app");
     };
 
     console.ClearScreen();
     console.WriteCachedMsgs();
-    console.RequestMenuOptionID(list_opts, {0, 5}, ConsoleComponents::RequestIsCancellable::No);
+    console.RequestMenuOptionID(list_opts, {0, 6}, ConsoleComponents::RequestIsCancellable::No);
 
     return std::make_unique<ValidateMainMenuOptionChoice>(ctx);
 }

@@ -20,8 +20,7 @@ module;
 
 #include <memory>
 
-module Tasks;
-import :StopApp;
+module Task_StopApp;
 
 using namespace gw::con::tasks;
 using namespace gw::con::core;

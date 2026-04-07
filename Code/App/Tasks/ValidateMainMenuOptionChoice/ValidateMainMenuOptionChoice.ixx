@@ -20,7 +20,7 @@ module;
 
 #include <memory>
 
-export module Tasks:ValidateMainMenuOptionChoice;
+export module Task_ValidateMainMenuOptionChoice;
 
 import Task;
 import Console;

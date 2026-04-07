@@ -20,7 +20,7 @@ module;
 
 #include <memory>
 
-export module Tasks:ListGames;
+export module Task_ListGames;
 
 import Task;
 import GameLibrary;

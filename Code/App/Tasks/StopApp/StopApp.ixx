@@ -20,7 +20,7 @@ module;
 
 #include <memory>
 
-export module Tasks:StopApp;
+export module Task_StopApp;
 
 import Task;
 import AppState;

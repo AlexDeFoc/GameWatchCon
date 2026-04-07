@@ -33,10 +33,10 @@ public:
     auto RequestGameID(ListOptsFunc, std::pair<int, int>) noexcept -> void;
 
     template <typename ListOptsFunc>
-    auto RequestMenuOptionID(ListOptsFunc, std::pair<int, int>, ConsoleComponents::RequestIsCancellable) noexcept -> void;
+    auto RequestMenuOptionID(ListOptsFunc, std::pair<int, int>, ConsoleComponents::RequestIsCancellable = ConsoleComponents::RequestIsCancellable::Yes) noexcept -> void;
 
     ConsoleReadAccess() noexcept;
-    auto RequestGameTitle(ConsoleComponents::RequestIsCancellable) noexcept -> void; // TODO: Add more context to the function
+    auto RequestGameTitle(ConsoleComponents::RequestIsCancellable = ConsoleComponents::RequestIsCancellable::Yes) noexcept -> void; // TODO: Add more context to the function
     auto SetInputRequestStatus(ConsoleComponents::InputRequestStatus) noexcept -> void;
     [[nodiscard]] auto GetInputRequestStatus() const noexcept -> ConsoleComponents::InputRequestStatus;
     [[nodiscard]] auto GetNumberInputResult() const noexcept -> int;
@@ -70,6 +70,8 @@ auto ConsoleReadAccess::RequestStringInput(RequestMsgFunc request_msg_func, cons
             input_request_status_ = ConsoleComponents::InputRequestStatus::Cancelled;
         else
             input_request_status_ = ConsoleComponents::InputRequestStatus::Invalid;
+
+        std::cin.clear();
 
         return;
     }
@@ -120,6 +122,8 @@ auto ConsoleReadAccess::RequestNumberInput(ListOptsFunc list_opts_func, RequestM
             input_request_status_ = ConsoleComponents::InputRequestStatus::Cancelled;
         else
             input_request_status_ = ConsoleComponents::InputRequestStatus::Invalid;
+
+        std::cin.clear();
 
         return;
     }

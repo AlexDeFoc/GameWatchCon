@@ -20,7 +20,7 @@ module;
 
 #include <memory>
 
-export module Tasks:GetMainMenuOptionChoice;
+export module Task_GetMainMenuOptionChoice;
 
 import Task;
 import Console;
