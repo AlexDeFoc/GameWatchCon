@@ -31,6 +31,57 @@ using namespace gw::con::core;
 ResetGameClock::ResetGameClock(const std::shared_ptr<Context>& ctx) noexcept : Task{ctx}, game_library_{Task::ctx->game_library}, console_{Task::ctx->console} {}
 
 auto ResetGameClock::Run() noexcept -> std::unique_ptr<Task> {
+    auto next_task = [&] -> std::unique_ptr<Task> {
+        while (true) {
+            console_.ClearScreen();
+            console_.WriteCachedMsgs();
+
+            const auto list_func = [&] { game_library_.ListGames(); };
+            console_.RequestGameID(list_func, {1, game_library_.GamesCount()});
+
+            switch (console_.GetInputRequestStatus()) {
+                case ConsoleComponents::InputRequestStatus::Success:
+                    return nullptr;
+
+                case ConsoleComponents::InputRequestStatus::Cancelled:
+                    console_.WriteLineToCache(ConsoleComponents::MsgType::Info, "Action cancelled");
+                    return std::make_unique<EditGamesMenu>(ctx);
+
+                case ConsoleComponents::InputRequestStatus::Invalid:
+                    console_.WriteLineToCache(ConsoleComponents::MsgType::Info, "Invalid input");
+                    break;
+
+                default:
+                    assert(false && "Unhandled ConsoleComponents::InputRequestStatus");
+                    std::terminate();
+            }
+        }
+    }();
+
+    if (next_task != nullptr)
+        return next_task;
+
+    [&] {
+        while (true) {
+            console_.ClearScreen();
+            console_.WriteCachedMsgs();
+            console_.RequestUserConfirmation();
+
+            switch (console_.GetInputRequestStatus()) {
+                case ConsoleComponents::InputRequestStatus::Success:
+                    return;
+
+                case ConsoleComponents::InputRequestStatus::Invalid:
+                    console_.WriteLineToCache(ConsoleComponents::MsgType::Info, "Invalid input");
+                    break;
+
+                default:
+                    assert(false && "Unhandled ConsoleComponents::InputRequestStatus");
+                    std::terminate();
+            }
+        }
+    }();
+
     if (console_.GetUserConfirmationStatus() == true) {
         game_library_.ResetGameClock(console_.GetNumberInputResult() - 1);
         console_.WriteLineToCache(ConsoleComponents::MsgType::Info, "Reset game clock");

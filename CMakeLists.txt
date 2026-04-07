@@ -38,10 +38,6 @@ target_sources(GameWatchCon PUBLIC FILE_SET CXX_MODULES FILES
         Code/App/Tasks/GetGameTitleUsedToChangeGameTitle/GetGameTitleUsedToChangeGameTitle.ixx
         Code/App/Tasks/ValidateGameTitleUsedToChangeGameTitle/ValidateGameTitleUsedToChangeGameTitle.ixx
         Code/App/Tasks/ChangeGameTitle/ChangeGameTitle.ixx
-        Code/App/Tasks/GetGameIDUsedToResetGameClock/GetGameIDUsedToResetGameClock.ixx
-        Code/App/Tasks/ValidateGameIDUsedToResetGameClock/ValidateGameIDUsedToResetGameClock.ixx
-        Code/App/Tasks/GetUserConfirmationUsedToResetGameClock/GetUserConfirmationUsedToResetGameClock.ixx
-        Code/App/Tasks/ValidateUserConfirmationUsedToResetGameClock/ValidateUserConfirmationUsedToResetGameClock.ixx
         Code/App/Tasks/ResetGameClock/ResetGameClock.ixx
 
         Code/App/Core/App/App.ixx
@@ -74,10 +70,6 @@ target_sources(GameWatchCon PRIVATE
         Code/App/Tasks/GetGameTitleUsedToChangeGameTitle/GetGameTitleUsedToChangeGameTitle.cxx
         Code/App/Tasks/ValidateGameTitleUsedToChangeGameTitle/ValidateGameTitleUsedToChangeGameTitle.cxx
         Code/App/Tasks/ChangeGameTitle/ChangeGameTitle.cxx
-        Code/App/Tasks/GetGameIDUsedToResetGameClock/GetGameIDUsedToResetGameClock.cxx
-        Code/App/Tasks/ValidateGameIDUsedToResetGameClock/ValidateGameIDUsedToResetGameClock.cxx
-        Code/App/Tasks/GetUserConfirmationUsedToResetGameClock/GetUserConfirmationUsedToResetGameClock.cxx
-        Code/App/Tasks/ValidateUserConfirmationUsedToResetGameClock/ValidateUserConfirmationUsedToResetGameClock.cxx
         Code/App/Tasks/ResetGameClock/ResetGameClock.cxx
 
         Code/App/Core/App/App.cxx
