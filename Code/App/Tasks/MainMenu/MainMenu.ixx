@@ -20,24 +20,18 @@ module;
 
 #include <memory>
 
-module App;
+export module Task_MainMenu;
 
 import Task;
-import Task_StartApp;
+import Console;
 
-using namespace gw::con::core;
-using namespace gw::con::tasks;
+export namespace gw::con::tasks {
+class MainMenu : public core::Task {
+public:
+    explicit MainMenu(const std::shared_ptr<Context>&) noexcept;
+    [[nodiscard]] auto Run() noexcept -> std::unique_ptr<Task> override;
 
-App::App() noexcept : app_state_{} {}
-
-auto App::Start() noexcept -> void {
-    task_stack_.Push(std::make_unique<StartApp>(std::make_shared<Task::Context>(app_state_, app_config_, console_, game_library_)));
-
-    do {
-        ProcessTask();
-    } while (app_state_.GetStatus() == AppStatusAccess::Status::Active);
-}
-
-auto App::ProcessTask() noexcept -> void {
-    task_stack_.Push(task_stack_.Pop()->Run());
-}
+private:
+    core::Console& console_;
+};
+} // namespace gw::con::tasks

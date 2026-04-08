@@ -20,8 +20,10 @@ module;
 
 #include <memory>
 
-module Tasks;
-import :StartApp;
+module Task_StartApp;
+
+import AppState;
+import Task_MainMenu;
 
 using namespace gw::con::tasks;
 using namespace gw::con::core;
@@ -31,5 +33,5 @@ StartApp::StartApp(const std::shared_ptr<Context>& ctx) noexcept : Task{ctx}, ap
 auto StartApp::Run() noexcept -> std::unique_ptr<Task> {
     app_status_.SetStatus(AppStatusAccess::Status::Active);
 
-    return std::make_unique<GetMainMenuOptionChoice>(ctx);
+    return std::make_unique<MainMenu>(ctx);
 }

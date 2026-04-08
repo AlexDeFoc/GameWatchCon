@@ -30,3 +30,22 @@ auto GameLibraryWriteAccess::SetGameTitle(const std::size_t index, std::string n
     assert(index < games_.size() && "Provided out of range index to GameLibraryWriteAccess::SetGameTitle");
     games_[index].SetTitle(std::move(new_title));
 }
+
+auto GameLibraryWriteAccess::SetGameTitle(const std::size_t index, const std::string_view new_title) noexcept -> void {
+    assert(index < games_.size() && "Provided out of range index to GameLibraryWriteAccess::SetGameTitle");
+    games_[index].SetTitle(std::string{new_title});
+}
+
+auto GameLibraryWriteAccess::ResetGameClock(const std::size_t index) noexcept -> void {
+    assert(index < games_.size() && "Provided out of range index to GameLibraryWriteAccess::SetGameTitle");
+    games_[index].ResetClock();
+}
+
+auto GameLibraryWriteAccess::RemoveGame(const std::size_t index) noexcept -> void {
+    assert(index < games_.size() && "Provided out of range index to GameLibraryWriteAccess::SetGameTitle");
+    games_.erase(games_.begin() + index);
+}
+
+auto GameLibraryWriteAccess::AddGame(const std::string_view title) noexcept -> void { games_.emplace_back(std::string{title}); }
+
+auto GameLibraryWriteAccess::AddGame(std::string title) noexcept -> void { games_.emplace_back(std::move(title)); }

@@ -24,6 +24,6 @@ module Task;
 
 using namespace gw::con::core;
 
-Task::Context::Context(AppState& app_state, AppConfig& app_config, Console& console) noexcept : app_state{app_state}, app_config{app_config}, console{console} {}
+Task::Context::Context(AppState& app_state, AppConfig& app_config, Console& console, GameLibrary& game_library) noexcept : app_state{app_state}, app_config{app_config}, console{console}, game_library{game_library} {}
 
 Task::Task(const std::shared_ptr<Context>& ctx) noexcept : ctx{ctx} {}

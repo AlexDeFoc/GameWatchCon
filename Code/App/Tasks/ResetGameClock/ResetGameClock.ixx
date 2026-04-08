@@ -20,18 +20,20 @@ module;
 
 #include <memory>
 
-export module Tasks:GetMainMenuOptionChoice;
+export module Task_ResetGameClock;
 
 import Task;
+import GameLibrary;
 import Console;
 
 export namespace gw::con::tasks {
-class GetMainMenuOptionChoice : public core::Task {
+class ResetGameClock : public core::Task {
 public:
-    explicit GetMainMenuOptionChoice(const std::shared_ptr<Context>&) noexcept;
+    explicit ResetGameClock(const std::shared_ptr<Context>&) noexcept;
     [[nodiscard]] auto Run() noexcept -> std::unique_ptr<Task> override;
 
 private:
-    core::Console& console;
+    core::GameLibrary& game_library_;
+    core::Console& console_;
 };
 } // namespace gw::con::tasks

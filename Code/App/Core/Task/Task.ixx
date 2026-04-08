@@ -24,16 +24,18 @@ export module Task;
 import AppState;
 import AppConfig;
 import Console;
+import GameLibrary;
 
 export namespace gw::con::core {
 class Task {
 public:
     struct Context {
-        Context(AppState&, AppConfig&, Console&) noexcept;
+        Context(AppState&, AppConfig&, Console&, GameLibrary&) noexcept;
 
         AppState& app_state;
         AppConfig& app_config;
         Console& console;
+        GameLibrary& game_library;
     };
 
     explicit Task(const std::shared_ptr<Context>&) noexcept;

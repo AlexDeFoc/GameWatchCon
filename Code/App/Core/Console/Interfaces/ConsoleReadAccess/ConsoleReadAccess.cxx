@@ -18,14 +18,28 @@
 
 module;
 
-#include <string_view>
+#include <iostream>
+#include <print>
+#include <string>
 
 module Console;
 import :ConsoleReadAccess;
 
 using namespace gw::con::core;
 
-ConsoleReadAccess::ConsoleReadAccess() noexcept : input_request_status_{}, number_input_result_{} {}
+ConsoleReadAccess::ConsoleReadAccess() noexcept : input_request_status_{}, number_input_result_{}, user_confirmed_{false} {}
+
+auto ConsoleReadAccess::RequestUserConfirmation() noexcept -> void {
+    static auto list_func = [&] {
+        std::println("Are you sure?");
+        std::println("1. Yes");
+        std::println("0. No");
+    };
+
+    RequestMenuOptionID(list_func, {0, 1}, ConsoleComponents::RequestIsCancellable::No);
+
+    user_confirmed_ = number_input_result_ == 1;
+}
 
 auto ConsoleReadAccess::RequestGameTitle(const ConsoleComponents::RequestIsCancellable request_is_cancellable) noexcept -> void {
     static auto request_msg_func = [&] { ConsoleWriteAccess::Write(ConsoleComponents::MsgType::Request, "Enter game new title: "); };
@@ -40,3 +54,10 @@ auto ConsoleReadAccess::GetInputRequestStatus() const noexcept -> ConsoleCompone
 auto ConsoleReadAccess::GetNumberInputResult() const noexcept -> int { return number_input_result_; }
 
 auto ConsoleReadAccess::GetStringInputResult() const noexcept -> std::string_view { return string_input_result_; }
+
+auto ConsoleReadAccess::GetUserConfirmationStatus() const noexcept -> bool { return user_confirmed_; }
+
+auto ConsoleReadAccess::RequestKeyPress() noexcept -> void {
+    std::string _{};
+    std::getline(std::cin, _);
+}

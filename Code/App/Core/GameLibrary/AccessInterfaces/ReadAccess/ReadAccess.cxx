@@ -26,19 +26,18 @@ import :ReadAccess;
 
 using namespace gw::con::core;
 
-auto GameLibraryReadAccess::ListGames() const noexcept -> GameLibraryStatus {
-    if (games_.empty())
-        return GameLibraryStatus::Empty;
-
+auto GameLibraryReadAccess::ListGames() const noexcept -> void {
     for (std::size_t game_index{1}; const auto& game : games_) {
         std::println("{}. {} - {}", game_index, game.GetTitle(), game.GetPrintableClock());
         game_index++;
     }
-
-    return GameLibraryStatus::NotEmpty;
 }
+
+auto GameLibraryReadAccess::IsEmpty() const noexcept -> bool { return games_.empty(); }
 
 auto GameLibraryReadAccess::GetGameTitle(const std::size_t index) const noexcept -> std::string_view {
     assert(index < games_.size() && "Provided out of range index to GameLibraryReadAccess::GetGameTitle");
     return games_[index].GetTitle();
 }
+
+auto GameLibraryReadAccess::GamesCount() const noexcept -> std::size_t { return games_.size(); }

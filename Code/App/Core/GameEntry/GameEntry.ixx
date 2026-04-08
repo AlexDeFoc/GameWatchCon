@@ -29,6 +29,7 @@ export namespace gw::con::core {
 class GameEntry {
 public:
     GameEntry() noexcept = default;
+    explicit GameEntry(std::string) noexcept;
 
     auto SetTitle(std::string) noexcept -> void;
     [[nodiscard]] auto GetTitle() const noexcept -> std::string_view;

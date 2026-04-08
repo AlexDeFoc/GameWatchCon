@@ -27,11 +27,15 @@ target_sources(GameWatchCon PUBLIC FILE_SET CXX_MODULES FILES
         Code/App/Core/AppState/AppState.ixx
         Code/App/Core/AppState/Interfaces/AppStatusAccess/AppStatusAccess.ixx
 
-        Code/App/Tasks/Tasks.ixx
         Code/App/Tasks/StartApp/StartApp.ixx
         Code/App/Tasks/StopApp/StopApp.ixx
-        Code/App/Tasks/GetMainMenuOptionChoice/GetMainMenuOptionChoice.ixx
-        Code/App/Tasks/ValidateMainMenuOptionChoice/ValidateMainMenuOptionChoice.ixx
+        Code/App/Tasks/MainMenu/MainMenu.ixx
+        Code/App/Tasks/EditGamesMenu/EditGamesMenu.ixx
+        Code/App/Tasks/ListGames/ListGames.ixx
+        Code/App/Tasks/AddNewGame/AddNewGame.ixx
+        Code/App/Tasks/ChangeGameTitle/ChangeGameTitle.ixx
+        Code/App/Tasks/ResetGameClock/ResetGameClock.ixx
+        Code/App/Tasks/DeleteGame/DeleteGame.ixx
 
         Code/App/Core/App/App.ixx
 )
@@ -54,8 +58,13 @@ target_sources(GameWatchCon PRIVATE
 
         Code/App/Tasks/StartApp/StartApp.cxx
         Code/App/Tasks/StopApp/StopApp.cxx
-        Code/App/Tasks/GetMainMenuOptionChoice/GetMainMenuOptionChoice.cxx
-        Code/App/Tasks/ValidateMainMenuOptionChoice/ValidateMainMenuOptionChoice.cxx
+        Code/App/Tasks/MainMenu/MainMenu.cxx
+        Code/App/Tasks/EditGamesMenu/EditGamesMenu.cxx
+        Code/App/Tasks/ListGames/ListGames.cxx
+        Code/App/Tasks/AddNewGame/AddNewGame.cxx
+        Code/App/Tasks/ChangeGameTitle/ChangeGameTitle.cxx
+        Code/App/Tasks/ResetGameClock/ResetGameClock.cxx
+        Code/App/Tasks/DeleteGame/DeleteGame.cxx
 
         Code/App/Core/App/App.cxx
 

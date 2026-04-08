@@ -20,18 +20,20 @@ module;
 
 #include <memory>
 
-export module Tasks:ValidateMainMenuOptionChoice;
+export module Task_DeleteGame;
 
 import Task;
+import GameLibrary;
 import Console;
 
 export namespace gw::con::tasks {
-class ValidateMainMenuOptionChoice : public core::Task {
+class DeleteGame : public core::Task {
 public:
-    explicit ValidateMainMenuOptionChoice(const std::shared_ptr<Context>&) noexcept;
+    explicit DeleteGame(const std::shared_ptr<Context>&) noexcept;
     [[nodiscard]] auto Run() noexcept -> std::unique_ptr<Task> override;
 
 private:
-    core::Console& console;
+    core::GameLibrary& game_library_;
+    core::Console& console_;
 };
 } // namespace gw::con::tasks

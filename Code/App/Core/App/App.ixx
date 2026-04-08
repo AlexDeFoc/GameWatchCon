@@ -22,6 +22,7 @@ import AppState;
 import AppConfig;
 import TaskQueue;
 import Console;
+import GameLibrary;
 
 export namespace gw::con::core {
 class App {
@@ -35,5 +36,6 @@ private:
     AppConfig app_config_;
     TaskQueue task_stack_;
     Console console_;
+    GameLibrary game_library_;
 };
 } // namespace gw::con::core

@@ -18,29 +18,26 @@
 
 module;
 
-#include <print>
+#include <memory>
 
-module Tasks;
-import :GetMainMenuOptionChoice;
+module Task_ListGames;
+
+import Task_MainMenu;
 
 using namespace gw::con::tasks;
 using namespace gw::con::core;
 
-GetMainMenuOptionChoice::GetMainMenuOptionChoice(const std::shared_ptr<Context>& ctx) noexcept : Task{ctx}, console{Task::ctx->console} {}
+ListGames::ListGames(const std::shared_ptr<Context>& ctx) noexcept : Task{ctx}, game_library_{Task::ctx->game_library}, console_{Task::ctx->console} {}
 
-auto GetMainMenuOptionChoice::Run() noexcept -> std::unique_ptr<Task> {
-    static auto list_opts = [] {
-        std::println("1. List games");
-        std::println("2. Edit games");
-        std::println("3. Add new game");
-        std::println("4. Settings");
-        std::println("5. Check for updates");
-        std::println("0. Exit app");
-    };
+auto ListGames::Run() noexcept -> std::unique_ptr<Task> {
+    if (game_library_.IsEmpty()) {
+        console_.WriteLineToCache(ConsoleComponents::MsgType::Error, "No entries found");
+        return std::make_unique<MainMenu>(ctx);
+    }
 
-    console.ClearScreen();
-    console.WriteCachedMsgs();
-    console.RequestMenuOptionID(list_opts, {0, 5}, ConsoleComponents::RequestIsCancellable::No);
-
-    return std::make_unique<ValidateMainMenuOptionChoice>(ctx);
+    console_.ClearScreen();
+    game_library_.ListGames();
+    console_.WriteLine(ConsoleComponents::MsgType::Tip, "Press any key to go back");
+    Console::RequestKeyPress();
+    return std::make_unique<MainMenu>(ctx);
 }
