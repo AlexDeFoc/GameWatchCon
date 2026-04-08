@@ -21,35 +21,36 @@ module;
 #include <cassert>
 #include <print>
 
-module Task_MainMenu;
+module Task_SettingsMenu;
 
-import Task_StopApp;
-import Task_ListGames;
-import Task_AddNewGame;
-import Task_EditGamesMenu;
-import Task_SettingsMenu;
+import Task_MainMenu;
+import Task_ToggleAutoSave;
 
 using namespace gw::con::tasks;
 using namespace gw::con::core;
 
-MainMenu::MainMenu(const std::shared_ptr<Context>& ctx) noexcept : Task{ctx}, console_{Task::ctx->console} {}
+SettingsMenu::SettingsMenu(const std::shared_ptr<Context>& ctx) noexcept : Task{ctx}, console_{Task::ctx->console}, app_config_{Task::ctx->app_config} {}
 
-auto MainMenu::Run() noexcept -> std::unique_ptr<Task> {
-    static auto list_opts = [] {
-        std::println("1. List games");
-        std::println("2. Start game");
-        std::println("3. Edit games");
-        std::println("4. Add new game");
-        std::println("5. Settings");
-        std::println("6. Check for updates");
-        std::println("0. Exit app");
+auto SettingsMenu::Run() noexcept -> std::unique_ptr<Task> {
+    // TODO: Change from true to 'Enabled' enum typed value
+    // TODO 2: Make it colored the 'enabled' text value and diff color from disabled (need to impl console color text method)
+    std::string autosave_status_text = "1. Toggle game clock autosave";
+    if (app_config_.GetAutoSaveStatus() == true)
+        autosave_status_text = std::format("{}: enabled", autosave_status_text);
+    else
+        autosave_status_text = std::format("{}: disabled", autosave_status_text);
+
+    auto list_opts = [&] {
+        std::println("{}", autosave_status_text);
+        std::println("2. Change game clock autosave interval");
+        std::println("0. Go back");
     };
 
     [&] {
         while (true) {
             console_.ClearScreen();
             console_.WriteCachedMsgs();
-            console_.RequestMenuOptionID(list_opts, {0, 6}, Console::RequestIsCancellable::No);
+            console_.RequestMenuOptionID(list_opts, {0, 2}, Console::RequestIsCancellable::No);
 
             switch (console_.GetInputRequestStatus()) {
                 case Console::InputRequestStatus::Invalid:
@@ -68,19 +69,10 @@ auto MainMenu::Run() noexcept -> std::unique_ptr<Task> {
 
     switch (console_.GetNumberInputResult()) {
         case 0:
-            return std::make_unique<StopApp>(ctx);
+            return std::make_unique<MainMenu>(ctx);
 
         case 1:
-            return std::make_unique<ListGames>(ctx);
-
-        case 3:
-            return std::make_unique<EditGamesMenu>(ctx);
-
-        case 4:
-            return std::make_unique<AddNewGame>(ctx);
-
-        case 5:
-            return std::make_unique<SettingsMenu>(ctx);
+            return std::make_unique<ToggleAutoSave>(ctx);
 
         default:
             assert(false && "Unhandled option index");

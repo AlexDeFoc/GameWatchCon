@@ -18,22 +18,20 @@
 
 module;
 
-#include <chrono>
+#include <memory>
 
-export module AppConfig;
+export module Task_ToggleAutoSave;
 
-export namespace gw::con::core {
-class AppConfig {
+import Task;
+import AppConfig;
+
+export namespace gw::con::tasks {
+class ToggleAutoSave : public core::Task {
 public:
-    AppConfig() noexcept;
-
-    auto ToggleAutoSaveStatus() noexcept -> void;
-    auto ChangeAutoSaveInterval(std::chrono::steady_clock::duration) noexcept -> void;
-    [[nodiscard]] auto GetAutoSaveStatus() const noexcept -> bool;
-    [[nodiscard]] auto GetPrintableAutoSaveInterval() const noexcept -> std::string;
+    explicit ToggleAutoSave(const std::shared_ptr<Context>&) noexcept;
+    [[nodiscard]] auto Run() noexcept -> std::unique_ptr<Task> override;
 
 private:
-    bool autosave_enabled_status_;
-    std::chrono::steady_clock::duration autosave_interval_;
+    core::AppConfig& app_config_;
 };
-} // namespace gw::con::core
+} // namespace gw::con::tasks
