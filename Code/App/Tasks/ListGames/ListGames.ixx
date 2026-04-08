@@ -34,6 +34,6 @@ public:
 
 private:
     core::GameLibrary& game_library_;
-    core::ConsoleWriteAccess& console_;
+    core::Console& console_;
 };
 } // namespace gw::con::tasks

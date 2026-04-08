@@ -40,19 +40,19 @@ auto ChangeGameTitle::Run() noexcept -> std::unique_ptr<Task> {
             console_.RequestGameID(list_func, {1, game_library_.GamesCount()});
 
             switch (console_.GetInputRequestStatus()) {
-                case ConsoleComponents::InputRequestStatus::Success:
+                case Console::InputRequestStatus::Success:
                     return nullptr;
 
-                case ConsoleComponents::InputRequestStatus::Cancelled:
-                    console_.WriteLineToCache(ConsoleComponents::MsgType::Info, "Action cancelled");
+                case Console::InputRequestStatus::Cancelled:
+                    console_.WriteLineToCache(Console::MsgType::Info, "Action cancelled");
                     return std::make_unique<EditGamesMenu>(ctx);
 
-                case ConsoleComponents::InputRequestStatus::Invalid:
-                    console_.WriteLineToCache(ConsoleComponents::MsgType::Info, "Invalid input");
+                case Console::InputRequestStatus::Invalid:
+                    console_.WriteLineToCache(Console::MsgType::Info, "Invalid input");
                     break;
 
                 default:
-                    assert(false && "Unhandled ConsoleComponents::InputRequestStatus");
+                    assert(false && "Unhandled Console::InputRequestStatus");
                     std::terminate();
             }
         }
@@ -65,19 +65,19 @@ auto ChangeGameTitle::Run() noexcept -> std::unique_ptr<Task> {
     console_.WriteCachedMsgs();
     console_.RequestGameTitle();
     switch (console_.GetInputRequestStatus()) {
-        case ConsoleComponents::InputRequestStatus::Success:
+        case Console::InputRequestStatus::Success:
             break;
 
-        case ConsoleComponents::InputRequestStatus::Cancelled:
-            console_.WriteLineToCache(ConsoleComponents::MsgType::Info, "Action cancelled");
+        case Console::InputRequestStatus::Cancelled:
+            console_.WriteLineToCache(Console::MsgType::Info, "Action cancelled");
             return std::make_unique<EditGamesMenu>(ctx);
 
         default:
-            assert(false && "Unhandled ConsoleComponents::InputRequestStatus");
+            assert(false && "Unhandled Console::InputRequestStatus");
             std::terminate();
     }
 
     game_library_.SetGameTitle(console_.GetNumberInputResult() - 1, console_.GetStringInputResult());
-    console_.WriteLineToCache(ConsoleComponents::MsgType::Info, "Changed game title");
+    console_.WriteLineToCache(Console::MsgType::Info, "Changed game title");
     return std::make_unique<EditGamesMenu>(ctx);
 }

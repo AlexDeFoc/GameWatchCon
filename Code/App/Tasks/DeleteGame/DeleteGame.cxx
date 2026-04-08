@@ -41,19 +41,19 @@ auto DeleteGame::Run() noexcept -> std::unique_ptr<Task> {
             console_.RequestGameID(list_func, {1, game_library_.GamesCount()});
 
             switch (console_.GetInputRequestStatus()) {
-                case ConsoleComponents::InputRequestStatus::Success:
+                case Console::InputRequestStatus::Success:
                     return nullptr;
 
-                case ConsoleComponents::InputRequestStatus::Cancelled:
-                    console_.WriteLineToCache(ConsoleComponents::MsgType::Info, "Action cancelled");
+                case Console::InputRequestStatus::Cancelled:
+                    console_.WriteLineToCache(Console::MsgType::Info, "Action cancelled");
                     return std::make_unique<EditGamesMenu>(ctx);
 
-                case ConsoleComponents::InputRequestStatus::Invalid:
-                    console_.WriteLineToCache(ConsoleComponents::MsgType::Info, "Invalid input");
+                case Console::InputRequestStatus::Invalid:
+                    console_.WriteLineToCache(Console::MsgType::Info, "Invalid input");
                     break;
 
                 default:
-                    assert(false && "Unhandled ConsoleComponents::InputRequestStatus");
+                    assert(false && "Unhandled Console::InputRequestStatus");
                     std::terminate();
             }
         }
@@ -69,15 +69,15 @@ auto DeleteGame::Run() noexcept -> std::unique_ptr<Task> {
             console_.RequestUserConfirmation();
 
             switch (console_.GetInputRequestStatus()) {
-                case ConsoleComponents::InputRequestStatus::Success:
+                case Console::InputRequestStatus::Success:
                     return;
 
-                case ConsoleComponents::InputRequestStatus::Invalid:
-                    console_.WriteLineToCache(ConsoleComponents::MsgType::Info, "Invalid input");
+                case Console::InputRequestStatus::Invalid:
+                    console_.WriteLineToCache(Console::MsgType::Info, "Invalid input");
                     break;
 
                 default:
-                    assert(false && "Unhandled ConsoleComponents::InputRequestStatus");
+                    assert(false && "Unhandled Console::InputRequestStatus");
                     std::terminate();
             }
         }
@@ -85,9 +85,9 @@ auto DeleteGame::Run() noexcept -> std::unique_ptr<Task> {
 
     if (console_.GetUserConfirmationStatus() == true) {
         game_library_.RemoveGame(console_.GetNumberInputResult() - 1);
-        console_.WriteLineToCache(ConsoleComponents::MsgType::Info, "Deleted game");
+        console_.WriteLineToCache(Console::MsgType::Info, "Deleted game");
     } else {
-        console_.WriteLineToCache(ConsoleComponents::MsgType::Info, "Action cancelled");
+        console_.WriteLineToCache(Console::MsgType::Info, "Action cancelled");
     }
 
     if (game_library_.IsEmpty())
