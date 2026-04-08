@@ -18,20 +18,22 @@
 
 module;
 
-#include <string>
+#include <memory>
 
-export module GameLibrary:WriteAccess;
+export module Task_DeleteGame;
 
-import :Base;
+import Task;
+import GameLibrary;
+import Console;
 
-export namespace gw::con::core {
-class GameLibraryWriteAccess : virtual public GameLibraryBase {
+export namespace gw::con::tasks {
+class DeleteGame : public core::Task {
 public:
-    auto SetGameTitle(std::size_t, std::string) noexcept -> void;
-    auto SetGameTitle(std::size_t, std::string_view) noexcept -> void;
-    auto ResetGameClock(std::size_t) noexcept -> void;
-    auto RemoveGame(std::size_t) noexcept -> void;
-    auto AddGame(std::string_view) noexcept -> void;
-    auto AddGame(std::string) noexcept -> void;
+    explicit DeleteGame(const std::shared_ptr<Context>&) noexcept;
+    [[nodiscard]] auto Run() noexcept -> std::unique_ptr<Task> override;
+
+private:
+    core::GameLibrary& game_library_;
+    core::Console& console_;
 };
-} // namespace gw::con::core
+} // namespace gw::con::tasks

@@ -37,6 +37,8 @@ auto ConsoleReadAccess::RequestUserConfirmation() noexcept -> void {
     };
 
     RequestMenuOptionID(list_func, {0, 1}, ConsoleComponents::RequestIsCancellable::No);
+
+    user_confirmed_ = number_input_result_ == 1;
 }
 
 auto ConsoleReadAccess::RequestGameTitle(const ConsoleComponents::RequestIsCancellable request_is_cancellable) noexcept -> void {

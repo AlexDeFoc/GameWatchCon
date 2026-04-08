@@ -26,6 +26,7 @@ module Task_EditGamesMenu;
 import Task_MainMenu;
 import Task_ChangeGameTitle;
 import Task_ResetGameClock;
+import Task_DeleteGame;
 
 using namespace gw::con::tasks;
 using namespace gw::con::core;
@@ -75,6 +76,9 @@ auto EditGamesMenu::Run() noexcept -> std::unique_ptr<Task> {
 
         case 2:
             return std::make_unique<ResetGameClock>(ctx);
+
+        case 3:
+            return std::make_unique<DeleteGame>(ctx);
 
         default:
             assert(false && "Unhandled option index");
