@@ -35,7 +35,7 @@ EditGamesMenu::EditGamesMenu(const std::shared_ptr<Context>& ctx) noexcept : Tas
 
 auto EditGamesMenu::Run() noexcept -> std::unique_ptr<Task> {
     if (game_library_.IsEmpty()) {
-        console_.WriteLineToCache(ConsoleComponents::MsgType::Error, "No entries found");
+        console_.WriteLineToCache(Console::MsgType::Error, "No entries found");
         return std::make_unique<MainMenu>(ctx);
     }
 
@@ -50,18 +50,18 @@ auto EditGamesMenu::Run() noexcept -> std::unique_ptr<Task> {
         while (true) {
             console_.ClearScreen();
             console_.WriteCachedMsgs();
-            console_.RequestMenuOptionID(list_opts, {0, 3}, ConsoleComponents::RequestIsCancellable::No);
+            console_.RequestMenuOptionID(list_opts, {0, 3}, Console::RequestIsCancellable::No);
 
             switch (console_.GetInputRequestStatus()) {
-                case ConsoleComponents::InputRequestStatus::Invalid:
-                    console_.WriteLineToCache(ConsoleComponents::MsgType::Error, "Invalid input!");
+                case Console::InputRequestStatus::Invalid:
+                    console_.WriteLineToCache(Console::MsgType::Error, "Invalid input!");
                     break;
 
-                case ConsoleComponents::InputRequestStatus::Success:
+                case Console::InputRequestStatus::Success:
                     return;
 
                 default:
-                    assert(false && "Unhandled ConsoleComponents::InputRequestStatus");
+                    assert(false && "Unhandled Console::InputRequestStatus");
                     std::terminate();
             }
         }

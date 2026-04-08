@@ -36,23 +36,23 @@ auto AddNewGame::Run() noexcept -> std::unique_ptr<Task> {
     console_.RequestGameTitle();
 
     switch (console_.GetInputRequestStatus()) {
-        case ConsoleComponents::InputRequestStatus::Success:
+        case Console::InputRequestStatus::Success:
             game_library_.AddGame(console_.GetStringInputResult());
-            console_.WriteLineToCache(ConsoleComponents::MsgType::Info, "Added game");
+            console_.WriteLineToCache(Console::MsgType::Info, "Added game");
             return std::make_unique<MainMenu>(ctx);
 
-        case ConsoleComponents::InputRequestStatus::Cancelled:
-            console_.WriteLineToCache(ConsoleComponents::MsgType::Info, "Action cancelled");
+        case Console::InputRequestStatus::Cancelled:
+            console_.WriteLineToCache(Console::MsgType::Info, "Action cancelled");
             return std::make_unique<MainMenu>(ctx);
 
-        case ConsoleComponents::InputRequestStatus::Invalid:
-            console_.WriteLineToCache(ConsoleComponents::MsgType::Info, "An issue has occurred with adding the game");
+        case Console::InputRequestStatus::Invalid:
+            console_.WriteLineToCache(Console::MsgType::Info, "An issue has occurred with adding the game");
             return std::make_unique<MainMenu>(ctx);
 
         default:
             break;
     }
 
-    assert(false && "Unhandled ConsoleComponents::InputRequestStatus in AddNewGame::Run");
+    assert(false && "Unhandled Console::InputRequestStatus in AddNewGame::Run");
     std::terminate();
 }
