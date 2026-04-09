@@ -29,11 +29,11 @@ using namespace std::chrono;
 // TODO: change autosave to being true by default
 AppConfig::AppConfig() noexcept : autosave_enabled_status_{false}, autosave_interval_{5min} {}
 
-auto AppConfig::ToggleAutoSaveStatus() noexcept -> void { autosave_enabled_status_ = !autosave_enabled_status_; }
+auto AppConfig::ToggleAutoSaveStatus() noexcept -> void { autosave_enabled_status_ = autosave_enabled_status_ == AutoSaveStatus::Disabled ? AutoSaveStatus::Enabled : AutoSaveStatus::Disabled; }
 
 auto AppConfig::ChangeAutoSaveInterval(const steady_clock::duration new_interval) noexcept -> void { autosave_interval_ = new_interval; }
 
-auto AppConfig::GetAutoSaveStatus() const noexcept -> bool { return autosave_enabled_status_; }
+auto AppConfig::GetAutoSaveStatus() const noexcept -> AutoSaveStatus { return autosave_enabled_status_; }
 
 // TODO: Make this more/stronger type/d safe
 auto AppConfig::GetPrintableAutoSaveInterval() const noexcept -> std::string {

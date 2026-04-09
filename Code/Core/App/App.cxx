@@ -38,6 +38,10 @@ auto App::Run() noexcept -> void {
                 current_task_ = tasks::AddNewGame(console_, game_library_);
                 break;
 
+            case TaskType::ChangeAutoSaveInterval:
+                current_task_ = tasks::ChangeAutoSaveInterval(console_, app_config_);
+                break;
+
             case TaskType::ChangeGameTitle:
                 current_task_ = tasks::ChangeGameTitle(console_, game_library_);
                 break;

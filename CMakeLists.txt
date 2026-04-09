@@ -16,10 +16,12 @@ target_sources(GameWatchCon PUBLIC FILE_SET CXX_MODULES FILES
         Code/Core/GameLibrary/GameLibrary.ixx
         Code/Core/GameLibrary/AccessInterfaces/ReadAccess/ReadAccess.ixx
         Code/Core/GameLibrary/AccessInterfaces/WriteAccess/WriteAccess.ixx
+        Code/Core/Utils/Utils.ixx
 
         # Tasks
         Code/Tasks/Tasks.ixx
         Code/Tasks/AddNewGame/AddNewGame.ixx
+        Code/Tasks/ChangeAutoSaveInterval/ChangeAutoSaveInterval.ixx
         Code/Tasks/ChangeGameTitle/ChangeGameTitle.ixx
         Code/Tasks/DeleteGame/DeleteGame.ixx
         Code/Tasks/EditGamesMenu/EditGamesMenu.ixx
@@ -42,9 +44,11 @@ target_sources(GameWatchCon PRIVATE
         Code/Core/GameEntry/GameEntry.cxx
         Code/Core/GameLibrary/AccessInterfaces/ReadAccess/ReadAccess.cxx
         Code/Core/GameLibrary/AccessInterfaces/WriteAccess/WriteAccess.cxx
+        Code/Core/Utils/Utils.cxx
 
         # Tasks
         Code/Tasks/AddNewGame/AddNewGame.cxx
+        Code/Tasks/ChangeAutoSaveInterval/ChangeAutoSaveInterval.cxx
         Code/Tasks/ChangeGameTitle/ChangeGameTitle.cxx
         Code/Tasks/DeleteGame/DeleteGame.cxx
         Code/Tasks/EditGamesMenu/EditGamesMenu.cxx
