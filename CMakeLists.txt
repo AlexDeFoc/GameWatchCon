@@ -86,3 +86,8 @@ if(CMAKE_GENERATOR MATCHES "Ninja|Unix Makefiles|Visual Studio")
         )
     endif()
 endif()
+
+find_package(asio CONFIG REQUIRED)
+find_package(nlohmann_json CONFIG REQUIRED)
+find_package(OpenSSL REQUIRED)
+target_link_libraries(GameWatchCon PRIVATE asio::asio nlohmann_json::nlohmann_json OpenSSL::SSL OpenSSL::Crypto)
