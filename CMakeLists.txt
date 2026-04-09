@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 4.2)
+cmake_minimum_required(VERSION 4.3)
 project(GameWatchCon LANGUAGES CXX)
 
 # Main App
@@ -6,63 +6,58 @@ add_executable(GameWatchCon)
 
 target_sources(GameWatchCon PUBLIC FILE_SET CXX_MODULES FILES
         # Core
-        Code/App/Core/App/App.ixx
-        Code/App/Core/AppConfig/AppConfig.ixx
-        Code/App/Core/AppState/AppState.ixx
-        Code/App/Core/AppState/Interfaces/AppStatusAccess/AppStatusAccess.ixx
-        Code/App/Core/Console/Console.ixx
-        Code/App/Core/GameClock/GameClock.ixx
-        Code/App/Core/GameEntry/GameEntry.ixx
-        Code/App/Core/GameLibrary/GameLibrary.ixx
-        Code/App/Core/GameLibrary/Partitions/Base.ixx
-        Code/App/Core/GameLibrary/AccessInterfaces/ReadAccess/ReadAccess.ixx
-        Code/App/Core/GameLibrary/AccessInterfaces/WriteAccess/WriteAccess.ixx
-        Code/App/Core/Task/Task.ixx
-        Code/App/Core/TaskQueue/TaskQueue.ixx
+        Code/Core/App/App.ixx
+        Code/Core/TaskType/TaskType.ixx
+        Code/Core/AppConfig/AppConfig.ixx
+        Code/Core/Console/Console.ixx
+        Code/Core/GameClock/GameClock.ixx
+        Code/Core/GameEntry/GameEntry.ixx
+        Code/Core/GameLibrary/Partitions/Base.ixx
+        Code/Core/GameLibrary/GameLibrary.ixx
+        Code/Core/GameLibrary/AccessInterfaces/ReadAccess/ReadAccess.ixx
+        Code/Core/GameLibrary/AccessInterfaces/WriteAccess/WriteAccess.ixx
 
         # Tasks
-        Code/App/Tasks/AddNewGame/AddNewGame.ixx
-        Code/App/Tasks/ChangeGameTitle/ChangeGameTitle.ixx
-        Code/App/Tasks/DeleteGame/DeleteGame.ixx
-        Code/App/Tasks/EditGamesMenu/EditGamesMenu.ixx
-        Code/App/Tasks/ListGames/ListGames.ixx
-        Code/App/Tasks/MainMenu/MainMenu.ixx
-        Code/App/Tasks/SettingsMenu/SettingsMenu.ixx
-        Code/App/Tasks/ResetGameClock/ResetGameClock.ixx
-        Code/App/Tasks/StartApp/StartApp.ixx
-        Code/App/Tasks/StopApp/StopApp.ixx
-        Code/App/Tasks/ToggleAutoSave/ToggleAutoSave.ixx
+        Code/Tasks/Tasks.ixx
+        Code/Tasks/AddNewGame/AddNewGame.ixx
+        Code/Tasks/ChangeGameTitle/ChangeGameTitle.ixx
+        Code/Tasks/DeleteGame/DeleteGame.ixx
+        Code/Tasks/EditGamesMenu/EditGamesMenu.ixx
+        Code/Tasks/ListGames/ListGames.ixx
+        Code/Tasks/MainMenu/MainMenu.ixx
+        Code/Tasks/ResetGameClock/ResetGameClock.ixx
+        Code/Tasks/SettingsMenu/SettingsMenu.ixx
+        Code/Tasks/StartApp/StartApp.ixx
+        Code/Tasks/StopApp/StopApp.ixx
+        Code/Tasks/ToggleAutoSave/ToggleAutoSave.ixx
 )
 
 target_sources(GameWatchCon PRIVATE
         # Core
-        Code/App/Core/App/App.cxx
-        Code/App/Core/AppConfig/AppConfig.cxx
-        Code/App/Core/AppEntryPoint/Main.cxx
-        Code/App/Core/AppState/Interfaces/AppStatusAccess/AppStatusAccess.cxx
-        Code/App/Core/Console/Console.cxx
-        Code/App/Core/GameClock/GameClock.cxx
-        Code/App/Core/GameEntry/GameEntry.cxx
-        Code/App/Core/GameLibrary/AccessInterfaces/ReadAccess/ReadAccess.cxx
-        Code/App/Core/GameLibrary/AccessInterfaces/WriteAccess/WriteAccess.cxx
-        Code/App/Core/Task/Task.cxx
-        Code/App/Core/TaskQueue/TaskQueue.cxx
+        Code/Core/App/App.cxx
+        Code/Core/AppConfig/AppConfig.cxx
+        Code/Core/AppEntryPoint/Main.cxx
+        Code/Core/Console/Console.cxx
+        Code/Core/GameClock/GameClock.cxx
+        Code/Core/GameEntry/GameEntry.cxx
+        Code/Core/GameLibrary/AccessInterfaces/ReadAccess/ReadAccess.cxx
+        Code/Core/GameLibrary/AccessInterfaces/WriteAccess/WriteAccess.cxx
 
         # Tasks
-        Code/App/Tasks/AddNewGame/AddNewGame.cxx
-        Code/App/Tasks/ChangeGameTitle/ChangeGameTitle.cxx
-        Code/App/Tasks/DeleteGame/DeleteGame.cxx
-        Code/App/Tasks/EditGamesMenu/EditGamesMenu.cxx
-        Code/App/Tasks/ListGames/ListGames.cxx
-        Code/App/Tasks/MainMenu/MainMenu.cxx
-        Code/App/Tasks/SettingsMenu/SettingsMenu.cxx
-        Code/App/Tasks/ResetGameClock/ResetGameClock.cxx
-        Code/App/Tasks/StartApp/StartApp.cxx
-        Code/App/Tasks/StopApp/StopApp.cxx
-        Code/App/Tasks/ToggleAutoSave/ToggleAutoSave.cxx
+        Code/Tasks/AddNewGame/AddNewGame.cxx
+        Code/Tasks/ChangeGameTitle/ChangeGameTitle.cxx
+        Code/Tasks/DeleteGame/DeleteGame.cxx
+        Code/Tasks/EditGamesMenu/EditGamesMenu.cxx
+        Code/Tasks/ListGames/ListGames.cxx
+        Code/Tasks/MainMenu/MainMenu.cxx
+        Code/Tasks/ResetGameClock/ResetGameClock.cxx
+        Code/Tasks/SettingsMenu/SettingsMenu.cxx
+        Code/Tasks/StartApp/StartApp.cxx
+        Code/Tasks/StopApp/StopApp.cxx
+        Code/Tasks/ToggleAutoSave/ToggleAutoSave.cxx
 )
 
-target_include_directories(GameWatchCon PRIVATE Code/App/)
+target_include_directories(GameWatchCon PRIVATE Code)
 
 set_target_properties(GameWatchCon PROPERTIES
     CXX_STANDARD 23
