@@ -18,24 +18,18 @@
 
 module;
 
-#include <chrono>
+#include <string>
 
-export module AppConfig;
+export module Utils;
+import Console;
 
-export namespace gw::con::core {
-class AppConfig {
-public:
-    enum class AutoSaveStatus : bool { Disabled,
-                                       Enabled };
-    AppConfig() noexcept;
-
-    auto ToggleAutoSaveStatus() noexcept -> void;
-    auto ChangeAutoSaveInterval(std::chrono::steady_clock::duration) noexcept -> void;
-    [[nodiscard]] auto GetAutoSaveStatus() const noexcept -> AutoSaveStatus;
-    [[nodiscard]] auto GetPrintableAutoSaveInterval() const noexcept -> std::string;
-
-private:
-    AutoSaveStatus autosave_enabled_status_;
-    std::chrono::steady_clock::duration autosave_interval_;
+export namespace gw::con::core::utils {
+enum class TextColor : int {
+    DarkGray,
+    Green,
+    Magenta,
+    Red
 };
-} // namespace gw::con::core
+
+[[nodiscard]] auto ColorText(const Console&, TextColor, std::string) noexcept -> std::string;
+} // namespace gw::con::core::utils

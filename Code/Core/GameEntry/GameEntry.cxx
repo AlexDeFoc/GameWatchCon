@@ -25,6 +25,8 @@ module GameEntry;
 
 using namespace gw::con::core;
 
+GameEntry::GameEntry() noexcept = default;
+
 GameEntry::GameEntry(std::string title) noexcept : title_{std::move(title)} {}
 
 auto GameEntry::SetTitle(std::string new_title) noexcept -> void { title_ = std::move(new_title); }

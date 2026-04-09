@@ -148,6 +148,31 @@ auto Console::RequestUserConfirmation() noexcept -> void {
     user_confirmed_ = number_input_result_ == 1;
 }
 
+auto Console::RequestAutoSaveInterval() noexcept -> void {
+    WriteLine(MsgType::Tip, "Enter CTRL+Z to cancel");
+    std::print("Enter new interval (in seconds): ");
+
+    if (std::string input{}; std::getline(std::cin, input)) {
+        try {
+            number_input_result_ = std::stoi(input);
+
+            // TODO: Add invalid values case (too low of a value / 0); and potentially request double input to truly confirm values that are too low BUT != 0
+        } catch (std::invalid_argument&) {
+            input_request_status_ = InputRequestStatus::Invalid;
+            return;
+        } catch (std::out_of_range&) {
+            input_request_status_ = InputRequestStatus::Invalid;
+            return;
+        }
+    } else if (std::cin.eof() || std::cin.fail()) {
+        input_request_status_ = InputRequestStatus::Cancelled;
+        std::cin.clear();
+        return;
+    }
+
+    input_request_status_ = InputRequestStatus::Success;
+}
+
 auto Console::RequestGameTitle(const RequestIsCancellable request_is_cancellable) noexcept -> void {
     static auto request_msg_func = [&] { Write(MsgType::Request, "Enter game new title: "); };
 
@@ -174,6 +199,14 @@ auto Console::GetNumberInputResult() const noexcept -> int { return number_input
 auto Console::GetStringInputResult() const noexcept -> std::string_view { return string_input_result_; }
 
 auto Console::GetUserConfirmationStatus() const noexcept -> bool { return user_confirmed_; }
+
+auto Console::IsCapableDisplayingColoredText() const noexcept -> bool {
+#ifdef _WIN32
+    return output_configured_for_vt_seq_;
+#else
+    return true;
+#endif
+}
 
 // Private Member Methods
 auto Console::GetDecoratedMsgTag(const MsgType msg_type) const noexcept -> std::string {

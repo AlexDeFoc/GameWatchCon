@@ -23,21 +23,24 @@ module;
 
 module Tasks;
 import :SettingsMenu;
+import Utils;
 
 using namespace gw::con;
 
 auto tasks::SettingsMenu(core::Console& console, const core::AppConfig& app_config) noexcept -> core::TaskType {
-    // TODO: Change from true to 'Enabled' enum typed value
-    // TODO 2: Make it colored the 'enabled' text value and diff color from disabled (need to impl console color text method)
     std::string autosave_status_text = "1. Toggle game clock autosave";
-    if (app_config.GetAutoSaveStatus() == true)
-        autosave_status_text = std::format("{}: enabled", autosave_status_text);
+    if (app_config.GetAutoSaveStatus() == core::AppConfig::AutoSaveStatus::Enabled)
+        // TODO: Optimize this stuff, its so insanely costly, computing each time, making allocations...
+        autosave_status_text = std::format("{}: {}", autosave_status_text, core::utils::ColorText(console, core::utils::TextColor::Green, "enabled"));
     else
-        autosave_status_text = std::format("{}: disabled", autosave_status_text);
+        autosave_status_text = std::format("{}: {}", autosave_status_text, core::utils::ColorText(console, core::utils::TextColor::Red, "disabled"));
+
+    // TODO: Find a way to optimize this, there may not be a way though
+    std::string autosave_interval_text = std::format("{} - {}", "2. Change game clock autosave interval", app_config.GetPrintableAutoSaveInterval());
 
     auto list_opts = [&] {
         std::println("{}", autosave_status_text);
-        std::println("2. Change game clock autosave interval");
+        std::println("{}", autosave_interval_text);
         std::println("0. Go back");
     };
 
@@ -68,6 +71,9 @@ auto tasks::SettingsMenu(core::Console& console, const core::AppConfig& app_conf
 
         case 1:
             return core::TaskType::ToggleAutoSave;
+
+        case 2:
+            return core::TaskType::ChangeAutoSaveInterval;
 
         default:
             assert(false && "Unhandled option index");

@@ -82,7 +82,6 @@ public:
     Console() noexcept;
 
     ~Console();
-
     template <typename ListOptsFunc>
     auto RequestGameID(ListOptsFunc, std::pair<int, int>) noexcept -> void;
 
@@ -95,7 +94,12 @@ public:
 
     auto RequestUserConfirmation() noexcept -> void;
 
-    auto RequestGameTitle(RequestIsCancellable = RequestIsCancellable::Yes) noexcept -> void; // TODO: Add more context to the function
+    // TODO: Remove this and impl the actual code into the task .cxx file
+    auto RequestAutoSaveInterval() noexcept -> void;
+
+    // TODO: Add more context to the function
+    // TODO 2: Remove the cancellable param (its always Yes)
+    auto RequestGameTitle(RequestIsCancellable = RequestIsCancellable::Yes) noexcept -> void;
 
     auto WriteCachedMsgs() noexcept -> void;
 
@@ -112,6 +116,8 @@ public:
     [[nodiscard]] auto GetStringInputResult() const noexcept -> std::string_view;
 
     [[nodiscard]] auto GetUserConfirmationStatus() const noexcept -> bool;
+
+    [[nodiscard]] auto IsCapableDisplayingColoredText() const noexcept -> bool;
 
 private:
     template <typename RequestMsgFunc>
