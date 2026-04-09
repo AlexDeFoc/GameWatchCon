@@ -23,6 +23,42 @@ module;
 #include <vector>
 
 #ifdef _WIN32
+
+#ifndef UNICODE
+#define UNICODE
+#endif
+
+#ifndef _UNICODE
+#define _UNICODE
+#endif
+
+#define WIN32_LEAN_AND_MEAN
+#define NOMINMAX
+// UI/GDI Cleanup (Since you aren't making a Window)
+#define NOUSER // All USER functions (Menus, Icons, etc.)
+#define NOGDI // All GDI functions
+#define NODRAWTEXT // DrawText() and DT_*
+#define NOMSG // APIs for Message loops
+#define NOCTLMGR // Control Management (Buttons, Edit boxes)
+#define NOSHOWWINDOW // ShowWindow() constants
+
+// System Services Cleanup
+#define NOHELP // Help engine
+#define NOSERVICE // Service Controller (StartService, etc.)
+#define NOIMAGE // Image manipulation
+#define NOTAPE // Tape drive support
+#define NOMCX // Modem Configuration Extensions
+#define NOIME // Input Method Manager
+#define NOKANJI // Kanji support
+#define NOCOMM // Communications (Serial ports)
+#define NORPC // Remote Procedure Call
+#define NOPROXYSTUB // RPC Proxy/Stub
+
+// Registry/File/Memory (Usually safe to exclude for simple Console apps)
+#define NOREGISTRY // Registry APIs (Advapi32)
+#define NOOPENFILE // OpenFile/standard file I/O
+#define NOMEMMGR // LocalAlloc/GlobalAlloc (you use new/delete)
+#define NOMETAFILE // Metafile support
 #include <Windows.h>
 #endif
 
