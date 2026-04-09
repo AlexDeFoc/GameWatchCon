@@ -27,14 +27,17 @@ target_sources(GameWatchCon PUBLIC FILE_SET CXX_MODULES FILES
         Code/App/Tasks/EditGamesMenu/EditGamesMenu.ixx
         Code/App/Tasks/ListGames/ListGames.ixx
         Code/App/Tasks/MainMenu/MainMenu.ixx
+        Code/App/Tasks/SettingsMenu/SettingsMenu.ixx
         Code/App/Tasks/ResetGameClock/ResetGameClock.ixx
         Code/App/Tasks/StartApp/StartApp.ixx
         Code/App/Tasks/StopApp/StopApp.ixx
+        Code/App/Tasks/ToggleAutoSave/ToggleAutoSave.ixx
 )
 
 target_sources(GameWatchCon PRIVATE
         # Core
         Code/App/Core/App/App.cxx
+        Code/App/Core/AppConfig/AppConfig.cxx
         Code/App/Core/AppEntryPoint/Main.cxx
         Code/App/Core/AppState/Interfaces/AppStatusAccess/AppStatusAccess.cxx
         Code/App/Core/Console/Console.cxx
@@ -52,9 +55,11 @@ target_sources(GameWatchCon PRIVATE
         Code/App/Tasks/EditGamesMenu/EditGamesMenu.cxx
         Code/App/Tasks/ListGames/ListGames.cxx
         Code/App/Tasks/MainMenu/MainMenu.cxx
+        Code/App/Tasks/SettingsMenu/SettingsMenu.cxx
         Code/App/Tasks/ResetGameClock/ResetGameClock.cxx
         Code/App/Tasks/StartApp/StartApp.cxx
         Code/App/Tasks/StopApp/StopApp.cxx
+        Code/App/Tasks/ToggleAutoSave/ToggleAutoSave.cxx
 )
 
 target_include_directories(GameWatchCon PRIVATE Code/App/)
