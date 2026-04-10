@@ -2,7 +2,40 @@
     "version": 9,
     "configurePresets": [
         {
-            "name": "ClangReleaseX64Win",
+            "name": "msvc_x64_release",
+            "generator": "Visual Studio 18 2026",
+            "binaryDir": "Output/Release",
+            "architecture": {
+                "value": "x64",
+                "strategy": "external"
+            },
+            "cacheVariables": {
+                "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
+                "VCPKG_TARGET_TRIPLET": "x64-windows",
+                "VCPKG_MANIFEST_MODE": "ON",
+                "VCPKG_MANIFEST_DIR": "${sourceDir}"
+            },
+            "environment": {
+                "VCPKG_BINARY_SOURCES": "clear;files,${sourceDir}/.vcpkg_cache,readwrite"
+            }
+        },
+        {
+            "name": "msvc_x64_debug",
+            "generator": "Visual Studio 18 2026",
+            "binaryDir": "Output/Debug",
+            "architecture": {
+                "value": "x64",
+                "strategy": "external"
+            },
+            "cacheVariables": {
+                "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
+                "VCPKG_TARGET_TRIPLET": "x64-windows",
+                "VCPKG_MANIFEST_MODE": "ON",
+                "VCPKG_MANIFEST_DIR": "${sourceDir}"
+            }
+        },
+        {
+            "name": "clang_x64_release_windows",
             "generator": "Ninja",
             "binaryDir": "Output/Release",
             "cacheVariables": {
@@ -10,12 +43,13 @@
                 "CMAKE_C_COMPILER": "clang",
                 "CMAKE_CXX_COMPILER": "clang++",
                 "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
-                "VCPKG_TARGET_TRIPLET": "x64-windows-release",
-                "VCPKG_OVERLAY_TRIPLETS": "${sourceDir}/VcpkgTriplets"
+                "VCPKG_TARGET_TRIPLET": "x64-windows",
+                "VCPKG_MANIFEST_MODE": "ON",
+                "VCPKG_MANIFEST_DIR": "${sourceDir}"
             }
         },
         {
-            "name": "ClangDebugX64Win",
+            "name": "clang_x64_debug_windows",
             "generator": "Ninja",
             "binaryDir": "Output/Debug",
             "cacheVariables": {
@@ -23,9 +57,30 @@
                 "CMAKE_C_COMPILER": "clang",
                 "CMAKE_CXX_COMPILER": "clang++",
                 "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
-                "VCPKG_TARGET_TRIPLET": "x64-windows-debug",
-                "VCPKG_OVERLAY_TRIPLETS": "${sourceDir}/VcpkgTriplets"
+                "VCPKG_TARGET_TRIPLET": "x64-windows",
+                "VCPKG_MANIFEST_MODE": "ON",
+                "VCPKG_MANIFEST_DIR": "${sourceDir}"
             }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "msvc_x64_release",
+            "configurePreset": "msvc_x64_release",
+            "configuration": "Release"
+        },
+        {
+            "name": "msvc_x64_debug",
+            "configurePreset": "msvc_x64_debug",
+            "configuration": "Debug"
+        },
+        {
+            "name": "clang_x64_release_windows",
+            "configurePreset": "clang_x64_release_windows"
+        },
+        {
+            "name": "clang_x64_debug_windows",
+            "configurePreset": "clang_x64_debug_windows"
         }
     ]
 }

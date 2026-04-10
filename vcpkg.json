@@ -1,3 +1,5 @@
 {
-    "dependencies": ["openssl", "asio", "nlohmann-json"]
+    "name": "gamewatchcon",
+    "version": "1.0.0",
+    "dependencies": ["cpr", "nlohmann-json"]
 }
