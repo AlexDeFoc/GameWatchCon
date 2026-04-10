@@ -83,7 +83,7 @@ public:
 
     ~Console();
     template <typename ListOptsFunc>
-    auto RequestGameID(ListOptsFunc, std::pair<int, int>) noexcept -> void;
+    auto RequestGameID(ListOptsFunc, std::pair<size_t, size_t>) noexcept -> void;
 
     template <typename ListOptsFunc>
     auto RequestMenuOptionID(ListOptsFunc, std::pair<int, int>, RequestIsCancellable = RequestIsCancellable::Yes) noexcept -> void;
@@ -153,7 +153,7 @@ private:
 
 // Public Member Methods
 template <typename ListOptsFunc>
-auto Console::RequestGameID(ListOptsFunc list_opts_func, std::pair<int, int> bounds) noexcept -> void {
+auto Console::RequestGameID(ListOptsFunc list_opts_func, std::pair<size_t, size_t> bounds) noexcept -> void {
     static auto request_msg_func = [&] { Write(MsgType::Request, "Enter game id: "); };
 
     RequestNumberInput(list_opts_func, request_msg_func, std::move(bounds));
