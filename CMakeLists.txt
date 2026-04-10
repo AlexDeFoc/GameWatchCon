@@ -86,3 +86,7 @@ if(CMAKE_GENERATOR MATCHES "Ninja|Unix Makefiles|Visual Studio")
         )
     endif()
 endif()
+
+find_package(cpr CONFIG REQUIRED)
+find_package(nlohmann_json CONFIG REQUIRED)
+target_link_libraries(GameWatchCon PRIVATE cpr::cpr nlohmann_json::nlohmann_json)

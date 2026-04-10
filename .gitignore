@@ -1,3 +1,6 @@
 .idea/
 .cache/
+.vcpkg_cache/
+Output/
 build/
+vcpkg_installed/
