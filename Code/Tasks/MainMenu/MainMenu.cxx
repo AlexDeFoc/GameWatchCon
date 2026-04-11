@@ -1,33 +1,10 @@
-/*
-    GameWatchCon - Keep track of your in-game time
-    Copyright (C) 2026  Sava Alexandru-Andrei
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// Copyright (C) 2026 Sava Alexandru-Andrei
+// License: GNU AGPL v3 or later - see LICENSE file
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as published
-    by the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+#include "Tasks/MainMenu/MainMenu.hxx"
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
-module;
-
-#include <cassert>
-#include <print>
-
-module Tasks;
-import :MainMenu;
-import Console;
-
-using namespace gw::con;
-
-auto tasks::MainMenu(core::Console& console) noexcept -> core::TaskType {
+auto gw::tasks::MainMenu(Console& console) noexcept -> TaskType {
     static auto list_opts = [] {
         std::println("1. List games");
         std::println("2. Start game");
@@ -42,14 +19,14 @@ auto tasks::MainMenu(core::Console& console) noexcept -> core::TaskType {
         while (true) {
             console.ClearScreen();
             console.WriteCachedMsgs();
-            console.RequestMenuOptionID(list_opts, {0, 6}, core::Console::RequestIsCancellable::No);
+            console.RequestMenuOptionID(list_opts, {0, 6}, Console::RequestIsCancellable::No);
 
             switch (console.GetInputRequestStatus()) {
-                case core::Console::InputRequestStatus::Invalid:
-                    console.WriteLineToCache(core::Console::MsgType::Error, "Invalid input");
+                case Console::InputRequestStatus::Invalid:
+                    console.WriteLineToCache(Console::MsgType::Error, "Invalid input");
                     break;
 
-                case core::Console::InputRequestStatus::Success:
+                case Console::InputRequestStatus::Success:
                     return;
 
                 default:
@@ -61,19 +38,19 @@ auto tasks::MainMenu(core::Console& console) noexcept -> core::TaskType {
 
     switch (console.GetNumberInputResult()) {
         case 0:
-            return core::TaskType::StopApp;
+            return TaskType::StopApp;
 
         case 1:
-            return core::TaskType::ListGames;
+            return TaskType::ListGames;
 
         case 3:
-            return core::TaskType::EditGamesMenu;
+            return TaskType::EditGamesMenu;
 
         case 4:
-            return core::TaskType::AddNewGame;
+            return TaskType::AddNewGame;
 
         case 5:
-            return core::TaskType::SettingsMenu;
+            return TaskType::SettingsMenu;
 
         default:
             assert(false && "Unhandled option index");

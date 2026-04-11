@@ -1,42 +1,23 @@
-/*
-    GameWatchCon - Keep track of your in-game time
-    Copyright (C) 2026  Sava Alexandru-Andrei
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// Copyright (C) 2026 Sava Alexandru-Andrei
+// License: GNU AGPL v3 or later - see LICENSE file
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as published
-    by the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+#include "Core/AppConfig/AppConfig.hxx"
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
-module;
-
-#include <chrono>
-
-module AppConfig;
-
-using namespace gw::con::core;
 using namespace std::chrono_literals;
 using namespace std::chrono;
 
 // TODO: change autosave to being true by default
-AppConfig::AppConfig() noexcept : autosave_enabled_status_{false}, autosave_interval_{5min} {}
+gw::AppConfig::AppConfig() noexcept : autosave_enabled_status_{false}, autosave_interval_{5min} {}
 
-auto AppConfig::ToggleAutoSaveStatus() noexcept -> void { autosave_enabled_status_ = autosave_enabled_status_ == AutoSaveStatus::Disabled ? AutoSaveStatus::Enabled : AutoSaveStatus::Disabled; }
+auto gw::AppConfig::ToggleAutoSaveStatus() noexcept -> void { autosave_enabled_status_ = autosave_enabled_status_ == AutoSaveStatus::Disabled ? AutoSaveStatus::Enabled : AutoSaveStatus::Disabled; }
 
-auto AppConfig::ChangeAutoSaveInterval(const steady_clock::duration new_interval) noexcept -> void { autosave_interval_ = new_interval; }
+auto gw::AppConfig::ChangeAutoSaveInterval(const steady_clock::duration new_interval) noexcept -> void { autosave_interval_ = new_interval; }
 
-auto AppConfig::GetAutoSaveStatus() const noexcept -> AutoSaveStatus { return autosave_enabled_status_; }
+auto gw::AppConfig::GetAutoSaveStatus() const noexcept -> AutoSaveStatus { return autosave_enabled_status_; }
 
 // TODO: Make this more/stronger type/d safe
-auto AppConfig::GetPrintableAutoSaveInterval() const noexcept -> std::string {
+auto gw::AppConfig::GetPrintableAutoSaveInterval() const noexcept -> std::string {
     auto ms = duration_cast<milliseconds>(autosave_interval_);
     const auto d = duration_cast<days>(ms);
     ms -= d;

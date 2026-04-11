@@ -1,29 +1,12 @@
-/*
-    GameWatchCon - Keep track of your in-game time
-    Copyright (C) 2026  Sava Alexandru-Andrei
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// Copyright (C) 2026 Sava Alexandru-Andrei
+// License: GNU AGPL v3 or later - see LICENSE file
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as published
-    by the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+#pragma once
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
-module;
-
-#include <iostream>
-#include <string>
-#include <vector>
+#include "pch.hxx"
 
 #ifdef _WIN32
-
 #ifndef UNICODE
 #define UNICODE
 #endif
@@ -31,40 +14,9 @@ module;
 #ifndef _UNICODE
 #define _UNICODE
 #endif
-
-#define WIN32_LEAN_AND_MEAN
-#define NOMINMAX
-// UI/GDI Cleanup (Since you aren't making a Window)
-#define NOUSER // All USER functions (Menus, Icons, etc.)
-#define NOGDI // All GDI functions
-#define NODRAWTEXT // DrawText() and DT_*
-#define NOMSG // APIs for Message loops
-#define NOCTLMGR // Control Management (Buttons, Edit boxes)
-#define NOSHOWWINDOW // ShowWindow() constants
-
-// System Services Cleanup
-#define NOHELP // Help engine
-#define NOSERVICE // Service Controller (StartService, etc.)
-#define NOIMAGE // Image manipulation
-#define NOTAPE // Tape drive support
-#define NOMCX // Modem Configuration Extensions
-#define NOIME // Input Method Manager
-#define NOKANJI // Kanji support
-#define NOCOMM // Communications (Serial ports)
-#define NORPC // Remote Procedure Call
-#define NOPROXYSTUB // RPC Proxy/Stub
-
-// Registry/File/Memory (Usually safe to exclude for simple Console apps)
-#define NOREGISTRY // Registry APIs (Advapi32)
-#define NOOPENFILE // OpenFile/standard file I/O
-#define NOMEMMGR // LocalAlloc/GlobalAlloc (you use new/delete)
-#define NOMETAFILE // Metafile support
-#include <Windows.h>
 #endif
 
-export module Console;
-
-export namespace gw::con::core {
+namespace gw {
 class Console {
 public:
     enum class MsgType : int { Info,
@@ -83,7 +35,7 @@ public:
 
     ~Console();
     template <typename ListOptsFunc>
-    auto RequestGameID(ListOptsFunc, std::pair<size_t, size_t>) noexcept -> void;
+    auto RequestGameID(ListOptsFunc, std::pair<int, int>) noexcept -> void;
 
     template <typename ListOptsFunc>
     auto RequestMenuOptionID(ListOptsFunc, std::pair<int, int>, RequestIsCancellable = RequestIsCancellable::Yes) noexcept -> void;
@@ -153,7 +105,7 @@ private:
 
 // Public Member Methods
 template <typename ListOptsFunc>
-auto Console::RequestGameID(ListOptsFunc list_opts_func, std::pair<size_t, size_t> bounds) noexcept -> void {
+auto Console::RequestGameID(ListOptsFunc list_opts_func, std::pair<int, int> bounds) noexcept -> void {
     static auto request_msg_func = [&] { Write(MsgType::Request, "Enter game id: "); };
 
     RequestNumberInput(list_opts_func, request_msg_func, std::move(bounds));
@@ -227,4 +179,4 @@ auto Console::RequestNumberInput(ListOptsFunc list_opts_func, RequestMsgFunc req
 
     input_request_status_ = InputRequestStatus::Success;
 }
-}; // namespace gw::con::core
+}; // namespace gw

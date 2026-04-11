@@ -1,43 +1,22 @@
-/*
-    GameWatchCon - Keep track of your in-game time
-    Copyright (C) 2026  Sava Alexandru-Andrei
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// Copyright (C) 2026 Sava Alexandru-Andrei
+// License: GNU AGPL v3 or later - see LICENSE file
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as published
-    by the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+#include "Core/GameEntry/GameEntry.hxx"
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
+gw::GameEntry::GameEntry() noexcept = default;
 
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
+gw::GameEntry::GameEntry(std::string title) noexcept : title_{std::move(title)} {}
 
-module;
+auto gw::GameEntry::SetTitle(std::string new_title) noexcept -> void { title_ = std::move(new_title); }
 
-#include <chrono>
-#include <string>
+auto gw::GameEntry::GetTitle() const noexcept -> std::string_view { return title_; }
 
-module GameEntry;
+auto gw::GameEntry::AddTime(std::chrono::steady_clock::duration additional_time) noexcept -> void { clock_.AddTime(std::move(additional_time)); }
 
-using namespace gw::con::core;
+auto gw::GameEntry::ResetClock() noexcept -> void { clock_.Reset(); }
 
-GameEntry::GameEntry() noexcept = default;
-
-GameEntry::GameEntry(std::string title) noexcept : title_{std::move(title)} {}
-
-auto GameEntry::SetTitle(std::string new_title) noexcept -> void { title_ = std::move(new_title); }
-
-auto GameEntry::GetTitle() const noexcept -> std::string_view { return title_; }
-
-auto GameEntry::AddTime(std::chrono::steady_clock::duration additional_time) noexcept -> void { clock_.AddTime(std::move(additional_time)); }
-
-auto GameEntry::ResetClock() noexcept -> void { clock_.Reset(); }
-
-auto GameEntry::GetPrintableClock() const noexcept -> std::string {
+auto gw::GameEntry::GetPrintableClock() const noexcept -> std::string {
     std::vector<std::string> clock_bits{};
 
     if (clock_.GetDays() > std::chrono::days::zero())

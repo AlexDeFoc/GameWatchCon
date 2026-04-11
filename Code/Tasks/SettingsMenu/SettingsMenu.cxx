@@ -1,39 +1,17 @@
-/*
-    GameWatchCon - Keep track of your in-game time
-    Copyright (C) 2026  Sava Alexandru-Andrei
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// Copyright (C) 2026 Sava Alexandru-Andrei
+// License: GNU AGPL v3 or later - see LICENSE file
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as published
-    by the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+#include "Tasks/SettingsMenu/SettingsMenu.hxx"
+#include "Core/Utils/Utils.hxx"
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
-module;
-
-#include <cassert>
-#include <print>
-
-module Tasks;
-import :SettingsMenu;
-import Utils;
-
-using namespace gw::con;
-
-auto tasks::SettingsMenu(core::Console& console, const core::AppConfig& app_config) noexcept -> core::TaskType {
+auto gw::tasks::SettingsMenu(Console& console, const AppConfig& app_config) noexcept -> TaskType {
     std::string autosave_status_text = "1. Toggle game clock autosave";
-    if (app_config.GetAutoSaveStatus() == core::AppConfig::AutoSaveStatus::Enabled)
+    if (app_config.GetAutoSaveStatus() == AppConfig::AutoSaveStatus::Enabled)
         // TODO: Optimize this stuff, its so insanely costly, computing each time, making allocations...
-        autosave_status_text = std::format("{}: {}", autosave_status_text, core::utils::ColorText(console, core::utils::TextColor::Green, "enabled"));
+        autosave_status_text = std::format("{}: {}", autosave_status_text, utils::ColorText(console, utils::TextColor::Green, "enabled"));
     else
-        autosave_status_text = std::format("{}: {}", autosave_status_text, core::utils::ColorText(console, core::utils::TextColor::Red, "disabled"));
+        autosave_status_text = std::format("{}: {}", autosave_status_text, utils::ColorText(console, utils::TextColor::Red, "disabled"));
 
     // TODO: Find a way to optimize this, there may not be a way though
     std::string autosave_interval_text = std::format("{} - {}", "2. Change game clock autosave interval", app_config.GetPrintableAutoSaveInterval());
@@ -48,18 +26,18 @@ auto tasks::SettingsMenu(core::Console& console, const core::AppConfig& app_conf
         while (true) {
             console.ClearScreen();
             console.WriteCachedMsgs();
-            console.RequestMenuOptionID(list_opts, {0, 2}, core::Console::RequestIsCancellable::No);
+            console.RequestMenuOptionID(list_opts, {0, 2}, Console::RequestIsCancellable::No);
 
             switch (console.GetInputRequestStatus()) {
-                case core::Console::InputRequestStatus::Invalid:
-                    console.WriteLineToCache(core::Console::MsgType::Error, "Invalid input");
+                case Console::InputRequestStatus::Invalid:
+                    console.WriteLineToCache(Console::MsgType::Error, "Invalid input");
                     break;
 
-                case core::Console::InputRequestStatus::Success:
+                case Console::InputRequestStatus::Success:
                     return;
 
                 default:
-                    assert(false && "Unhandled core::Console::InputRequestStatus");
+                    assert(false && "Unhandled Console::InputRequestStatus");
                     std::terminate();
             }
         }
@@ -67,13 +45,13 @@ auto tasks::SettingsMenu(core::Console& console, const core::AppConfig& app_conf
 
     switch (console.GetNumberInputResult()) {
         case 0:
-            return core::TaskType::MainMenu;
+            return TaskType::MainMenu;
 
         case 1:
-            return core::TaskType::ToggleAutoSave;
+            return TaskType::ToggleAutoSave;
 
         case 2:
-            return core::TaskType::ChangeAutoSaveInterval;
+            return TaskType::ChangeAutoSaveInterval;
 
         default:
             assert(false && "Unhandled option index");

@@ -1,37 +1,14 @@
-/*
-    GameWatchCon - Keep track of your in-game time
-    Copyright (C) 2026  Sava Alexandru-Andrei
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// Copyright (C) 2026 Sava Alexandru-Andrei
+// License: GNU AGPL v3 or later - see LICENSE file
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as published
-    by the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+#include "Core/App/App.hxx"
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
+#include "Tasks/Tasks.hxx"
 
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
+gw::App::App() noexcept : keep_app_running_{false}, current_task_{TaskType::StartApp} {}
 
-module;
-
-#include <cassert>
-#include <exception>
-
-module App;
-
-import TaskType;
-import Tasks;
-
-using namespace gw::con::core;
-using namespace gw::con;
-
-App::App() noexcept : keep_app_running_{false}, current_task_{TaskType::StartApp} {}
-
-auto App::Run() noexcept -> void {
+auto gw::App::Run() noexcept -> void {
     do {
         switch (current_task_) {
             case TaskType::AddNewGame:
