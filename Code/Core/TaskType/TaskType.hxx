@@ -10,6 +10,7 @@ enum class TaskType {
     AddNewGame,
     ChangeAutoSaveInterval,
     ChangeGameTitle,
+    CheckForUpdates,
     DeleteGame,
     EditGamesMenu,
     ListGames,

@@ -52,6 +52,9 @@ auto gw::tasks::MainMenu(Console& console) noexcept -> TaskType {
         case 5:
             return TaskType::SettingsMenu;
 
+        case 6:
+            return TaskType::CheckForUpdates;
+
         default:
             assert(false && "Unhandled option index");
             std::terminate();

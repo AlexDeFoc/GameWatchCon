@@ -7,6 +7,7 @@
 #include "Tasks/AddNewGame/AddNewGame.hxx"
 #include "Tasks/ChangeAutoSaveInterval/ChangeAutoSaveInterval.hxx"
 #include "Tasks/ChangeGameTitle/ChangeGameTitle.hxx"
+#include "Tasks/CheckForUpdates/CheckForUpdates.hxx"
 #include "Tasks/DeleteGame/DeleteGame.hxx"
 #include "Tasks/EditGamesMenu/EditGamesMenu.hxx"
 #include "Tasks/ListGames/ListGames.hxx"

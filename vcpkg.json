@@ -1,5 +1,7 @@
 {
-    "name": "gamewatchcon",
-    "version": "1.0.0",
-    "dependencies": []
+    "dependencies": [
+        "cpr"
+    ],
+    "version-string": "2026.4.11",
+    "name": "gamewatchcon"
 }
