@@ -24,6 +24,7 @@ target_sources(GameWatchCon PRIVATE
         Code/Tasks/AddNewGame/AddNewGame.cxx
         Code/Tasks/ChangeAutoSaveInterval/ChangeAutoSaveInterval.cxx
         Code/Tasks/ChangeGameTitle/ChangeGameTitle.cxx
+        Code/Tasks/CheckForUpdates/CheckForUpdates.cxx
         Code/Tasks/DeleteGame/DeleteGame.cxx
         Code/Tasks/EditGamesMenu/EditGamesMenu.cxx
         Code/Tasks/ListGames/ListGames.cxx
@@ -61,6 +62,5 @@ if(CMAKE_GENERATOR MATCHES "Ninja|Unix Makefiles|Visual Studio")
     endif()
 endif()
 
-#find_package(cpr CONFIG REQUIRED)
-#find_package(nlohmann_json CONFIG REQUIRED)
-#target_link_libraries(GameWatchCon PRIVATE cpr::cpr nlohmann_json::nlohmann_json)
+find_package(cpr CONFIG REQUIRED)
+target_link_libraries(GameWatchCon PRIVATE cpr::cpr)

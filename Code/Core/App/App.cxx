@@ -23,6 +23,10 @@ auto gw::App::Run() noexcept -> void {
                 current_task_ = tasks::ChangeGameTitle(console_, game_library_);
                 break;
 
+            case TaskType::CheckForUpdates:
+                current_task_ = tasks::CheckForUpdates(console_);
+                break;
+
             case TaskType::DeleteGame:
                 current_task_ = tasks::DeleteGame(console_, game_library_);
                 break;
