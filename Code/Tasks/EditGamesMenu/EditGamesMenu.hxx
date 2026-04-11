@@ -9,5 +9,5 @@
 #include "Core/TaskType/TaskType.hxx"
 
 namespace gw::tasks {
-[[nodiscard]] auto EditGamesMenu(Console&, const GameLibraryReadAccess&) noexcept -> TaskType;
+[[nodiscard]] auto EditGamesMenu(Console&, const GameLibrary&) noexcept -> TaskType;
 } // namespace gw::tasks

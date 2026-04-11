@@ -4,11 +4,32 @@
 
 #pragma once
 
-#include "Core/GameLibrary/AccessInterfaces/ReadAccess/ReadAccess.hxx"
-#include "Core/GameLibrary/AccessInterfaces/WriteAccess/WriteAccess.hxx"
+#include "Core/GameEntry/GameEntry.hxx"
 
 namespace gw {
-class GameLibrary : public GameLibraryReadAccess,
-                    public GameLibraryWriteAccess {
+class GameLibrary {
+public:
+    auto SetGameTitle(std::size_t, std::string) noexcept -> void;
+
+    auto SetGameTitle(std::size_t, std::string_view) noexcept -> void;
+
+    auto ResetGameClock(std::size_t) noexcept -> void;
+
+    auto RemoveGame(std::size_t) noexcept -> void;
+
+    auto AddGame(std::string_view) noexcept -> void;
+
+    auto AddGame(std::string) noexcept -> void;
+
+    auto ListGames() const noexcept -> void;
+
+    [[nodiscard]] auto IsEmpty() const noexcept -> bool;
+
+    [[nodiscard]] auto GetGameTitle(std::size_t) const noexcept -> std::string_view;
+
+    [[nodiscard]] auto GamesCount() const noexcept -> std::size_t;
+
+private:
+    std::vector<GameEntry> games_;
 };
 } // namespace gw
