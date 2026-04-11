@@ -9,5 +9,5 @@
 #include "Core/TaskType/TaskType.hxx"
 
 namespace gw::tasks {
-[[nodiscard]] auto AddNewGame(Console&, GameLibraryWriteAccess&) noexcept -> TaskType;
+[[nodiscard]] auto AddNewGame(Console&, GameLibrary&) noexcept -> TaskType;
 } // namespace gw::tasks
