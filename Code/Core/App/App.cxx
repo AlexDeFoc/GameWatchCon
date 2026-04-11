@@ -6,7 +6,7 @@
 
 #include "Tasks/Tasks.hxx"
 
-gw::App::App() noexcept : keep_app_running_{false}, current_task_{TaskType::StartApp} {}
+gw::App::App() noexcept : keep_app_running_{0}, current_task_{TaskType::StartApp}, app_config_{}, game_library_{keep_app_running_, app_config_.GetAutoSaveInterval(), app_config_.GetAutoSaveStatus()} {}
 
 auto gw::App::Run() noexcept -> void {
     do {
@@ -61,6 +61,10 @@ auto gw::App::Run() noexcept -> void {
 
             case TaskType::ToggleAutoSave:
                 current_task_ = tasks::ToggleAutoSave(app_config_);
+                break;
+
+            case TaskType::ToggleGameClock:
+                current_task_ = tasks::ToggleGameClock(game_library_);
                 break;
 
             case TaskType::Default:

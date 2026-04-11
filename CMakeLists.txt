@@ -33,6 +33,7 @@ target_sources(GameWatchCon PRIVATE
         Code/Tasks/StartApp/StartApp.cxx
         Code/Tasks/StopApp/StopApp.cxx
         Code/Tasks/ToggleAutoSave/ToggleAutoSave.cxx
+        Code/Tasks/ToggleGameClock/ToggleGameClock.cxx
 )
 
 target_include_directories(GameWatchCon PRIVATE Code)

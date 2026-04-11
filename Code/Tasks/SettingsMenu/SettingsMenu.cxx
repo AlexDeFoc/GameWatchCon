@@ -7,7 +7,7 @@
 
 auto gw::tasks::SettingsMenu(Console& console, const AppConfig& app_config) noexcept -> TaskType {
     std::string autosave_status_text = "1. Toggle game clock autosave";
-    if (app_config.GetAutoSaveStatus() == AppConfig::AutoSaveStatus::Enabled)
+    if (app_config.GetAutoSaveStatus() == 1)
         // TODO: Optimize this stuff, its so insanely costly, computing each time, making allocations...
         autosave_status_text = std::format("{}: {}", autosave_status_text, utils::ColorText(console, utils::TextColor::Green, "enabled"));
     else

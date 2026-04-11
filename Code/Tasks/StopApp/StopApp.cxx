@@ -4,7 +4,7 @@
 
 #include "Tasks/StopApp/StopApp.hxx"
 
-auto gw::tasks::StopApp(bool& keep_app_running_status) noexcept -> TaskType {
-    keep_app_running_status = false;
+auto gw::tasks::StopApp(std::atomic<int>& keep_app_running_status) noexcept -> TaskType {
+    keep_app_running_status = 0; // TODO: Optimize for speed
     return {};
 }

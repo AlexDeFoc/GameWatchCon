@@ -43,6 +43,9 @@ auto gw::tasks::MainMenu(Console& console) noexcept -> TaskType {
         case 1:
             return TaskType::ListGames;
 
+        case 2:
+            return TaskType::ToggleGameClock;
+
         case 3:
             return TaskType::EditGamesMenu;
 

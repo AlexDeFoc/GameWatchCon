@@ -7,6 +7,7 @@
 #include "Core/GameClock/GameClock.hxx"
 
 namespace gw {
+// TODO: Optimize its size, its too much!
 class GameEntry {
 public:
     GameEntry() noexcept;

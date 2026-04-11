@@ -16,7 +16,7 @@ public:
     auto Run() noexcept -> void;
 
 private:
-    bool keep_app_running_;
+    std::atomic<int> keep_app_running_;
     TaskType current_task_;
     AppConfig app_config_;
     Console console_;
