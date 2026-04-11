@@ -1,16 +1,13 @@
-module;
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// Copyright (C) 2026 Sava Alexandru-Andrei
+// License: GNU AGPL v3 or later - see LICENSE file
 
-#include <chrono>
+#include "Tasks/ChangeAutoSaveInterval/ChangeAutoSaveInterval.hxx"
 
-module Tasks;
-import :ChangeAutoSaveInterval;
-
-using namespace gw::con;
-
-auto tasks::ChangeAutoSaveInterval(core::Console& console, core::AppConfig& app_config) noexcept -> core::TaskType {
+auto gw::tasks::ChangeAutoSaveInterval(Console& console, AppConfig& app_config) noexcept -> TaskType {
     // TODO: Display current interval
     console.ClearScreen();
     console.RequestAutoSaveInterval();
     app_config.ChangeAutoSaveInterval(std::chrono::seconds{console.GetNumberInputResult()});
-    return core::TaskType::SettingsMenu;
+    return TaskType::SettingsMenu;
 }

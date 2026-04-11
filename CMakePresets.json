@@ -4,7 +4,7 @@
         {
             "name": "msvc_x64_release",
             "generator": "Visual Studio 18 2026",
-            "binaryDir": "Output/Release",
+            "binaryDir": "Output/Release/MSVC",
             "architecture": {
                 "value": "x64",
                 "strategy": "external"
@@ -22,7 +22,7 @@
         {
             "name": "msvc_x64_debug",
             "generator": "Visual Studio 18 2026",
-            "binaryDir": "Output/Debug",
+            "binaryDir": "Output/Debug/MSVC",
             "architecture": {
                 "value": "x64",
                 "strategy": "external"
@@ -37,7 +37,7 @@
         {
             "name": "clang_x64_release_windows",
             "generator": "Ninja",
-            "binaryDir": "Output/Release",
+            "binaryDir": "Output/Release/Clang",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release",
                 "CMAKE_C_COMPILER": "clang",
@@ -51,7 +51,7 @@
         {
             "name": "clang_x64_debug_windows",
             "generator": "Ninja",
-            "binaryDir": "Output/Debug",
+            "binaryDir": "Output/Debug/Clang",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug",
                 "CMAKE_C_COMPILER": "clang",

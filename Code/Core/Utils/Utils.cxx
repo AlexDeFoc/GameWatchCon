@@ -1,31 +1,10 @@
-/*
-    GameWatchCon - Keep track of your in-game time
-    Copyright (C) 2026  Sava Alexandru-Andrei
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// Copyright (C) 2026 Sava Alexandru-Andrei
+// License: GNU AGPL v3 or later - see LICENSE file
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as published
-    by the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+#include "Core/Utils/Utils.hxx"
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
-module;
-
-#include <cassert>
-#include <format>
-
-module Utils;
-
-using namespace gw::con::core;
-
-auto utils::ColorText(const Console& console, const TextColor color, std::string uncolored_text) noexcept -> std::string {
+auto gw::utils::ColorText(const Console& console, const TextColor color, std::string uncolored_text) noexcept -> std::string {
     if (console.IsCapableDisplayingColoredText() == false)
         return uncolored_text;
 

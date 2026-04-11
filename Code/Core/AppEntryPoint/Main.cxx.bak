@@ -16,11 +16,14 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-export module Tasks:EditGamesMenu;
-import TaskType;
-import Console;
-import GameLibrary;
+import App;
 
-export namespace gw::con::tasks {
-[[nodiscard]] auto EditGamesMenu(core::Console&, const core::GameLibraryReadAccess&) noexcept -> core::TaskType;
-} // namespace gw::con::tasks
+using namespace gw::con::core;
+
+int main() {
+    App app{};
+
+    app.Run();
+
+    return 0;
+}

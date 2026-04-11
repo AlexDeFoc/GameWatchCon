@@ -2,6 +2,10 @@
 // Copyright (C) 2026 Sava Alexandru-Andrei
 // License: GNU AGPL v3 or later - see LICENSE file
 
-int main() {
-    return 0;
+#pragma once
+
+#include "Core/TaskType/TaskType.hxx"
+
+namespace gw::tasks {
+[[nodiscard]] auto StartApp(bool&) noexcept -> TaskType;
 }

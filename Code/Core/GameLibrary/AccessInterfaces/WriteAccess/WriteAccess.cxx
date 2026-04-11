@@ -1,51 +1,29 @@
-/*
-    GameWatchCon - Keep track of your in-game time
-    Copyright (C) 2026  Sava Alexandru-Andrei
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// Copyright (C) 2026 Sava Alexandru-Andrei
+// License: GNU AGPL v3 or later - see LICENSE file
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as published
-    by the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+#include "Core/GameLibrary/AccessInterfaces/WriteAccess/WriteAccess.hxx"
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
-module;
-
-#include <cassert>
-#include <string>
-
-module GameLibrary;
-import :WriteAccess;
-
-using namespace gw::con::core;
-
-auto GameLibraryWriteAccess::SetGameTitle(const std::size_t index, std::string new_title) noexcept -> void {
+auto gw::GameLibraryWriteAccess::SetGameTitle(const std::size_t index, std::string new_title) noexcept -> void {
     assert(index < games_.size() && "Provided out of range index to GameLibraryWriteAccess::SetGameTitle");
     games_[index].SetTitle(std::move(new_title));
 }
 
-auto GameLibraryWriteAccess::SetGameTitle(const std::size_t index, const std::string_view new_title) noexcept -> void {
+auto gw::GameLibraryWriteAccess::SetGameTitle(const std::size_t index, const std::string_view new_title) noexcept -> void {
     assert(index < games_.size() && "Provided out of range index to GameLibraryWriteAccess::SetGameTitle");
     games_[index].SetTitle(std::string{new_title});
 }
 
-auto GameLibraryWriteAccess::ResetGameClock(const std::size_t index) noexcept -> void {
+auto gw::GameLibraryWriteAccess::ResetGameClock(const std::size_t index) noexcept -> void {
     assert(index < games_.size() && "Provided out of range index to GameLibraryWriteAccess::SetGameTitle");
     games_[index].ResetClock();
 }
 
-auto GameLibraryWriteAccess::RemoveGame(const std::size_t index) noexcept -> void {
+auto gw::GameLibraryWriteAccess::RemoveGame(const std::size_t index) noexcept -> void {
     assert(index < games_.size() && "Provided out of range index to GameLibraryWriteAccess::SetGameTitle");
     games_.erase(games_.begin() + index);
 }
 
-auto GameLibraryWriteAccess::AddGame(const std::string_view title) noexcept -> void { games_.emplace_back(std::string{title}); }
+auto gw::GameLibraryWriteAccess::AddGame(const std::string_view title) noexcept -> void { games_.emplace_back(std::string{title}); }
 
-auto GameLibraryWriteAccess::AddGame(std::string title) noexcept -> void { games_.emplace_back(std::move(title)); }
+auto gw::GameLibraryWriteAccess::AddGame(std::string title) noexcept -> void { games_.emplace_back(std::move(title)); }

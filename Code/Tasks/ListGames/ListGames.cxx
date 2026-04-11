@@ -1,35 +1,18 @@
-/*
-    GameWatchCon - Keep track of your in-game time
-    Copyright (C) 2026  Sava Alexandru-Andrei
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// Copyright (C) 2026 Sava Alexandru-Andrei
+// License: GNU AGPL v3 or later - see LICENSE file
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as published
-    by the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+#include "Tasks/ListGames/ListGames.hxx"
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
-module Tasks;
-import :ListGames;
-
-using namespace gw::con;
-
-auto tasks::ListGames(core::Console& console, const core::GameLibraryReadAccess& game_library) noexcept -> core::TaskType {
+auto gw::tasks::ListGames(Console& console, const GameLibraryReadAccess& game_library) noexcept -> TaskType {
     if (game_library.IsEmpty()) {
-        console.WriteLineToCache(core::Console::MsgType::Error, "No entries found");
-        return core::TaskType::MainMenu;
+        console.WriteLineToCache(Console::MsgType::Error, "No entries found");
+        return TaskType::MainMenu;
     }
 
     console.ClearScreen();
     game_library.ListGames();
-    console.WriteLine(core::Console::MsgType::Tip, "Press any key to go back");
-    core::Console::RequestKeyPress();
-    return core::TaskType::MainMenu;
+    console.WriteLine(Console::MsgType::Tip, "Press any key to go back");
+    Console::RequestKeyPress();
+    return TaskType::MainMenu;
 }
