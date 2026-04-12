@@ -4,8 +4,11 @@
 
 #include "Tasks/ToggleAutoSave/ToggleAutoSave.hxx"
 
-auto gw::tasks::ToggleAutoSave(AppConfig& app_config) noexcept -> TaskType {
-    app_config.ToggleAutoSaveStatus();
+auto gw::tasks::ToggleAutoSave(Console& console, AppConfig& app_config, const GameLibrary& game_library) noexcept -> TaskType {
+    if (game_library.IsAnyGameActive())
+        console.WriteLineToCache(Console::MsgType::Error, "Cannot toggle autosave status while a game is active");
+    else
+        app_config.ToggleAutoSaveStatus();
 
     return TaskType::SettingsMenu;
 }

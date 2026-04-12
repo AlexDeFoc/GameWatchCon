@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include "Core/Console/Console.hxx"
 #include "Core/GameEntry/GameEntry.hxx"
 
 namespace gw {
@@ -28,7 +29,7 @@ public:
 
     auto ToggleGameClock(std::optional<int>) noexcept -> void;
 
-    auto ListGames() const noexcept -> void;
+    auto ListGames(const Console&) const noexcept -> void;
 
     [[nodiscard]] auto IsEmpty() const noexcept -> bool;
 

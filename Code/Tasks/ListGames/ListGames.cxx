@@ -11,8 +11,8 @@ auto gw::tasks::ListGames(Console& console, const GameLibrary& game_library) noe
     }
 
     console.ClearScreen();
-    game_library.ListGames();
-    console.WriteLine(Console::MsgType::Tip, "Press any key to go back");
+    game_library.ListGames(console);
+    console.WriteLine(Console::MsgType::Tip, "Enter anything to go back");
     Console::RequestKeyPress();
     return TaskType::MainMenu;
 }

@@ -5,8 +5,10 @@
 #pragma once
 
 #include "Core/AppConfig/AppConfig.hxx"
+#include "Core/Console/Console.hxx"
+#include "Core/GameLibrary/GameLibrary.hxx"
 #include "Core/TaskType/TaskType.hxx"
 
 namespace gw::tasks {
-[[nodiscard]] auto ToggleAutoSave(AppConfig&) noexcept -> TaskType;
+[[nodiscard]] auto ToggleAutoSave(Console&, AppConfig&, const GameLibrary&) noexcept -> TaskType;
 } // namespace gw::tasks

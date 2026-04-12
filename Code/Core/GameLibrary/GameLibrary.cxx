@@ -3,6 +3,7 @@
 // License: GNU AGPL v3 or later - see LICENSE file
 
 #include "Core/GameLibrary/GameLibrary.hxx"
+#include "Core/Utils/Utils.hxx"
 
 auto gw::GameLibrary::SaveJob() noexcept -> void {
     std::unique_lock lock{mutex_};
@@ -10,6 +11,9 @@ auto gw::GameLibrary::SaveJob() noexcept -> void {
     do {
         // Skip sleeping while predicate is true
         autosave_cv_.wait(lock, [&] { return should_save_game_ || !keep_thread_running_; });
+
+        if (!keep_thread_running_)
+            break;
 
         // Autosave status table:
         // 0 => do manual save
@@ -91,9 +95,12 @@ auto gw::GameLibrary::ToggleGameClock(const std::optional<int> index) noexcept -
     autosave_cv_.notify_one();
 }
 
-auto gw::GameLibrary::ListGames() const noexcept -> void {
+auto gw::GameLibrary::ListGames(const Console& console) const noexcept -> void {
     for (std::size_t game_index{1}; const auto& game : games_) {
-        std::println("{}. {} - {}", game_index, game.GetTitle(), game.GetPrintableClock());
+        if (IsAnyGameActive() && game_index == static_cast<std::size_t>(active_game_index_ + 1))
+            std::println("{}. {} - {} - {}", game_index, game.GetTitle(), game.GetPrintableClock(), utils::ColorText(console, utils::TextColor::Red, "ACTIVE"));
+        else
+            std::println("{}. {} - {}", game_index, game.GetTitle(), game.GetPrintableClock());
         game_index++;
     }
 }

@@ -16,7 +16,7 @@ auto gw::App::Run() noexcept -> void {
                 break;
 
             case TaskType::ChangeAutoSaveInterval:
-                current_task_ = tasks::ChangeAutoSaveInterval(console_, app_config_);
+                current_task_ = tasks::ChangeAutoSaveInterval(console_, app_config_, game_library_);
                 break;
 
             case TaskType::ChangeGameTitle:
@@ -60,7 +60,7 @@ auto gw::App::Run() noexcept -> void {
                 break;
 
             case TaskType::ToggleAutoSave:
-                current_task_ = tasks::ToggleAutoSave(app_config_);
+                current_task_ = tasks::ToggleAutoSave(console_, app_config_, game_library_);
                 break;
 
             case TaskType::ToggleGameClock:
