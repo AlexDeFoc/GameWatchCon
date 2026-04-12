@@ -16,7 +16,7 @@ auto gw::tasks::ToggleGameClock(Console& console, GameLibrary& game_library) noe
                 console.ClearScreen();
                 console.WriteCachedMsgs();
 
-                const auto list_func = [&] { game_library.ListGames(); };
+                const auto list_func = [&] { game_library.ListGames(console); };
                 console.RequestGameID(list_func, {1, static_cast<int>(game_library.GamesCount())});
 
                 switch (console.GetInputRequestStatus()) {
