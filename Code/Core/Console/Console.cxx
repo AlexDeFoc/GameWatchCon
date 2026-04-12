@@ -93,7 +93,11 @@ auto gw::Console::RequestAutoSaveInterval() noexcept -> void {
         try {
             number_input_result_ = std::stoi(input);
 
-            // TODO: Add invalid values case (too low of a value / 0); and potentially request double input to truly confirm values that are too low BUT != 0
+            // TODO QOL: Notify user that below 5s cpu usage is high, at least on 0 seconds its very much (gotta benchmark)
+            if (number_input_result_ <= 0) {
+                input_request_status_ = InputRequestStatus::Invalid;
+                return;
+            }
         } catch (std::invalid_argument&) {
             input_request_status_ = InputRequestStatus::Invalid;
             return;

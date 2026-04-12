@@ -63,4 +63,5 @@ if(CMAKE_GENERATOR MATCHES "Ninja|Unix Makefiles|Visual Studio")
 endif()
 
 find_package(cpr CONFIG REQUIRED)
-target_link_libraries(GameWatchCon PRIVATE cpr::cpr)
+find_package(SqliteOrm CONFIG REQUIRED)
+target_link_libraries(GameWatchCon PRIVATE cpr::cpr sqlite_orm::sqlite_orm)

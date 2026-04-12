@@ -35,3 +35,4 @@
 
 // External libraries
 #include <cpr/cpr.h>
+#include <sqlite_orm/sqlite_orm.h>

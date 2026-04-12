@@ -25,10 +25,8 @@ auto gw::tasks::ChangeAutoSaveInterval(Console& console, AppConfig& app_config, 
                     console.WriteLineToCache(Console::MsgType::Info, "Action cancelled");
                     return TaskType::SettingsMenu;
 
-                // TODO: Should be triggered by console.RequestAutoSaveInterval(), when the value is too small; In the 'case:' check if we are here 'again' then if yes then set it
-                // NOTE: For now its never gonna get triggered, by normal user input, only by other stuff
                 case Console::InputRequestStatus::Invalid:
-                    console.WriteLineToCache(Console::MsgType::Info, "Invalid input");
+                    console.WriteLineToCache(Console::MsgType::Error, "Invalid input");
                     break;
 
                 default:
