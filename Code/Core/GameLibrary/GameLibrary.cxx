@@ -12,6 +12,9 @@ auto gw::GameLibrary::SaveJob() noexcept -> void {
         // Skip sleeping while predicate is true
         autosave_cv_.wait(lock, [&] { return should_save_game_ || !keep_thread_running_; });
 
+        if (!keep_thread_running_)
+            break;
+
         // Autosave status table:
         // 0 => do manual save
         // 1 => perform autosave
@@ -94,7 +97,7 @@ auto gw::GameLibrary::ToggleGameClock(const std::optional<int> index) noexcept -
 
 auto gw::GameLibrary::ListGames(const Console& console) const noexcept -> void {
     for (std::size_t game_index{1}; const auto& game : games_) {
-        if (IsAnyGameActive() && game_index == active_game_index_ + 1)
+        if (IsAnyGameActive() && game_index == static_cast<std::size_t>(active_game_index_ + 1))
             std::println("{}. {} - {} - {}", game_index, game.GetTitle(), game.GetPrintableClock(), utils::ColorText(console, utils::TextColor::Red, "ACTIVE"));
         else
             std::println("{}. {} - {}", game_index, game.GetTitle(), game.GetPrintableClock());

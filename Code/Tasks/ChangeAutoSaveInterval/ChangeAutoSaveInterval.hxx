@@ -6,8 +6,9 @@
 
 #include "Core/AppConfig/AppConfig.hxx"
 #include "Core/Console/Console.hxx"
+#include "Core/GameLibrary/GameLibrary.hxx"
 #include "Core/TaskType/TaskType.hxx"
 
 namespace gw::tasks {
-[[nodiscard]] auto ChangeAutoSaveInterval(Console&, AppConfig&) noexcept -> TaskType;
+[[nodiscard]] auto ChangeAutoSaveInterval(Console&, AppConfig&, const GameLibrary&) noexcept -> TaskType;
 } // namespace gw::tasks

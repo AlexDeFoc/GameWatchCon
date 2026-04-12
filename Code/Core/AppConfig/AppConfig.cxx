@@ -8,7 +8,7 @@ using namespace std::chrono_literals;
 using namespace std::chrono;
 
 // TODO: change autosave to being true by default
-gw::AppConfig::AppConfig() noexcept : autosave_enabled_status_{0}, autosave_interval_{5min} {}
+gw::AppConfig::AppConfig() noexcept : autosave_enabled_status_{1}, autosave_interval_{5min} {}
 
 auto gw::AppConfig::ToggleAutoSaveStatus() noexcept -> void { autosave_enabled_status_ = autosave_enabled_status_ == 0; }
 
@@ -33,8 +33,13 @@ auto gw::AppConfig::GetPrintableAutoSaveInterval() const noexcept -> std::string
     ms -= s;
 
     std::vector<std::string> bits{};
-    if (d.count() > 0)
-        bits.emplace_back(std::format("{} days", d.count()));
+    if (d.count() > 0) {
+        if (d.count() > 1)
+            bits.emplace_back(std::format("{} days", d.count()));
+        else
+            bits.emplace_back(std::format("{} day", d.count()));
+    }
+
     if (h.count() > 0)
         bits.emplace_back(std::format("{} h", h.count()));
     if (m.count() > 0)

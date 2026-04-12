@@ -6,19 +6,13 @@
 #include "Core/Utils/Utils.hxx"
 
 auto gw::tasks::SettingsMenu(Console& console, const AppConfig& app_config) noexcept -> TaskType {
-    std::string autosave_status_text = "1. Toggle game clock autosave";
-    if (app_config.GetAutoSaveStatus() == 1)
-        // TODO: Optimize this stuff, its so insanely costly, computing each time, making allocations...
-        autosave_status_text = std::format("{}: {}", autosave_status_text, utils::ColorText(console, utils::TextColor::Green, "enabled"));
-    else
-        autosave_status_text = std::format("{}: {}", autosave_status_text, utils::ColorText(console, utils::TextColor::Red, "disabled"));
-
-    // TODO: Find a way to optimize this, there may not be a way though
-    std::string autosave_interval_text = std::format("{} - {}", "2. Change game clock autosave interval", app_config.GetPrintableAutoSaveInterval());
-
     auto list_opts = [&] {
-        std::println("{}", autosave_status_text);
-        std::println("{}", autosave_interval_text);
+        if (app_config.GetAutoSaveStatus() == 1)
+            std::println("1. Toggle game clock autosave - {}", utils::ColorText(console, utils::TextColor::Green, "enabled"));
+        else
+            std::println("1. Toggle game clock autosave - {}", utils::ColorText(console, utils::TextColor::Red, "disabled"));
+
+        std::println("2. Change game clock autosave interval - {}", app_config.GetPrintableAutoSaveInterval());
         std::println("0. Go back");
     };
 
