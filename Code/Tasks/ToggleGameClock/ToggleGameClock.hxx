@@ -9,5 +9,5 @@
 #include "Core/TaskType/TaskType.hxx"
 
 namespace gw::tasks {
-[[nodiscard]] auto MainMenu(Console&, const GameLibrary&) noexcept -> TaskType;
-} // namespace gw::tasks
+[[nodiscard]] auto ToggleGameClock(Console& console, GameLibrary&) noexcept -> TaskType;
+}

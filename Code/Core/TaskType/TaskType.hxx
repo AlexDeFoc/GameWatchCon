@@ -19,6 +19,7 @@ enum class TaskType {
     SettingsMenu,
     StartApp,
     StopApp,
-    ToggleAutoSave
+    ToggleAutoSave,
+    ToggleGameClock
 };
 }

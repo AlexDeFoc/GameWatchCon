@@ -4,10 +4,16 @@
 
 #include "Tasks/MainMenu/MainMenu.hxx"
 
-auto gw::tasks::MainMenu(Console& console) noexcept -> TaskType {
-    static auto list_opts = [] {
+auto gw::tasks::MainMenu(Console& console, const GameLibrary& game_library) noexcept -> TaskType {
+    auto list_opts = [&] {
         std::println("1. List games");
-        std::println("2. Start game");
+
+        if (!game_library.IsAnyGameActive()) {
+            std::println("2. Start game");
+        } else {
+            std::println("2. Stop game - {}", game_library.GetActiveGameTitle());
+        }
+
         std::println("3. Edit games");
         std::println("4. Add new game");
         std::println("5. Settings");
@@ -42,6 +48,9 @@ auto gw::tasks::MainMenu(Console& console) noexcept -> TaskType {
 
         case 1:
             return TaskType::ListGames;
+
+        case 2:
+            return TaskType::ToggleGameClock;
 
         case 3:
             return TaskType::EditGamesMenu;

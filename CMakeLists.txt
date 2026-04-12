@@ -16,8 +16,7 @@ target_sources(GameWatchCon PRIVATE
         Code/Core/Console/Console.cxx
         Code/Core/GameClock/GameClock.cxx
         Code/Core/GameEntry/GameEntry.cxx
-        Code/Core/GameLibrary/AccessInterfaces/WriteAccess/WriteAccess.cxx
-        Code/Core/GameLibrary/AccessInterfaces/ReadAccess/ReadAccess.cxx
+        Code/Core/GameLibrary/GameLibrary.cxx
         Code/Core/Utils/Utils.cxx
 
         # Tasks
@@ -34,6 +33,7 @@ target_sources(GameWatchCon PRIVATE
         Code/Tasks/StartApp/StartApp.cxx
         Code/Tasks/StopApp/StopApp.cxx
         Code/Tasks/ToggleAutoSave/ToggleAutoSave.cxx
+        Code/Tasks/ToggleGameClock/ToggleGameClock.cxx
 )
 
 target_include_directories(GameWatchCon PRIVATE Code)

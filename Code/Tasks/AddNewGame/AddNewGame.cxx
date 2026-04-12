@@ -4,7 +4,7 @@
 
 #include "Tasks/AddNewGame/AddNewGame.hxx"
 
-auto gw::tasks::AddNewGame(Console& console, GameLibraryWriteAccess& game_library) noexcept -> TaskType {
+auto gw::tasks::AddNewGame(Console& console, GameLibrary& game_library) noexcept -> TaskType {
     console.ClearScreen();
     console.RequestGameTitle();
 

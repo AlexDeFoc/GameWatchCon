@@ -4,7 +4,7 @@
 
 #include "Tasks/ListGames/ListGames.hxx"
 
-auto gw::tasks::ListGames(Console& console, const GameLibraryReadAccess& game_library) noexcept -> TaskType {
+auto gw::tasks::ListGames(Console& console, const GameLibrary& game_library) noexcept -> TaskType {
     if (game_library.IsEmpty()) {
         console.WriteLineToCache(Console::MsgType::Error, "No entries found");
         return TaskType::MainMenu;

@@ -9,17 +9,17 @@
 namespace gw {
 class AppConfig {
 public:
-    enum class AutoSaveStatus : bool { Disabled,
-                                       Enabled };
     AppConfig() noexcept;
 
     auto ToggleAutoSaveStatus() noexcept -> void;
     auto ChangeAutoSaveInterval(std::chrono::steady_clock::duration) noexcept -> void;
-    [[nodiscard]] auto GetAutoSaveStatus() const noexcept -> AutoSaveStatus;
+    [[nodiscard]] auto GetAutoSaveInterval() noexcept -> std::atomic<std::chrono::steady_clock::duration>&;
+    [[nodiscard]] auto GetAutoSaveStatus() const noexcept -> const std::atomic<int>&;
     [[nodiscard]] auto GetPrintableAutoSaveInterval() const noexcept -> std::string;
 
 private:
-    AutoSaveStatus autosave_enabled_status_;
-    std::chrono::steady_clock::duration autosave_interval_;
+    // TODO: Optimize their atomic usage
+    std::atomic<int> autosave_enabled_status_;
+    std::atomic<std::chrono::steady_clock::duration> autosave_interval_;
 };
 } // namespace gw

@@ -17,3 +17,4 @@
 #include "Tasks/StartApp/StartApp.hxx"
 #include "Tasks/StopApp/StopApp.hxx"
 #include "Tasks/ToggleAutoSave/ToggleAutoSave.hxx"
+#include "Tasks/ToggleGameClock/ToggleGameClock.hxx"

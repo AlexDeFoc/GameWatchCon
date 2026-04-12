@@ -15,7 +15,7 @@ auto gw::tasks::DeleteGame(Console& console, GameLibrary& game_library) noexcept
 
             switch (console.GetInputRequestStatus()) {
                 case Console::InputRequestStatus::Success:
-                    return TaskType::Default;
+                    break;
 
                 case Console::InputRequestStatus::Cancelled:
                     console.WriteLineToCache(Console::MsgType::Info, "Action cancelled");
@@ -29,6 +29,11 @@ auto gw::tasks::DeleteGame(Console& console, GameLibrary& game_library) noexcept
                     assert(false && "Unhandled Console::InputRequestStatus");
                     std::terminate();
             }
+
+            if (console.GetNumberInputResult() == game_library.GetActiveGameIndex() + 1)
+                console.WriteLineToCache(Console::MsgType::Error, "Cannot delete active game, stop it first");
+            else
+                return TaskType::Default;
         }
     }();
 
