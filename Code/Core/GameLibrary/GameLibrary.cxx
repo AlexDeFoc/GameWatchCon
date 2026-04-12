@@ -8,7 +8,7 @@ auto gw::GameLibrary::SaveJob() noexcept -> void {
     std::unique_lock lock{mutex_};
 
     do {
-        // Sleep while predicate is false; gets skipped (predicate gets checked) when using notify_one()
+        // Skip sleeping while predicate is true
         autosave_cv_.wait(lock, [&] { return should_save_game_ || !keep_thread_running_; });
 
         // Autosave status table:
@@ -27,7 +27,7 @@ auto gw::GameLibrary::SaveJob() noexcept -> void {
         } else {
             last_snapshot = std::chrono::steady_clock::now();
 
-            // Sleep until we elapsed autosave interval OR we should stop before finishing the autosave interval OR app is exiting
+            // Sleep until we elapsed autosave interval OR game has been stopped OR app is exiting
             autosave_cv_.wait_for(lock, autosave_interval_.load(), [&] { return !should_save_game_ || !keep_thread_running_; });
 
             AddGameTime(std::chrono::steady_clock::now() - last_snapshot);
@@ -76,13 +76,17 @@ auto gw::GameLibrary::AddGameTime(const std::chrono::steady_clock::duration time
 
 auto gw::GameLibrary::AddGame(std::string title) noexcept -> void { games_.emplace_back(std::move(title)); }
 
-auto gw::GameLibrary::ToggleGameClock() noexcept -> void {
+auto gw::GameLibrary::ToggleGameClock(const std::optional<int> index) noexcept -> void {
+    if (index != std::nullopt)
+        active_game_index_ = *index;
+
     // Case 1: autosave_enabled_status == 0 => we set it to true each time
     // Case 2: autosave_enabled_status == 1 => we set it to true first then false the second time we toggle
     if (autosave_enabled_status == 0)
         should_save_game_ = true;
-    else
+    else {
         should_save_game_ = should_save_game_ == false;
+    }
 
     autosave_cv_.notify_one();
 }
@@ -101,4 +105,14 @@ auto gw::GameLibrary::GetGameTitle(const std::size_t index) const noexcept -> st
     return games_[index].GetTitle();
 }
 
+auto gw::GameLibrary::GetActiveGameTitle() const noexcept -> std::string_view {
+    return games_[active_game_index_].GetTitle();
+}
+
+auto gw::GameLibrary::GetActiveGameIndex() const noexcept -> int { return active_game_index_; }
+
 auto gw::GameLibrary::GamesCount() const noexcept -> std::size_t { return games_.size(); }
+
+auto gw::GameLibrary::IsAnyGameActive() const noexcept -> bool {
+    return (autosave_enabled_status == 0 && took_snapshot_already_ == true) || (autosave_enabled_status == 1 && should_save_game_ == true);
+}

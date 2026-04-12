@@ -40,7 +40,7 @@ auto gw::App::Run() noexcept -> void {
                 break;
 
             case TaskType::MainMenu:
-                current_task_ = tasks::MainMenu(console_);
+                current_task_ = tasks::MainMenu(console_, game_library_);
                 break;
 
             case TaskType::ResetGameClock:
@@ -64,7 +64,7 @@ auto gw::App::Run() noexcept -> void {
                 break;
 
             case TaskType::ToggleGameClock:
-                current_task_ = tasks::ToggleGameClock(game_library_);
+                current_task_ = tasks::ToggleGameClock(console_, game_library_);
                 break;
 
             case TaskType::Default:

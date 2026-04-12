@@ -5,8 +5,9 @@
 #pragma once
 
 #include "Core/Console/Console.hxx"
+#include "Core/GameLibrary/GameLibrary.hxx"
 #include "Core/TaskType/TaskType.hxx"
 
 namespace gw::tasks {
-[[nodiscard]] auto MainMenu(Console&) noexcept -> TaskType;
+[[nodiscard]] auto MainMenu(Console&, const GameLibrary&) noexcept -> TaskType;
 } // namespace gw::tasks

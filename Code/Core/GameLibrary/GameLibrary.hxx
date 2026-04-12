@@ -26,7 +26,7 @@ public:
 
     auto AddGameTime(std::chrono::steady_clock::duration) noexcept -> void;
 
-    auto ToggleGameClock() noexcept -> void;
+    auto ToggleGameClock(std::optional<int>) noexcept -> void;
 
     auto ListGames() const noexcept -> void;
 
@@ -34,7 +34,13 @@ public:
 
     [[nodiscard]] auto GetGameTitle(std::size_t) const noexcept -> std::string_view;
 
+    [[nodiscard]] auto GetActiveGameTitle() const noexcept -> std::string_view;
+
+    [[nodiscard]] auto GetActiveGameIndex() const noexcept -> int;
+
     [[nodiscard]] auto GamesCount() const noexcept -> std::size_t;
+
+    [[nodiscard]] auto IsAnyGameActive() const noexcept -> bool;
 
 private:
     int active_game_index_ = 0;

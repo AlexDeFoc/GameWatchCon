@@ -4,9 +4,10 @@
 
 #pragma once
 
+#include "Core/Console/Console.hxx"
 #include "Core/GameLibrary/GameLibrary.hxx"
 #include "Core/TaskType/TaskType.hxx"
 
 namespace gw::tasks {
-[[nodiscard]] auto ToggleGameClock(GameLibrary&) noexcept -> TaskType;
+[[nodiscard]] auto ToggleGameClock(Console& console, GameLibrary&) noexcept -> TaskType;
 }

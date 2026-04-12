@@ -20,7 +20,7 @@ struct Version {
 } // namespace
 
 auto gw::tasks::CheckForUpdates(Console& console) noexcept -> TaskType {
-    static Version current_version{.Year = 2026, .Month = 2, .Day = 11};
+    static Version current_version{.Year = 2026, .Month = 4, .Day = 12};
 
     console.ClearScreen();
 
