@@ -4,13 +4,15 @@
 
 #pragma once
 
+#include "Core/AppConfig/AppConfig.hxx"
+#include "Core/AppState/AppState.hxx"
 #include "Core/Console/Console.hxx"
 #include "Core/GameEntry/GameEntry.hxx"
 
 namespace gw {
 class GameLibrary {
 public:
-    explicit GameLibrary(std::atomic<int>&, std::atomic<std::chrono::steady_clock::duration>&, const std::atomic<int>&) noexcept;
+    explicit GameLibrary(const AppState&, const AppConfig&) noexcept;
     ~GameLibrary();
 
     auto SetGameTitle(std::size_t, std::string) noexcept -> void;
@@ -44,21 +46,39 @@ public:
     [[nodiscard]] auto IsAnyGameActive() const noexcept -> bool;
 
 private:
+    struct DiskGameSchema {
+        std::int64_t id = 0;
+        std::string title;
+        std::int64_t clock_in_ms = 0;
+    };
+
+    using DiskStorageType = decltype(sqlite_orm::make_storage("game_library.db",
+                                                              sqlite_orm::make_table("games",
+                                                                                     sqlite_orm::make_column("id", &DiskGameSchema::id, sqlite_orm::primary_key().autoincrement()),
+                                                                                     sqlite_orm::make_column("title", &DiskGameSchema::title, sqlite_orm::collate_binary()),
+                                                                                     sqlite_orm::make_column("clock_in_ms", &DiskGameSchema::clock_in_ms, sqlite_orm::default_value(0)),
+                                                                                     sqlite_orm::check(sqlite_orm::c(&DiskGameSchema::clock_in_ms) >= 0))));
+
     int active_game_index_ = 0;
     std::chrono::steady_clock::time_point last_snapshot;
     bool took_snapshot_already_ = false;
     std::vector<GameEntry> games_;
+    mutable DiskStorageType disk_storage_;
 
-    std::mutex mutex_;
+    mutable std::mutex mutex_;
     std::jthread autosave_thread_;
     std::condition_variable autosave_cv_;
 
     bool should_save_game_ = false;
-    std::atomic<int>& keep_thread_running_;
+    const AppState& app_state_;
+    const AppConfig& app_config_;
 
-    const std::atomic<int>& autosave_enabled_status;
-    std::atomic<std::chrono::steady_clock::duration>& autosave_interval_;
-
+    // Private Member Methods
     auto SaveJob() noexcept -> void;
+    auto SaveToDisk() const noexcept -> void;
+    auto LoadFromDisk() noexcept -> void;
+
+    // Private Static Methods
+    [[nodiscard]] static auto InitDiskStorage() noexcept -> DiskStorageType;
 };
 } // namespace gw

@@ -4,8 +4,9 @@
 
 #pragma once
 
+#include "Core/AppState/AppState.hxx"
 #include "Core/TaskType/TaskType.hxx"
 
 namespace gw::tasks {
-[[nodiscard]] auto StopApp(std::atomic<int>&) noexcept -> TaskType;
+[[nodiscard]] auto StopApp(AppState&) noexcept -> TaskType;
 }

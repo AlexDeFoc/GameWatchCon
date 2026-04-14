@@ -6,6 +6,8 @@
 
 gw::GameClock::GameClock() noexcept : duration_{std::chrono::steady_clock::duration::zero()} {}
 
+gw::GameClock::GameClock(const std::chrono::steady_clock::duration time) noexcept : duration_{time} {}
+
 auto gw::GameClock::AddTime(const std::chrono::steady_clock::duration additional_time) noexcept -> void { duration_ += additional_time; }
 
 auto gw::GameClock::Reset() noexcept -> void { duration_ = std::chrono::steady_clock::duration::zero(); }
@@ -35,3 +37,5 @@ auto gw::GameClock::GetMilliseconds() const noexcept -> std::chrono::millisecond
     const auto total_seconds = std::chrono::duration_cast<std::chrono::seconds>(duration_);
     return total_milliseconds - total_seconds;
 }
+
+auto gw::GameClock::GetTimeForStoringToDisk() const noexcept -> std::int64_t { return static_cast<std::int64_t>(duration_.count()); }

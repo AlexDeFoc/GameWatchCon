@@ -7,5 +7,5 @@
 #include "Core/TaskType/TaskType.hxx"
 
 namespace gw::tasks {
-[[nodiscard]] auto StartApp(std::atomic<int>&) noexcept -> TaskType;
+[[nodiscard]] auto StartApp() noexcept -> TaskType;
 }

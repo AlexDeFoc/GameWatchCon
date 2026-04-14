@@ -11,8 +11,9 @@ target_include_directories(GameWatchCon PRIVATE Code)
 target_sources(GameWatchCon PRIVATE
         # Core
         Code/Core/App/App.cxx
-        Code/Core/AppEntryPoint/Main.cxx
         Code/Core/AppConfig/AppConfig.cxx
+        Code/Core/AppEntryPoint/Main.cxx
+        Code/Core/AppState/AppState.cxx
         Code/Core/Console/Console.cxx
         Code/Core/GameClock/GameClock.cxx
         Code/Core/GameEntry/GameEntry.cxx

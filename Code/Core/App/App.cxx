@@ -6,7 +6,7 @@
 
 #include "Tasks/Tasks.hxx"
 
-gw::App::App() noexcept : keep_app_running_{0}, current_task_{TaskType::StartApp}, app_config_{}, game_library_{keep_app_running_, app_config_.GetAutoSaveInterval(), app_config_.GetAutoSaveStatus()} {}
+gw::App::App() noexcept : current_task_{TaskType::StartApp}, app_config_{}, game_library_{app_state_, app_config_} {}
 
 auto gw::App::Run() noexcept -> void {
     do {
@@ -52,11 +52,11 @@ auto gw::App::Run() noexcept -> void {
                 break;
 
             case TaskType::StartApp:
-                current_task_ = tasks::StartApp(keep_app_running_);
+                current_task_ = tasks::StartApp();
                 break;
 
             case TaskType::StopApp:
-                current_task_ = tasks::StopApp(keep_app_running_);
+                current_task_ = tasks::StopApp(app_state_);
                 break;
 
             case TaskType::ToggleAutoSave:
@@ -75,5 +75,5 @@ auto gw::App::Run() noexcept -> void {
                 assert(false && "Unhandled task");
                 std::terminate();
         }
-    } while (keep_app_running_);
+    } while (app_state_.IsAppRunning());
 }

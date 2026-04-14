@@ -13,8 +13,9 @@ public:
 
     auto ToggleAutoSaveStatus() noexcept -> void;
     auto ChangeAutoSaveInterval(std::chrono::steady_clock::duration) noexcept -> void;
-    [[nodiscard]] auto GetAutoSaveInterval() noexcept -> std::atomic<std::chrono::steady_clock::duration>&;
-    [[nodiscard]] auto GetAutoSaveStatus() const noexcept -> const std::atomic<int>&;
+    [[nodiscard]] auto IsAutoSaveEnabled() const noexcept -> bool;
+    [[nodiscard]] auto GetAutoSaveIntervalInMilliseconds() const noexcept -> std::chrono::milliseconds;
+    [[nodiscard]] auto GetAutoSaveInterval() const noexcept -> std::chrono::steady_clock::duration;
     [[nodiscard]] auto GetPrintableAutoSaveInterval() const noexcept -> std::string;
 
 private:
@@ -32,15 +33,16 @@ private:
                                                                                      sqlite_orm::check(sqlite_orm::in(&DiskStorageSchema::autosave_status, {0, 1})),
                                                                                      sqlite_orm::check(sqlite_orm::c(&DiskStorageSchema::autosave_interval_in_seconds) > 0))));
 
-
-    // TODO: Optimize their atomic usage
-    std::atomic<int> autosave_enabled_status_;
-    std::atomic<std::chrono::steady_clock::duration> autosave_interval_;
+    bool autosave_enabled_status_ = true;
+    std::chrono::steady_clock::duration autosave_interval_ = std::chrono::minutes(5);
     mutable DiskStorageType disk_storage_;
+    mutable std::mutex mutex_;
 
+    // Private Member Methods
     auto SaveToDisk() const noexcept -> void;
     auto LoadFromDisk() noexcept -> void;
 
+    // Private Static Methods
     [[nodiscard]] static auto InitDiskStorage() noexcept -> DiskStorageType;
 };
 } // namespace gw

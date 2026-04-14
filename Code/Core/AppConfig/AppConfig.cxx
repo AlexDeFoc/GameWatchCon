@@ -7,7 +7,7 @@
 using namespace std::chrono_literals;
 using namespace std::chrono;
 
-gw::AppConfig::AppConfig() noexcept : autosave_enabled_status_{1}, autosave_interval_{5min}, disk_storage_{InitDiskStorage()} {
+gw::AppConfig::AppConfig() noexcept : disk_storage_{InitDiskStorage()} {
     try {
         const auto schema_read = disk_storage_.sync_schema();
 
@@ -21,24 +21,41 @@ gw::AppConfig::AppConfig() noexcept : autosave_enabled_status_{1}, autosave_inte
 }
 
 auto gw::AppConfig::ToggleAutoSaveStatus() noexcept -> void {
-    autosave_enabled_status_ = autosave_enabled_status_ == 0;
+    {
+        std::lock_guard lck{mutex_};
+        autosave_enabled_status_ = autosave_enabled_status_ == false ? true : false;
+    }
+
     SaveToDisk();
 }
 
-// TODO: Optimize atomic operations for speed
-[[nodiscard]] auto gw::AppConfig::GetAutoSaveInterval() noexcept -> std::atomic<steady_clock::duration>& { return autosave_interval_; }
+auto gw::AppConfig::GetAutoSaveIntervalInMilliseconds() const noexcept -> milliseconds {
+    std::lock_guard lck{mutex_};
+    return duration_cast<milliseconds>(autosave_interval_);
+}
 
-// TODO: Optimize atomic operations for speed
+auto gw::AppConfig::GetAutoSaveInterval() const noexcept -> std::chrono::steady_clock::duration {
+    std::lock_guard lck{mutex_};
+    return autosave_interval_;
+}
+
 auto gw::AppConfig::ChangeAutoSaveInterval(const steady_clock::duration new_interval) noexcept -> void {
-    autosave_interval_ = new_interval;
+    {
+        std::lock_guard lck{mutex_};
+        autosave_interval_ = new_interval;
+    }
+
     SaveToDisk();
 }
 
-auto gw::AppConfig::GetAutoSaveStatus() const noexcept -> const std::atomic<int>& { return autosave_enabled_status_; }
+auto gw::AppConfig::IsAutoSaveEnabled() const noexcept -> bool {
+    std::lock_guard lck{mutex_};
+    return autosave_enabled_status_;
+}
 
 // TODO: Make this more/stronger type/d safe
 auto gw::AppConfig::GetPrintableAutoSaveInterval() const noexcept -> std::string {
-    auto ms = duration_cast<milliseconds>(autosave_interval_.load()); // TODO: Optimize for atomic operations speed
+    auto ms = GetAutoSaveIntervalInMilliseconds();
     const auto d = duration_cast<days>(ms);
     ms -= d;
     const auto h = duration_cast<hours>(ms);
@@ -85,10 +102,10 @@ auto gw::AppConfig::SaveToDisk() const noexcept -> void {
         using namespace sqlite_orm;
         using namespace std::chrono;
 
-        const auto status = static_cast<std::int64_t>(autosave_enabled_status_.load());
-        const auto interval = static_cast<std::int64_t>(std::chrono::duration_cast<seconds>(autosave_interval_.load()).count());
+        const auto status = static_cast<std::int64_t>(autosave_enabled_status_);
+        const auto interval = static_cast<std::int64_t>(std::chrono::duration_cast<seconds>(autosave_interval_).count());
 
-        const DiskStorageSchema current_settings{.autosave_status = status, .autosave_interval_in_seconds = interval};
+        const DiskStorageSchema current_settings{.id = 1, .autosave_status = status, .autosave_interval_in_seconds = interval};
         disk_storage_.replace(current_settings);
     } catch (...) {
         // TODO: Find out what is the issue and perform actions...
@@ -100,7 +117,7 @@ auto gw::AppConfig::LoadFromDisk() noexcept -> void {
     using namespace std::chrono;
 
     try {
-        auto results = disk_storage_.get_all<DiskStorageSchema>(where(c(&DiskStorageSchema::id) == 0));
+        auto results = disk_storage_.get_all<DiskStorageSchema>(where(c(&DiskStorageSchema::id) == 1));
 
         if (!results.empty()) {
             const auto& read = results.front();
