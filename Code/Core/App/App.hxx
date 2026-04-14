@@ -5,6 +5,7 @@
 #pragma once
 
 #include "Core/AppConfig/AppConfig.hxx"
+#include "Core/AppState/AppState.hxx"
 #include "Core/Console/Console.hxx"
 #include "Core/GameLibrary/GameLibrary.hxx"
 #include "Core/TaskType/TaskType.hxx"
@@ -16,7 +17,7 @@ public:
     auto Run() noexcept -> void;
 
 private:
-    std::atomic<int> keep_app_running_;
+    AppState app_state_;
     TaskType current_task_;
     AppConfig app_config_;
     Console console_;

@@ -2,11 +2,14 @@
 // Copyright (C) 2026 Sava Alexandru-Andrei
 // License: GNU AGPL v3 or later - see LICENSE file
 
+#include "pch.hxx"
 #include "Core/GameEntry/GameEntry.hxx"
 
 gw::GameEntry::GameEntry() noexcept = default;
 
 gw::GameEntry::GameEntry(std::string title) noexcept : title_{std::move(title)} {}
+
+gw::GameEntry::GameEntry(std::string title, const std::chrono::steady_clock::duration time) noexcept : title_{std::move(title)}, clock_{time} {}
 
 auto gw::GameEntry::SetTitle(std::string new_title) noexcept -> void { title_ = std::move(new_title); }
 
@@ -48,3 +51,7 @@ auto gw::GameEntry::GetPrintableClock() const noexcept -> std::string {
 
     return printable_clock;
 }
+
+auto gw::GameEntry::GetTitleForStoringToDisk() const noexcept -> std::string { return title_; }
+
+auto gw::GameEntry::GetClockForStoringToDisk() const noexcept -> std::int64_t { return clock_.GetTimeForStoringToDisk(); }

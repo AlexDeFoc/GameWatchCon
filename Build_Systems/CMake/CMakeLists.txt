@@ -11,8 +11,9 @@ target_include_directories(GameWatchCon PRIVATE Code)
 target_sources(GameWatchCon PRIVATE
         # Core
         Code/Core/App/App.cxx
-        Code/Core/AppEntryPoint/Main.cxx
         Code/Core/AppConfig/AppConfig.cxx
+        Code/Core/AppEntryPoint/Main.cxx
+        Code/Core/AppState/AppState.cxx
         Code/Core/Console/Console.cxx
         Code/Core/GameClock/GameClock.cxx
         Code/Core/GameEntry/GameEntry.cxx
@@ -63,4 +64,5 @@ if(CMAKE_GENERATOR MATCHES "Ninja|Unix Makefiles|Visual Studio")
 endif()
 
 find_package(cpr CONFIG REQUIRED)
-target_link_libraries(GameWatchCon PRIVATE cpr::cpr)
+find_package(SqliteOrm CONFIG REQUIRED)
+target_link_libraries(GameWatchCon PRIVATE cpr::cpr sqlite_orm::sqlite_orm)

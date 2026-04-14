@@ -2,9 +2,12 @@
 // Copyright (C) 2026 Sava Alexandru-Andrei
 // License: GNU AGPL v3 or later - see LICENSE file
 
+#include "pch.hxx"
 #include "Core/GameClock/GameClock.hxx"
 
 gw::GameClock::GameClock() noexcept : duration_{std::chrono::steady_clock::duration::zero()} {}
+
+gw::GameClock::GameClock(const std::chrono::steady_clock::duration time) noexcept : duration_{time} {}
 
 auto gw::GameClock::AddTime(const std::chrono::steady_clock::duration additional_time) noexcept -> void { duration_ += additional_time; }
 
@@ -35,3 +38,5 @@ auto gw::GameClock::GetMilliseconds() const noexcept -> std::chrono::millisecond
     const auto total_seconds = std::chrono::duration_cast<std::chrono::seconds>(duration_);
     return total_milliseconds - total_seconds;
 }
+
+auto gw::GameClock::GetTimeForStoringToDisk() const noexcept -> std::int64_t { return static_cast<std::int64_t>(duration_.count()); }

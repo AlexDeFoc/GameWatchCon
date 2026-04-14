@@ -10,6 +10,7 @@ namespace gw {
 class GameClock {
 public:
     GameClock() noexcept;
+    GameClock(std::chrono::steady_clock::duration) noexcept;
 
     auto AddTime(std::chrono::steady_clock::duration) noexcept -> void;
     auto Reset() noexcept -> void;
@@ -18,6 +19,7 @@ public:
     [[nodiscard]] auto GetMinutes() const noexcept -> std::chrono::minutes;
     [[nodiscard]] auto GetSeconds() const noexcept -> std::chrono::seconds;
     [[nodiscard]] auto GetMilliseconds() const noexcept -> std::chrono::milliseconds;
+    [[nodiscard]] auto GetTimeForStoringToDisk() const noexcept -> std::int64_t;
 
 private:
     std::chrono::steady_clock::duration duration_;
