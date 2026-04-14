@@ -66,15 +66,16 @@ private:
     mutable DiskStorageType disk_storage_;
 
     mutable std::mutex mutex_;
-    std::jthread autosave_thread_;
-    std::condition_variable autosave_cv_;
+    std::condition_variable_any autosave_cv_;
 
     std::atomic<std::uint8_t> should_save_game_ = 0;
     const AppState& app_state_;
     const AppConfig& app_config_;
 
+    std::jthread autosave_thread_; // NOTE: Must be destroyed last, to not hang at destruction, by join after destruction
+
     // Private Member Methods
-    auto SaveJob() noexcept -> void;
+    auto SaveJob(std::stop_token) noexcept -> void;
     auto SaveToDisk() const noexcept -> void;
     auto LoadFromDisk() noexcept -> void;
 

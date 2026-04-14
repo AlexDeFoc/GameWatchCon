@@ -36,6 +36,8 @@ auto gw::tasks::ResetGameClock(Console& console, GameLibrary& game_library) noex
     if (next_task != TaskType::Default)
         return next_task;
 
+    auto selected_game_index = console.GetNumberInputResult() - 1;
+
     [&] {
         while (true) {
             console.ClearScreen();
@@ -58,7 +60,7 @@ auto gw::tasks::ResetGameClock(Console& console, GameLibrary& game_library) noex
     }();
 
     if (console.GetUserConfirmationStatus() == true) {
-        game_library.ResetGameClock(console.GetNumberInputResult() - 1);
+        game_library.ResetGameClock(selected_game_index);
         console.WriteLineToCache(Console::MsgType::Info, "Reset game clock");
     } else {
         console.WriteLineToCache(Console::MsgType::Info, "Action cancelled");

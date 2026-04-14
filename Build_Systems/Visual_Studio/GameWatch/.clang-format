@@ -49,4 +49,6 @@ SpacesInConditionalStatement: false
 SpacesInCStyleCastParentheses: false
 SpacesInParentheses: false
 TabWidth: 4
+SortIncludes:
+  Enabled: false
 ...

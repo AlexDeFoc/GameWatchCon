@@ -7,7 +7,7 @@
 #include "Core/Utils/Utils.hxx"
 
 gw::GameLibrary::GameLibrary(const AppState& app_state, const AppConfig& app_config) noexcept : disk_storage_{InitDiskStorage()}, app_state_{app_state}, app_config_{app_config} {
-    autosave_thread_ = std::jthread([&] { SaveJob(); });
+    autosave_thread_ = std::jthread([this](std::stop_token stop_token) { SaveJob(stop_token); });
 
     try {
         const auto schema_read = disk_storage_.sync_schema();
@@ -22,14 +22,17 @@ gw::GameLibrary::GameLibrary(const AppState& app_state, const AppConfig& app_con
 }
 
 gw::GameLibrary::~GameLibrary() {
-    // 1. App sets app state to off
+    // 1. Signal auto thread to stop
+    autosave_thread_.request_stop();
 
-    // 2. Notify the thread to read the app state
-    autosave_cv_.notify_one();
+    // 2. Make autosave thread wake up
+    should_save_game_.store(2, std::memory_order_release); // NOTE: We use 2 to signal 'Shutdown' and not interact with the logic of 1 and 0
 
-    // 3. Join the thread
-    if (autosave_thread_.joinable())
-        autosave_thread_.join();
+    // 3. Notify the thread
+    should_save_game_.notify_all();
+
+    if (app_config_.IsAutoSaveEnabled())
+        autosave_cv_.notify_all();
 }
 
 auto gw::GameLibrary::SetGameTitle(const std::size_t index, std::string new_title) noexcept -> void {
@@ -74,7 +77,7 @@ auto gw::GameLibrary::AddGame(std::string title) noexcept -> void {
 
 auto gw::GameLibrary::AddGameTime(const std::chrono::steady_clock::duration time) noexcept -> void {
     auto current_active_game_index = active_game_index_.load(std::memory_order_acquire);
-    
+
     games_[current_active_game_index].AddTime(time);
     auto disk_game = disk_storage_.get<DiskGameSchema>(current_active_game_index + 1);
     disk_game.clock_in_ms += std::chrono::duration_cast<std::chrono::milliseconds>(time).count();
@@ -85,19 +88,16 @@ auto gw::GameLibrary::ToggleGameClock(const std::optional<int> index) noexcept -
     if (index != std::nullopt)
         active_game_index_.store(*index, std::memory_order_release);
 
-
-    {
-        std::lock_guard lock{mutex_}; // TODO: needed by the autosave_cv...for now
-        // Case 1: autosave_enabled_status == 0 => we set it to true each time
-        // Case 2: autosave_enabled_status == 1 => we set it to true first then false the second time we toggle
-        if (!app_config_.IsAutoSaveEnabled())
-            should_save_game_.store(1, std::memory_order_release);
-        else {
-            should_save_game_.fetch_xor(1); // Invert status each time
-        }
+    // Case 1: autosave_enabled_status == 0 => we set it to true each time
+    // Case 2: autosave_enabled_status == 1 => we set it to true first then false the second time we toggle
+    if (!app_config_.IsAutoSaveEnabled())
+        should_save_game_.store(1, std::memory_order_release);
+    else {
+        should_save_game_.fetch_xor(1); // Invert status each time
     }
 
-    autosave_cv_.notify_one();
+    should_save_game_.notify_all();
+    autosave_cv_.notify_all();
 }
 
 // TODO: Maybe transition from in-memory games to disk-only games
@@ -131,26 +131,23 @@ auto gw::GameLibrary::IsAnyGameActive() const noexcept -> bool {
 
     if (auto_save_enabled)
         return should_save_game_.load(std::memory_order_relaxed);
-    else
-        return took_snapshot_already_.load(std::memory_order_relaxed);
+    else {
+        bool took = took_snapshot_already_.load(std::memory_order_relaxed);
+        bool pending = should_save_game_.load(std::memory_order_relaxed) == 1;
+
+        return pending ? !took : took;
+    }
 }
 
-// Private Member Methods
-auto gw::GameLibrary::SaveJob() noexcept -> void {
-    std::unique_lock lock{mutex_};
+auto gw::GameLibrary::SaveJob(std::stop_token stop_token) noexcept -> void {
+    while (!stop_token.stop_requested()) {
+        should_save_game_.wait(0, std::memory_order_acquire);
 
-    do {
-        // Skip sleeping while predicate is true
-        autosave_cv_.wait(lock, [&] { return should_save_game_.load(std::memory_order_acquire) || !app_state_.IsAppRunning(); });
-
-        if (!app_state_.IsAppRunning())
+        if (stop_token.stop_requested())
             break;
 
-        // Autosave status table:
-        // 0 => do manual save
-        // 1 => perform autosave
         if (!app_config_.IsAutoSaveEnabled()) {
-            if (!took_snapshot_already_) {
+            if (!took_snapshot_already_.load(std::memory_order_relaxed)) {
                 last_snapshot = std::chrono::steady_clock::now();
                 took_snapshot_already_.store(true, std::memory_order_release);
             } else {
@@ -158,16 +155,27 @@ auto gw::GameLibrary::SaveJob() noexcept -> void {
                 took_snapshot_already_.store(false, std::memory_order_release);
             }
 
-            should_save_game_.store(false, std::memory_order_relaxed); // App will re-enable each time to either start or stop
+            should_save_game_.store(0, std::memory_order_release);
         } else {
             last_snapshot = std::chrono::steady_clock::now();
 
-            // Sleep until we elapsed autosave interval OR game has been stopped OR app is exiting
-            autosave_cv_.wait_for(lock, app_config_.GetAutoSaveInterval(), [&] { return !should_save_game_.load(std::memory_order_acquire) || !app_state_.IsAppRunning(); });
+            // LOOP until game is toggled OFF or the app closes
+            while (!stop_token.stop_requested() && should_save_game_.load(std::memory_order_acquire) == 1) {
+                std::unique_lock lck{mutex_};
 
-            AddGameTime(std::chrono::steady_clock::now() - last_snapshot);
+                bool interrupted = autosave_cv_.wait_for(lck, stop_token, app_config_.GetAutoSaveInterval(), [&] {
+                    return should_save_game_.load(std::memory_order_acquire) == 0;
+                });
+
+                auto now = std::chrono::steady_clock::now();
+                AddGameTime(now - last_snapshot);
+                last_snapshot = now;
+
+                if (stop_token.stop_requested() || interrupted)
+                    break;
+            }
         }
-    } while (app_state_.IsAppRunning());
+    }
 }
 
 auto gw::GameLibrary::SaveToDisk() const noexcept -> void {
