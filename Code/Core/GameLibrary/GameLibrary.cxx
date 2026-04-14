@@ -73,22 +73,28 @@ auto gw::GameLibrary::AddGame(std::string title) noexcept -> void {
 }
 
 auto gw::GameLibrary::AddGameTime(const std::chrono::steady_clock::duration time) noexcept -> void {
-    games_[active_game_index_].AddTime(time);
-    auto disk_game = disk_storage_.get<DiskGameSchema>(active_game_index_ + 1);
+    auto current_active_game_index = active_game_index_.load(std::memory_order_acquire);
+    
+    games_[current_active_game_index].AddTime(time);
+    auto disk_game = disk_storage_.get<DiskGameSchema>(current_active_game_index + 1);
     disk_game.clock_in_ms += std::chrono::duration_cast<std::chrono::milliseconds>(time).count();
     disk_storage_.update(disk_game);
 }
 
 auto gw::GameLibrary::ToggleGameClock(const std::optional<int> index) noexcept -> void {
     if (index != std::nullopt)
-        active_game_index_ = *index;
+        active_game_index_.store(*index, std::memory_order_release);
 
-    // Case 1: autosave_enabled_status == 0 => we set it to true each time
-    // Case 2: autosave_enabled_status == 1 => we set it to true first then false the second time we toggle
-    if (!app_config_.IsAutoSaveEnabled())
-        should_save_game_ = true;
-    else {
-        should_save_game_ ^= 1; // Equivalent to should_save_game_ = should_save_game_ == false;
+
+    {
+        std::lock_guard lock{mutex_}; // TODO: needed by the autosave_cv...for now
+        // Case 1: autosave_enabled_status == 0 => we set it to true each time
+        // Case 2: autosave_enabled_status == 1 => we set it to true first then false the second time we toggle
+        if (!app_config_.IsAutoSaveEnabled())
+            should_save_game_.store(1, std::memory_order_release);
+        else {
+            should_save_game_.fetch_xor(1); // Invert status each time
+        }
     }
 
     autosave_cv_.notify_one();
@@ -97,7 +103,7 @@ auto gw::GameLibrary::ToggleGameClock(const std::optional<int> index) noexcept -
 // TODO: Maybe transition from in-memory games to disk-only games
 auto gw::GameLibrary::ListGames(const Console& console) const noexcept -> void {
     for (std::size_t game_index{1}; const auto& game : games_) {
-        if (IsAnyGameActive() && game_index == static_cast<std::size_t>(active_game_index_ + 1))
+        if (IsAnyGameActive() && game_index == active_game_index_.load(std::memory_order_relaxed) + 1)
             std::println("{}. {} - {} - {}", game_index, game.GetTitle(), game.GetPrintableClock(), utils::ColorText(console, utils::TextColor::Red, "ACTIVE"));
         else
             std::println("{}. {} - {}", game_index, game.GetTitle(), game.GetPrintableClock());
@@ -113,17 +119,20 @@ auto gw::GameLibrary::GetGameTitle(const std::size_t index) const noexcept -> st
 }
 
 auto gw::GameLibrary::GetActiveGameTitle() const noexcept -> std::string_view {
-    return games_[active_game_index_].GetTitle();
+    return games_[active_game_index_.load(std::memory_order_acquire)].GetTitle();
 }
 
-auto gw::GameLibrary::GetActiveGameIndex() const noexcept -> int { return active_game_index_; }
+auto gw::GameLibrary::GetActiveGameIndex() const noexcept -> std::size_t { return active_game_index_.load(std::memory_order_acquire); }
 
 auto gw::GameLibrary::GamesCount() const noexcept -> std::size_t { return games_.size(); }
 
 auto gw::GameLibrary::IsAnyGameActive() const noexcept -> bool {
-    std::lock_guard lck{mutex_};
+    bool auto_save_enabled = app_config_.IsAutoSaveEnabled();
 
-    return (!app_config_.IsAutoSaveEnabled() && took_snapshot_already_ == true) || (app_config_.IsAutoSaveEnabled() && should_save_game_ == true);
+    if (auto_save_enabled)
+        return should_save_game_.load(std::memory_order_relaxed);
+    else
+        return took_snapshot_already_.load(std::memory_order_relaxed);
 }
 
 // Private Member Methods
@@ -132,7 +141,7 @@ auto gw::GameLibrary::SaveJob() noexcept -> void {
 
     do {
         // Skip sleeping while predicate is true
-        autosave_cv_.wait(lock, [&] { return should_save_game_ || !app_state_.IsAppRunning(); });
+        autosave_cv_.wait(lock, [&] { return should_save_game_.load(std::memory_order_acquire) || !app_state_.IsAppRunning(); });
 
         if (!app_state_.IsAppRunning())
             break;
@@ -143,18 +152,18 @@ auto gw::GameLibrary::SaveJob() noexcept -> void {
         if (!app_config_.IsAutoSaveEnabled()) {
             if (!took_snapshot_already_) {
                 last_snapshot = std::chrono::steady_clock::now();
-                took_snapshot_already_ = true;
+                took_snapshot_already_.store(true, std::memory_order_release);
             } else {
                 AddGameTime(std::chrono::steady_clock::now() - last_snapshot);
-                took_snapshot_already_ = false;
+                took_snapshot_already_.store(false, std::memory_order_release);
             }
 
-            should_save_game_ = false; // App will re-enable each time to either start or stop
+            should_save_game_.store(false, std::memory_order_relaxed); // App will re-enable each time to either start or stop
         } else {
             last_snapshot = std::chrono::steady_clock::now();
 
             // Sleep until we elapsed autosave interval OR game has been stopped OR app is exiting
-            autosave_cv_.wait_for(lock, app_config_.GetAutoSaveInterval(), [&] { return !should_save_game_ || !app_state_.IsAppRunning(); });
+            autosave_cv_.wait_for(lock, app_config_.GetAutoSaveInterval(), [&] { return !should_save_game_.load(std::memory_order_acquire) || !app_state_.IsAppRunning(); });
 
             AddGameTime(std::chrono::steady_clock::now() - last_snapshot);
         }

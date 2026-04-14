@@ -39,7 +39,7 @@ public:
 
     [[nodiscard]] auto GetActiveGameTitle() const noexcept -> std::string_view;
 
-    [[nodiscard]] auto GetActiveGameIndex() const noexcept -> int;
+    [[nodiscard]] auto GetActiveGameIndex() const noexcept -> std::size_t;
 
     [[nodiscard]] auto GamesCount() const noexcept -> std::size_t;
 
@@ -59,9 +59,9 @@ private:
                                                                                      sqlite_orm::make_column("clock_in_ms", &DiskGameSchema::clock_in_ms, sqlite_orm::default_value(0)),
                                                                                      sqlite_orm::check(sqlite_orm::c(&DiskGameSchema::clock_in_ms) >= 0))));
 
-    int active_game_index_ = 0;
+    std::atomic<std::size_t> active_game_index_ = 0;
     std::chrono::steady_clock::time_point last_snapshot;
-    bool took_snapshot_already_ = false;
+    std::atomic<bool> took_snapshot_already_ = false;
     std::vector<GameEntry> games_;
     mutable DiskStorageType disk_storage_;
 
@@ -69,7 +69,7 @@ private:
     std::jthread autosave_thread_;
     std::condition_variable autosave_cv_;
 
-    bool should_save_game_ = false;
+    std::atomic<std::uint8_t> should_save_game_ = 0;
     const AppState& app_state_;
     const AppConfig& app_config_;
 
