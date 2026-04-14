@@ -2,6 +2,7 @@
 // Copyright (C) 2026 Sava Alexandru-Andrei
 // License: GNU AGPL v3 or later - see LICENSE file
 
+#include "pch.hxx"
 #include "Tasks/DeleteGame/DeleteGame.hxx"
 
 auto gw::tasks::DeleteGame(Console& console, GameLibrary& game_library) noexcept -> TaskType {

@@ -2,6 +2,7 @@
 // Copyright (C) 2026 Sava Alexandru-Andrei
 // License: GNU AGPL v3 or later - see LICENSE file
 
+#include "pch.hxx"
 #include "Core/GameClock/GameClock.hxx"
 
 gw::GameClock::GameClock() noexcept : duration_{std::chrono::steady_clock::duration::zero()} {}

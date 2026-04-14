@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>18.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{755a7883-80d4-4aa8-a77d-97e66943517a}</ProjectGuid>
+    <RootNamespace>ConsoleApp</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v145</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v145</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v145</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v145</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(ProjectDir)Output\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)Output\$(Configuration)\Intermediaries\</IntDir>
+    <TargetName>$(ProjectName)Con</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(ProjectDir)Output\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)Output\$(Configuration)\Intermediaries\</IntDir>
+    <TargetName>$(ProjectName)Con</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>$(ProjectDir)Output\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)Output\$(Configuration)\Intermediaries\</IntDir>
+    <TargetName>$(ProjectName)Con</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>$(ProjectDir)Output\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)Output\$(Configuration)\Intermediaries\</IntDir>
+    <TargetName>$(ProjectName)Con</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Label="Vcpkg">
+    <VcpkgEnableManifest>true</VcpkgEnableManifest>
+  </PropertyGroup>
+  <PropertyGroup Label="Vcpkg" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <VcpkgConfiguration>Release</VcpkgConfiguration>
+    <VcpkgTriplet>x86-windows</VcpkgTriplet>
+    <VcpkgUseMD>true</VcpkgUseMD>
+  </PropertyGroup>
+  <PropertyGroup Label="Vcpkg" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <VcpkgConfiguration>Release</VcpkgConfiguration>
+    <VcpkgTriplet>x64-windows</VcpkgTriplet>
+    <VcpkgUseMD>true</VcpkgUseMD>
+    <VcpkgAdditionalInstallOptions>--binarysource=clear;files,$(MSBuildProjectDirectory)\.vcpkg_cache,readwrite</VcpkgAdditionalInstallOptions>
+  </PropertyGroup>
+  <PropertyGroup Label="Vcpkg" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <VcpkgTriplet>x64-windows</VcpkgTriplet>
+    <VcpkgUseMD>true</VcpkgUseMD>
+  </PropertyGroup>
+  <PropertyGroup Label="Vcpkg" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <VcpkgTriplet>x86-windows</VcpkgTriplet>
+    <VcpkgUseMD>true</VcpkgUseMD>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions);_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp23</LanguageStandard>
+      <AdditionalIncludeDirectories>C:\Users\alex\Documents\Dev\Projects\GameWatch\Code;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.hxx</PrecompiledHeaderFile>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions);_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp23</LanguageStandard>
+      <AdditionalIncludeDirectories>C:\Users\alex\Documents\Dev\Projects\GameWatch\Code;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.hxx</PrecompiledHeaderFile>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp23</LanguageStandard>
+      <AdditionalIncludeDirectories>C:\Users\alex\Documents\Dev\Projects\GameWatch\Code;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.hxx</PrecompiledHeaderFile>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions);_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp23</LanguageStandard>
+      <AdditionalIncludeDirectories>C:\Users\alex\Documents\Dev\Projects\GameWatch\Code;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.hxx</PrecompiledHeaderFile>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="Code\Core\AppConfig\AppConfig.cxx" />
+    <ClCompile Include="Code\Core\AppEntryPoint\Main.cxx" />
+    <ClCompile Include="Code\Core\AppState\AppState.cxx" />
+    <ClCompile Include="Code\Core\App\App.cxx" />
+    <ClCompile Include="Code\Core\Console\Console.cxx" />
+    <ClCompile Include="Code\Core\GameClock\GameClock.cxx" />
+    <ClCompile Include="Code\Core\GameEntry\GameEntry.cxx" />
+    <ClCompile Include="Code\Core\GameLibrary\GameLibrary.cxx" />
+    <ClCompile Include="Code\Core\Utils\Utils.cxx" />
+    <ClCompile Include="Code\pch.cxx">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Code\Tasks\AddNewGame\AddNewGame.cxx" />
+    <ClCompile Include="Code\Tasks\ChangeAutoSaveInterval\ChangeAutoSaveInterval.cxx" />
+    <ClCompile Include="Code\Tasks\ChangeGameTitle\ChangeGameTitle.cxx" />
+    <ClCompile Include="Code\Tasks\CheckForUpdates\CheckForUpdates.cxx" />
+    <ClCompile Include="Code\Tasks\DeleteGame\DeleteGame.cxx" />
+    <ClCompile Include="Code\Tasks\EditGamesMenu\EditGamesMenu.cxx" />
+    <ClCompile Include="Code\Tasks\ListGames\ListGames.cxx" />
+    <ClCompile Include="Code\Tasks\MainMenu\MainMenu.cxx" />
+    <ClCompile Include="Code\Tasks\ResetGameClock\ResetGameClock.cxx" />
+    <ClCompile Include="Code\Tasks\SettingsMenu\SettingsMenu.cxx" />
+    <ClCompile Include="Code\Tasks\StartApp\StartApp.cxx" />
+    <ClCompile Include="Code\Tasks\StopApp\StopApp.cxx" />
+    <ClCompile Include="Code\Tasks\ToggleAutoSave\ToggleAutoSave.cxx" />
+    <ClCompile Include="Code\Tasks\ToggleGameClock\ToggleGameClock.cxx" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Code\Core\AppConfig\AppConfig.hxx" />
+    <ClInclude Include="Code\Core\AppState\AppState.hxx" />
+    <ClInclude Include="Code\Core\App\App.hxx" />
+    <ClInclude Include="Code\Core\Console\Console.hxx" />
+    <ClInclude Include="Code\Core\GameClock\GameClock.hxx" />
+    <ClInclude Include="Code\Core\GameEntry\GameEntry.hxx" />
+    <ClInclude Include="Code\Core\GameLibrary\GameLibrary.hxx" />
+    <ClInclude Include="Code\Core\TaskType\TaskType.hxx" />
+    <ClInclude Include="Code\Core\Utils\Utils.hxx" />
+    <ClInclude Include="Code\pch.hxx" />
+    <ClInclude Include="Code\Tasks\AddNewGame\AddNewGame.hxx" />
+    <ClInclude Include="Code\Tasks\ChangeAutoSaveInterval\ChangeAutoSaveInterval.hxx" />
+    <ClInclude Include="Code\Tasks\ChangeGameTitle\ChangeGameTitle.hxx" />
+    <ClInclude Include="Code\Tasks\CheckForUpdates\CheckForUpdates.hxx" />
+    <ClInclude Include="Code\Tasks\DeleteGame\DeleteGame.hxx" />
+    <ClInclude Include="Code\Tasks\EditGamesMenu\EditGamesMenu.hxx" />
+    <ClInclude Include="Code\Tasks\ListGames\ListGames.hxx" />
+    <ClInclude Include="Code\Tasks\MainMenu\MainMenu.hxx" />
+    <ClInclude Include="Code\Tasks\ResetGameClock\ResetGameClock.hxx" />
+    <ClInclude Include="Code\Tasks\SettingsMenu\SettingsMenu.hxx" />
+    <ClInclude Include="Code\Tasks\StartApp\StartApp.hxx" />
+    <ClInclude Include="Code\Tasks\StopApp\StopApp.hxx" />
+    <ClInclude Include="Code\Tasks\Tasks.hxx" />
+    <ClInclude Include="Code\Tasks\ToggleAutoSave\ToggleAutoSave.hxx" />
+    <ClInclude Include="Code\Tasks\ToggleGameClock\ToggleGameClock.hxx" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include=".gitignore" />
+    <None Include="vcpkg-configuration.json" />
+    <None Include="vcpkg.json" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

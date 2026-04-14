@@ -2,8 +2,8 @@
 // Copyright (C) 2026 Sava Alexandru-Andrei
 // License: GNU AGPL v3 or later - see LICENSE file
 
+#include "pch.hxx"
 #include "Core/App/App.hxx"
-
 #include "Tasks/Tasks.hxx"
 
 gw::App::App() noexcept : current_task_{TaskType::StartApp}, app_config_{}, game_library_{app_state_, app_config_} {}
