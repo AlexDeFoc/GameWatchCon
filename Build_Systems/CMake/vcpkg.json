@@ -1,7 +1,0 @@
-{
-    "dependencies": [
-        "cpr", "sqlite-orm"
-    ],
-    "version-string": "2026.4.12",
-    "name": "gamewatchcon"
-}
