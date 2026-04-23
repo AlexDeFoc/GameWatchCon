@@ -39,25 +39,25 @@ set_target_properties(GameWatchCon PROPERTIES
 
 # Warnings only for the common generators you mentioned.
 if(MSVC OR CMAKE_CXX_COMPILER_FRONTEND_VARIANT STREQUAL "MSVC")
-        target_compile_options(GameWatchCon PRIVATE
-            #            /W4
-            #/WX
-            /permissive-
-        )
+    target_compile_options(GameWatchCon PRIVATE
+        #            /W4
+        #/WX
+        /permissive-
+    )
 
-    else()
-        target_compile_options(GameWatchCon PRIVATE
-#            -Wall
-#            -Wextra
-#            -Wpedantic
-#            -Wshadow
-#            -Wnon-virtual-dtor
-#            -Wold-style-cast
-#            -Wunused
-#            -Woverloaded-virtual
-#            -Wconversion
-#            -Werror
-        )
+else()
+    target_compile_options(GameWatchCon PRIVATE
+        #            -Wall
+        #            -Wextra
+        #            -Wpedantic
+        #            -Wshadow
+        #            -Wnon-virtual-dtor
+        #            -Wold-style-cast
+        #            -Wunused
+        #            -Woverloaded-virtual
+        #            -Wconversion
+        #            -Werror
+    )
 endif()
 
 find_package(cpr REQUIRED)
