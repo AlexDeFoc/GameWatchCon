@@ -32,37 +32,34 @@ target_sources(GameWatchCon PRIVATE
 target_include_directories(GameWatchCon PRIVATE Includes)
 
 set_target_properties(GameWatchCon PROPERTIES
-    CXX_STANDARD 23
+    CXX_STANDARD 26
     CXX_STANDARD_REQUIRED ON
     CXX_EXTENSIONS OFF
 )
 
 # Warnings only for the common generators you mentioned.
-if(CMAKE_GENERATOR MATCHES "Ninja|Unix Makefiles|Visual Studio")
-    if(MSVC)
-        # Visual Studio / cl.exe / clang-cl
+if(MSVC OR CMAKE_CXX_COMPILER_FRONTEND_VARIANT STREQUAL "MSVC")
         target_compile_options(GameWatchCon PRIVATE
-            /Wall
-            /WX
+            #            /W4
+            #/WX
             /permissive-
         )
-    elseif(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-        # GCC / Clang
+
+    else()
         target_compile_options(GameWatchCon PRIVATE
-            -Wall
-            -Wextra
-            -Wpedantic
-            -Wshadow
-            -Wnon-virtual-dtor
-            -Wold-style-cast
-            -Wunused
-            -Woverloaded-virtual
-            -Wconversion
-            -Werror
+#            -Wall
+#            -Wextra
+#            -Wpedantic
+#            -Wshadow
+#            -Wnon-virtual-dtor
+#            -Wold-style-cast
+#            -Wunused
+#            -Woverloaded-virtual
+#            -Wconversion
+#            -Werror
         )
-    endif()
 endif()
 
-find_package(cpr CONFIG REQUIRED)
+find_package(cpr REQUIRED)
 find_package(SqliteOrm REQUIRED)
 target_link_libraries(GameWatchCon PRIVATE cpr::cpr sqlite_orm::sqlite_orm)

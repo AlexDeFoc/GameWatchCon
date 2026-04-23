@@ -1,7 +1,7 @@
 #include "Pch.h"
 #include "Console.h"
 #include "GameLibrary.h"
-#include "Tasks/AddnewGame.h"
+#include "Tasks/AddNewGame.h"
 #include "Tasks/MainMenu.h"
 
 auto gw::tasks::AddNewGame(gw::Console& console, gw::AppState&, gw::AppSettings&, gw::GameLibrary& game_library) -> void* {

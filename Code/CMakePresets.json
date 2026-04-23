@@ -2,7 +2,8 @@
   "version": 9,
   "configurePresets": [
     {
-      "name": "clang_cl_x64_debug_dynamic",
+      "name": "clang_cl_x64_debug_static",
+      "generator": "Ninja",
       "binaryDir": "Output/Debug/x64/Clang-CL-Debug",
       "architecture": {
         "value": "x64",
@@ -10,10 +11,11 @@
       },
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_C_COMPILER": "clang-cl",
         "CMAKE_CXX_COMPILER": "clang-cl",
         "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
         "VCPKG_OVERLAY_TRIPLETS": "${sourceDir}/CustomVcpkgTriplets",
-        "VCPKG_TARGET_TRIPLET": "x64-debug-dynamic",
+        "VCPKG_TARGET_TRIPLET": "x64-debug-static",
         "VCPKG_MANIFEST_MODE": "ON",
         "VCPKG_INSTALLED_DIR": "${sourceDir}/vcpkg_packages"
       },
@@ -22,7 +24,8 @@
       }
     },
     {
-      "name": "clang_cl_x64_release_dynamic",
+      "name": "clang_cl_x64_release_static",
+      "generator": "Ninja",
       "binaryDir": "Output/Debug/x64/Clang-CL-Release",
       "architecture": {
         "value": "x64",
@@ -30,10 +33,11 @@
       },
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_C_COMPILER": "clang-cl",
         "CMAKE_CXX_COMPILER": "clang-cl",
         "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
         "VCPKG_OVERLAY_TRIPLETS": "${sourceDir}/CustomVcpkgTriplets",
-        "VCPKG_TARGET_TRIPLET": "x64-release-dynamic",
+        "VCPKG_TARGET_TRIPLET": "x64-release-static",
         "VCPKG_MANIFEST_MODE": "ON",
         "VCPKG_INSTALLED_DIR": "${sourceDir}/vcpkg_packages"
       },
@@ -42,7 +46,8 @@
       }
     },
     {
-      "name": "clang_x64_debug_dynamic",
+      "name": "clang_x64_debug_static",
+      "generator": "Ninja",
       "binaryDir": "Output/Debug/x64/Clang-Debug",
       "architecture": {
         "value": "x64",
@@ -53,7 +58,7 @@
         "CMAKE_CXX_COMPILER": "clang++",
         "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
         "VCPKG_OVERLAY_TRIPLETS": "${sourceDir}/CustomVcpkgTriplets",
-        "VCPKG_TARGET_TRIPLET": "x64-debug-dynamic",
+        "VCPKG_TARGET_TRIPLET": "x64-debug-static",
         "VCPKG_MANIFEST_MODE": "ON",
         "VCPKG_INSTALLED_DIR": "${sourceDir}/vcpkg_packages"
       },
@@ -62,7 +67,8 @@
       }
     },
     {
-      "name": "clang_x64_release_dynamic",
+      "name": "clang_x64_release_static",
+      "generator": "Ninja",
       "binaryDir": "Output/Debug/x64/Clang-Release",
       "architecture": {
         "value": "x64",
@@ -73,7 +79,7 @@
         "CMAKE_CXX_COMPILER": "clang++",
         "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
         "VCPKG_OVERLAY_TRIPLETS": "${sourceDir}/CustomVcpkgTriplets",
-        "VCPKG_TARGET_TRIPLET": "x64-release-dynamic",
+        "VCPKG_TARGET_TRIPLET": "x64-release-static",
         "VCPKG_MANIFEST_MODE": "ON",
         "VCPKG_INSTALLED_DIR": "${sourceDir}/vcpkg_packages"
       },
@@ -84,22 +90,19 @@
   ],
   "buildPresets": [
     {
-      "name": "clang_cl_x64_debug_dynamic",
-      "configurePreset": "clang_cl_x64_debug_dynamic",
-      "configuration": "Debug"
+      "name": "clang_cl_x64_debug_static",
+      "configurePreset": "clang_cl_x64_debug_static"    },
+    {
+      "name": "clang_cl_x64_release_static",
+      "configurePreset": "clang_cl_x64_release_static"
     },
     {
-      "name": "clang_cl_x64_release_dynamic",
-      "configurePreset": "clang_cl_x64_release_dynamic",
-      "configuration": "Release"
+      "name": "clang_x64_debug_static",
+      "configurePreset": "clang_x64_debug_static"
     },
     {
-      "name": "clang_x64_debug_dynamic",
-      "configurePreset": "clang_x64_debug_dynamic"
-    },
-    {
-      "name": "clang_x64_release_dynamic",
-      "configurePreset": "clang_x64_release_dynamic"
+      "name": "clang_x64_release_static",
+      "configurePreset": "clang_x64_release_static"
     }
   ]
 }

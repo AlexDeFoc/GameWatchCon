@@ -1,0 +1,3 @@
+[submodule "Code/Dependencies/cpr"]
+	path = Code/Dependencies/cpr
+	url = https://github.com/libcpr/cpr.git

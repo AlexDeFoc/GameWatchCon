@@ -30,7 +30,7 @@ public:
     /*!
     * @brief Toggles auto save status
     */
-    [[nodiscard]] auto ToggleAutoSaveStatus() const noexcept -> void;
+    auto ToggleAutoSaveStatus() const noexcept -> void;
 
     /*!
     * @brief Changes auto save interval
