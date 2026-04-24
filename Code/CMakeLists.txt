@@ -32,21 +32,21 @@ target_sources(GameWatchCon PRIVATE
 target_include_directories(GameWatchCon PRIVATE Includes)
 
 set_target_properties(GameWatchCon PROPERTIES
-    CXX_STANDARD 26
+    CXX_STANDARD 23
     CXX_STANDARD_REQUIRED ON
     CXX_EXTENSIONS OFF
 )
 
 # Warnings only for the common generators you mentioned.
-if(MSVC OR CMAKE_CXX_COMPILER_FRONTEND_VARIANT STREQUAL "MSVC")
-    target_compile_options(GameWatchCon PRIVATE
+#if(MSVC OR CMAKE_CXX_COMPILER_FRONTEND_VARIANT STREQUAL "MSVC")
+    #target_compile_options(GameWatchCon PRIVATE
         #            /W4
         #/WX
-        /permissive-
-    )
+        #/permissive-
+        #)
 
-else()
-    target_compile_options(GameWatchCon PRIVATE
+    #else()
+    #target_compile_options(GameWatchCon PRIVATE
         #            -Wall
         #            -Wextra
         #            -Wpedantic
@@ -57,8 +57,8 @@ else()
         #            -Woverloaded-virtual
         #            -Wconversion
         #            -Werror
-    )
-endif()
+        # )
+    #endif()
 
 find_package(cpr REQUIRED)
 find_package(SqliteOrm REQUIRED)

@@ -1,108 +1,219 @@
 {
-  "version": 9,
-  "configurePresets": [
-    {
-      "name": "clang_cl_x64_debug_static",
-      "generator": "Ninja",
-      "binaryDir": "Output/Debug/x64/Clang-CL-Debug",
-      "architecture": {
-        "value": "x64",
-        "strategy": "external"
-      },
-      "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Debug",
-        "CMAKE_C_COMPILER": "clang-cl",
-        "CMAKE_CXX_COMPILER": "clang-cl",
-        "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
-        "VCPKG_OVERLAY_TRIPLETS": "${sourceDir}/CustomVcpkgTriplets",
-        "VCPKG_TARGET_TRIPLET": "x64-debug-static",
-        "VCPKG_MANIFEST_MODE": "ON",
-        "VCPKG_INSTALLED_DIR": "${sourceDir}/vcpkg_packages"
-      },
-      "environment": {
-        "VCPKG_BINARY_SOURCES": "clear;files,${sourceDir}/.vcpkg_cache,readwrite"
-      }
-    },
-    {
-      "name": "clang_cl_x64_release_static",
-      "generator": "Ninja",
-      "binaryDir": "Output/Debug/x64/Clang-CL-Release",
-      "architecture": {
-        "value": "x64",
-        "strategy": "external"
-      },
-      "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Release",
-        "CMAKE_C_COMPILER": "clang-cl",
-        "CMAKE_CXX_COMPILER": "clang-cl",
-        "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
-        "VCPKG_OVERLAY_TRIPLETS": "${sourceDir}/CustomVcpkgTriplets",
-        "VCPKG_TARGET_TRIPLET": "x64-release-static",
-        "VCPKG_MANIFEST_MODE": "ON",
-        "VCPKG_INSTALLED_DIR": "${sourceDir}/vcpkg_packages"
-      },
-      "environment": {
-        "VCPKG_BINARY_SOURCES": "clear;files,${sourceDir}/.vcpkg_cache,readwrite"
-      }
-    },
-    {
-      "name": "clang_x64_debug_static",
-      "generator": "Ninja",
-      "binaryDir": "Output/Debug/x64/Clang-Debug",
-      "architecture": {
-        "value": "x64",
-        "strategy": "external"
-      },
-      "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Debug",
-        "CMAKE_CXX_COMPILER": "clang++",
-        "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
-        "VCPKG_OVERLAY_TRIPLETS": "${sourceDir}/CustomVcpkgTriplets",
-        "VCPKG_TARGET_TRIPLET": "x64-debug-static",
-        "VCPKG_MANIFEST_MODE": "ON",
-        "VCPKG_INSTALLED_DIR": "${sourceDir}/vcpkg_packages"
-      },
-      "environment": {
-        "VCPKG_BINARY_SOURCES": "clear;files,${sourceDir}/.vcpkg_cache,readwrite"
-      }
-    },
-    {
-      "name": "clang_x64_release_static",
-      "generator": "Ninja",
-      "binaryDir": "Output/Debug/x64/Clang-Release",
-      "architecture": {
-        "value": "x64",
-        "strategy": "external"
-      },
-      "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Release",
-        "CMAKE_CXX_COMPILER": "clang++",
-        "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
-        "VCPKG_OVERLAY_TRIPLETS": "${sourceDir}/CustomVcpkgTriplets",
-        "VCPKG_TARGET_TRIPLET": "x64-release-static",
-        "VCPKG_MANIFEST_MODE": "ON",
-        "VCPKG_INSTALLED_DIR": "${sourceDir}/vcpkg_packages"
-      },
-      "environment": {
-        "VCPKG_BINARY_SOURCES": "clear;files,${sourceDir}/.vcpkg_cache,readwrite"
-      }
-    }
-  ],
-  "buildPresets": [
-    {
-      "name": "clang_cl_x64_debug_static",
-      "configurePreset": "clang_cl_x64_debug_static"    },
-    {
-      "name": "clang_cl_x64_release_static",
-      "configurePreset": "clang_cl_x64_release_static"
-    },
-    {
-      "name": "clang_x64_debug_static",
-      "configurePreset": "clang_x64_debug_static"
-    },
-    {
-      "name": "clang_x64_release_static",
-      "configurePreset": "clang_x64_release_static"
-    }
-  ]
+    "version": 9,
+    "configurePresets": [
+        {
+            "name": "Windows-Debug-MSVC-VS2026-X64-Static",
+            "generator": "Visual Studio 18 2026",
+            "binaryDir": "Output/Debug/X64/MSVC-VS2026-Static",
+            "architecture": {
+                "value": "x64",
+                "strategy": "set"
+            },
+            "cacheVariables": {
+                "BUILD_SHARED_LIBS": "OFF",
+                "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
+                "VCPKG_OVERLAY_TRIPLETS": "${sourceDir}/CustomVcpkgTriplets",
+                "VCPKG_TARGET_TRIPLET": "x64-debug-static-windows",
+                "VCPKG_MANIFEST_MODE": "ON",
+                "VCPKG_INSTALLED_DIR": "${sourceDir}/vcpkg_packages"
+            },
+            "environment": {
+                "VCPKG_BINARY_SOURCES": "clear;files,${sourceDir}/.vcpkg_cache,readwrite"
+            }
+        },
+        {
+            "name": "Windows-Release-MSVC-VS2026-X64-Static",
+            "generator": "Visual Studio 18 2026",
+            "binaryDir": "Output/Release/X64/MSVC-VS2026-Static",
+            "architecture": {
+                "value": "x64",
+                "strategy": "set"
+            },
+            "cacheVariables": {
+                "BUILD_SHARED_LIBS": "OFF",
+                "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
+                "VCPKG_OVERLAY_TRIPLETS": "${sourceDir}/CustomVcpkgTriplets",
+                "VCPKG_TARGET_TRIPLET": "x64-release-static-windows",
+                "VCPKG_MANIFEST_MODE": "ON",
+                "VCPKG_INSTALLED_DIR": "${sourceDir}/vcpkg_packages"
+            },
+            "environment": {
+                "VCPKG_BINARY_SOURCES": "clear;files,${sourceDir}/.vcpkg_cache,readwrite"
+            }
+        },
+        {
+            "name": "Windows-Debug-Clang-Ninja-X64-Static",
+            "generator": "Ninja",
+            "binaryDir": "Output/Debug/X64/Clang-Ninja-Static",
+            "architecture": {
+                "value": "x64",
+                "strategy": "external"
+            },
+            "cacheVariables": {
+                "BUILD_SHARED_LIBS": "OFF",
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_C_COMPILER": "clang",
+                "CMAKE_CXX_COMPILER": "clang++",
+                "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
+                "VCPKG_OVERLAY_TRIPLETS": "${sourceDir}/CustomVcpkgTriplets",
+                "VCPKG_TARGET_TRIPLET": "x64-debug-static-windows",
+                "VCPKG_MANIFEST_MODE": "ON",
+                "VCPKG_INSTALLED_DIR": "${sourceDir}/vcpkg_packages"
+            },
+            "environment": {
+                "VCPKG_BINARY_SOURCES": "clear;files,${sourceDir}/.vcpkg_cache,readwrite"
+            }
+        },
+        {
+            "name": "Windows-Release-Clang-Ninja-X64-Static",
+            "generator": "Ninja",
+            "binaryDir": "Output/Release/X64/Clang-Ninja-Static",
+            "architecture": {
+                "value": "x64",
+                "strategy": "external"
+            },
+            "cacheVariables": {
+                "BUILD_SHARED_LIBS": "OFF",
+                "CMAKE_BUILD_TYPE": "Release",
+                "CMAKE_C_COMPILER": "clang",
+                "CMAKE_CXX_COMPILER": "clang++",
+                "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
+                "VCPKG_OVERLAY_TRIPLETS": "${sourceDir}/CustomVcpkgTriplets",
+                "VCPKG_TARGET_TRIPLET": "x64-release-static-windows",
+                "VCPKG_MANIFEST_MODE": "ON",
+                "VCPKG_INSTALLED_DIR": "${sourceDir}/vcpkg_packages"
+            },
+            "environment": {
+                "VCPKG_BINARY_SOURCES": "clear;files,${sourceDir}/.vcpkg_cache,readwrite"
+            }
+        },
+        {
+            "name": "Windows-Debug-ClangCL-Ninja-X64-Static",
+            "generator": "Ninja",
+            "binaryDir": "Output/Debug/X64/ClangCL-Ninja-Static",
+            "architecture": {
+                "value": "x64",
+                "strategy": "external"
+            },
+            "cacheVariables": {
+                "BUILD_SHARED_LIBS": "OFF",
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_C_COMPILER": "clang-cl",
+                "CMAKE_CXX_COMPILER": "clang-cl",
+                "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
+                "VCPKG_OVERLAY_TRIPLETS": "${sourceDir}/CustomVcpkgTriplets",
+                "VCPKG_TARGET_TRIPLET": "x64-debug-static-windows",
+                "VCPKG_MANIFEST_MODE": "ON",
+                "VCPKG_INSTALLED_DIR": "${sourceDir}/vcpkg_packages"
+            },
+            "environment": {
+                "VCPKG_BINARY_SOURCES": "clear;files,${sourceDir}/.vcpkg_cache,readwrite"
+            }
+        },
+        {
+            "name": "Windows-Release-ClangCL-Ninja-X64-Static",
+            "generator": "Ninja",
+            "binaryDir": "Output/Release/X64/ClangCL-Ninja-Static",
+            "architecture": {
+                "value": "x64",
+                "strategy": "external"
+            },
+            "cacheVariables": {
+                "BUILD_SHARED_LIBS": "OFF",
+                "CMAKE_BUILD_TYPE": "Release",
+                "CMAKE_C_COMPILER": "clang-cl",
+                "CMAKE_CXX_COMPILER": "clang-cl",
+                "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
+                "VCPKG_OVERLAY_TRIPLETS": "${sourceDir}/CustomVcpkgTriplets",
+                "VCPKG_TARGET_TRIPLET": "x64-debug-static-windows",
+                "VCPKG_MANIFEST_MODE": "ON",
+                "VCPKG_INSTALLED_DIR": "${sourceDir}/vcpkg_packages"
+            },
+            "environment": {
+                "VCPKG_BINARY_SOURCES": "clear;files,${sourceDir}/.vcpkg_cache,readwrite"
+            }
+        },
+        {
+            "name": "Linux-Debug-Clang-Ninja-X64-Static",
+            "generator": "Ninja",
+            "binaryDir": "Output/Debug/X64/Clang-Ninja-Static",
+            "architecture": {
+                "value": "x64",
+                "strategy": "external"
+            },
+            "cacheVariables": {
+                "BUILD_SHARED_LIBS": "OFF",
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_C_COMPILER": "clang",
+                "CMAKE_CXX_COMPILER": "clang++",
+                "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
+                "VCPKG_OVERLAY_TRIPLETS": "${sourceDir}/CustomVcpkgTriplets",
+                "VCPKG_TARGET_TRIPLET": "x64-debug-static-linux",
+                "VCPKG_MANIFEST_MODE": "ON",
+                "VCPKG_INSTALLED_DIR": "${sourceDir}/vcpkg_packages"
+            },
+            "environment": {
+                "VCPKG_BINARY_SOURCES": "clear;files,${sourceDir}/.vcpkg_cache,readwrite"
+            }
+        },
+        {
+            "name": "Linux-Release-Clang-Ninja-X64-Static",
+            "generator": "Ninja",
+            "binaryDir": "Output/Release/X64/Clang-Ninja-Static",
+            "architecture": {
+                "value": "x64",
+                "strategy": "external"
+            },
+            "cacheVariables": {
+                "BUILD_SHARED_LIBS": "OFF",
+                "CMAKE_BUILD_TYPE": "Release",
+                "CMAKE_C_COMPILER": "clang",
+                "CMAKE_CXX_COMPILER": "clang++",
+                "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
+                "VCPKG_OVERLAY_TRIPLETS": "${sourceDir}/CustomVcpkgTriplets",
+                "VCPKG_TARGET_TRIPLET": "x64-release-static-linux",
+                "VCPKG_MANIFEST_MODE": "ON",
+                "VCPKG_INSTALLED_DIR": "${sourceDir}/vcpkg_packages"
+            },
+            "environment": {
+                "VCPKG_BINARY_SOURCES": "clear;files,${sourceDir}/.vcpkg_cache,readwrite"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "Windows-Debug-MSVC-VS2026-X64-Static",
+            "configurePreset": "Windows-Debug-MSVC-VS2026-X64-Static",
+            "configuration": "Debug"
+        },
+        {
+            "name": "Windows-Release-MSVC-VS2026-X64-Static",
+            "configurePreset": "Windows-Release-MSVC-VS2026-X64-Static",
+            "configuration": "Release"
+        },
+        {
+            "name": "Windows-Debug-Clang-Ninja-X64-Static",
+            "configurePreset": "Windows-Debug-Clang-Ninja-X64-Static"
+        },
+        {
+            "name": "Windows-Release-Clang-Ninja-X64-Static",
+            "configurePreset": "Windows-Release-Clang-Ninja-X64-Static"
+        },
+        {
+            "name": "Windows-Debug-ClangCL-Ninja-X64-Static",
+            "configurePreset": "Windows-Debug-ClangCL-Ninja-X64-Static"
+        },
+        {
+            "name": "Windows-Release-ClangCL-Ninja-X64-Static",
+            "configurePreset": "Windows-Release-ClangCL-Ninja-X64-Static"
+        },
+        {
+            "name": "Linux-Debug-Clang-Ninja-X64-Static",
+            "configurePreset": "Linux-Debug-Clang-Ninja-X64-Static"
+        },
+        {
+            "name": "Linux-Release-Clang-Ninja-X64-Static",
+            "configurePreset": "Linux-Release-Clang-Ninja-X64-Static"
+        }
+    ]
 }
