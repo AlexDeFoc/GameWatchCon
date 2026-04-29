@@ -4,13 +4,13 @@
 
 #pragma once
 
-#include <chrono>
+#include "GameClockTimeTypes.h"
 
 using namespace std::chrono_literals;
 
 namespace gw {
 struct AppSettingsDefaults {
-    static constexpr int auto_save_status_default{1};
-    static constexpr auto auto_save_interval_default{5min};
+    static constexpr std::int8_t auto_save_status_default{1};
+    static constexpr gw::minutes auto_save_interval_default{5min};
 };
 } // namespace gw

@@ -1,3 +1,7 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// Copyright (C) 2026 Sava Alexandru-Andrei
+// License: GNU AGPL v3 or later - see LICENSE file
+
 #include "Pch.h"
 #include "Console.h"
 
@@ -55,7 +59,7 @@ gw::Console::~Console() {
 #endif
 }
 
-auto gw::Console::RequestUserGameIDChoice(std::string printable_games, int games_count, bool is_active_game_id_valid_choice, int active_game_id, bool is_request_cancellable) -> std::pair<int, InputStatus> {
+auto gw::Console::RequestUserGameIDChoice(std::string printable_games, std::int64_t games_count, bool is_active_game_id_valid_choice, std::int64_t active_game_id, bool is_request_cancellable) -> std::pair<std::int64_t, InputStatus> {
     while (true) {
         ClearCout();
         std::println("{}", printable_games);
@@ -156,7 +160,7 @@ auto gw::Console::RequestNewAutoSaveInterval(std::string formatted_current_inter
                     WriteLineToCache(Tag::Error, "Interval needs to be at least 1 minute!");
                     continue;
                 } else if (new_interval > std::numeric_limits<std::chrono::minutes::rep>::max()) {
-                    WriteLineToCache(Tag::Error, "Please enter an interval less then 4083 years!");
+                    WriteLineToCache(Tag::Error, "Please enter an interval less then 4083 years!"); // TODO: Fix this value! it has changed... i think
                     continue;
                 } else
                     return {std::chrono::minutes(new_interval), InputStatus::Success};

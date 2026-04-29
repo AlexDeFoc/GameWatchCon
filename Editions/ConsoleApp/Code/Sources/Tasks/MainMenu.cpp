@@ -1,3 +1,7 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// Copyright (C) 2026 Sava Alexandru-Andrei
+// License: GNU AGPL v3 or later - see LICENSE file
+
 #include "Pch.h"
 #include "Console.h"
 #include "GameLibrary.h"
@@ -12,12 +16,12 @@
 
 auto gw::tasks::MainMenu(gw::Console& console, gw::AppState&, gw::AppSettings&, gw::GameLibrary& game_library) -> Task {
     std::array<std::string, 7> menu_opts = {"List games",
-                                       "Start game",
-                                       "Edit games",
-                                       "Add new game",
-                                       "Settings",
-                                       "Check for updates",
-                                       "Exit App"};
+                                            "Start game",
+                                            "Edit games",
+                                            "Add new game",
+                                            "Settings",
+                                            "Check for updates",
+                                            "Exit App"};
 
     if (game_library.IsAnyGameActive())
         menu_opts[1] = std::format("Stop game: {}", game_library.ActiveGameTitle());

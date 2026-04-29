@@ -13,6 +13,7 @@ target_sources(GameWatchCon PRIVATE
     "Code/Sources/AppSettings.cpp"
     "Code/Sources/TaskDispatcher.cpp"
     "Code/Sources/AppState.cpp"
+    "Code/Sources/GameEntry.cpp"
     "Code/Sources/GameLibrary.cpp"
     "Code/Sources/Tasks/StartApp.cpp"
     "Code/Sources/Tasks/StopApp.cpp"
@@ -42,35 +43,33 @@ set_target_properties(GameWatchCon PROPERTIES
     CXX_EXTENSIONS OFF
 )
 
-if (MSVC)
-    if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-        # Clang-CL
-        target_compile_options(GameWatchCon PRIVATE /Wall /WX)
-        target_compile_options(GameWatchCon PRIVATE -Wno-documentation
-                                                    -Wno-c++98-compat
-                                                    -Wno-c++98-compat-pedantic
-                                                    -Wno-padded
-                                                    -Wno-header-hygiene
-                                                    -Wno-unsafe-buffer-usage-in-libc-call
-                                                    -Wno-switch-enum
-                                                    -Wno-covered-switch-default
-                                                    -Wno-newline-eof
-        )
-    else()
-        # MSVC - CL.exe
-        target_compile_options(GameWatchCon PRIVATE /Wall /WX /permissive- /analyze)
-        target_compile_options(GameWatchCon PRIVATE /wd4820 # -Wno-padded
-                                                    /wd4061 # -Wno-covered-switch-default
-        )
-    endif()
+if (MSVC AND NOT CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+    target_compile_options(GameWatchCon PRIVATE /Wall /WX /permissive- /analyze-)
+    target_compile_options(GameWatchCon PRIVATE
+        /wd4820 # -Wno-padded
+        /wd4061 # -Wno-covered-switch-default
+    )
+elseif (CMAKE_CXX_COMPILER_ID STREQUAL "Clang" AND MSVC)
+    target_compile_options(GameWatchCon PRIVATE -Wall -Wextra -Wpedantic -Werror -Wdeprecated -Wunsafe-buffer-usage)
+    target_compile_options(GameWatchCon PRIVATE
+        -Wno-unused-command-line-argument
+        -Wno-c++98-compat
+        -Wno-header-hygiene
+        -Wno-documentation
+        -Wno-newline-eof
+        -Wno-c++98-compat-pedantic
+        -Wno-padded
+        -Wno-covered-switch-default
+        -Wno-switch-enum
+    )
 elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
     # Clang
-    target_compile_options(GameWatchCon PRIVATE -Wall -Wextra -Wpedantic -Werror -Wdeprecated -fsafe-buffer-usage-suggestions -Wunsafe-buffer-usage)
-else(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    target_compile_options(GameWatchCon PRIVATE -Wall -Wextra -Wpedantic -Werror -Wdeprecated -fsafe-buffer-usage-suggestions -Wunsafe-buffer-usage -fcolor-diagnostics)
+elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     # GCC
     target_compile_options(GameWatchCon PRIVATE -Wall -Wextra -Wpedantic -Werror -Wdeprecated -fsafe-buffer-usage-suggestions -Wunsafe-buffer-usage)
 endif()
 
 find_package(cpr REQUIRED)
-find_package(SqliteOrm REQUIRED)
-target_link_libraries(GameWatchCon PRIVATE cpr::cpr sqlite_orm::sqlite_orm)
+find_package(glaze REQUIRED)
+target_link_libraries(GameWatchCon PRIVATE cpr::cpr glaze::glaze)

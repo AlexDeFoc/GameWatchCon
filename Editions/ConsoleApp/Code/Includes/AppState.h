@@ -18,6 +18,6 @@ public:
     auto ToggleAppRunningState() noexcept -> void;
 
 private:
-    std::atomic<int> keep_app_running_{1};
+    std::atomic<std::int8_t> keep_app_running_{1};
 };
 } // namespace gw

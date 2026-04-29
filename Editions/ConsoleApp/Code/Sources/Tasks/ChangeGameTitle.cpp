@@ -1,3 +1,7 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// Copyright (C) 2026 Sava Alexandru-Andrei
+// License: GNU AGPL v3 or later - see LICENSE file
+
 #include "Pch.h"
 #include "Console.h"
 #include "GameLibrary.h"
@@ -5,6 +9,8 @@
 #include "Tasks/EditGamesMenu.h"
 
 auto gw::tasks::ChangeGameTitle(gw::Console& console, gw::AppState&, gw::AppSettings&, gw::GameLibrary& game_library) -> Task {
+    assert(game_library.GetGameCount() != 0 && "Attemted to game title while no games exist");
+
     const auto [selected_game_id, input_status_for_game_id] = console.RequestUserGameIDChoice(game_library.GetPrintableGames(console), game_library.GetGameCount());
 
     switch (input_status_for_game_id) {

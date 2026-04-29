@@ -1,2 +1,2 @@
 CompileFlags:
-  CompilationDatabase: "Output/Debug-Windows/Clang-Ninja/"
+  CompilationDatabase: "Output/Debug-Windows/ClangCL-Ninja/"

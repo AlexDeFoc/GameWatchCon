@@ -2,16 +2,6 @@
     "version": 9,
     "configurePresets": [
         {
-            "name": "Clang Ninja - Release Windows",
-            "inherits": ["Clang Compiler Base", "Ninja - Release Windows Base"],
-            "binaryDir": "Output/Release-Windows/Clang-Ninja"
-        },
-        {
-            "name": "Clang Ninja - Debug Windows",
-            "inherits": ["Clang Compiler Base", "Ninja - Debug Windows Base"],
-            "binaryDir": "Output/Debug-Windows/Clang-Ninja"
-        },
-        {
             "name": "Clang Ninja - Release Linux",
             "inherits": ["Clang Compiler Base", "Ninja - Release Linux Base"],
             "binaryDir": "Output/Release-Linux/Clang-Ninja"
@@ -54,7 +44,7 @@
         {
             "name": "VS2026 - Release Windows Base",
             "hidden": true,
-            "inherits": ["VS2026 Base", "VCPKG - Debug Windows"]
+            "inherits": ["VS2026 Base", "VCPKG - Release Windows"]
         },
         {
             "name": "VS2026 - Debug Windows Base",
@@ -170,7 +160,6 @@
             "cacheVariables": {
                 "VCPKG_MANIFEST_MODE": "ON",
                 "VCPKG_INSTALLED_DIR": "${sourceDir}/vcpkg_packages",
-                "VCPKG_OVERLAY_TRIPLETS": "${sourceDir}/VCPKG_Triplets",
                 "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
             },
             "environment": {
@@ -181,54 +170,46 @@
             "name": "VCPKG - Release Windows",
             "hidden": true,
             "cacheVariables": {
-                "VCPKG_TARGET_TRIPLET": "release-windows"
+                "VCPKG_TARGET_TRIPLET": "x64-windows-static-md-release"
             }
         },
         {
             "name": "VCPKG - Debug Windows",
             "hidden": true,
             "cacheVariables": {
-                "VCPKG_TARGET_TRIPLET": "debug-windows"
+                "VCPKG_TARGET_TRIPLET": "x64-windows-static-md"
             }
         },
         {
             "name": "VCPKG - Release Linux",
             "hidden": true,
             "cacheVariables": {
-                "VCPKG_TARGET_TRIPLET": "release-linux"
+                "VCPKG_TARGET_TRIPLET": "x64-linux-release"
             }
         },
         {
             "name": "VCPKG - Debug Linux",
             "hidden": true,
             "cacheVariables": {
-                "VCPKG_TARGET_TRIPLET": "debug-linux"
+                "VCPKG_TARGET_TRIPLET": "x64-linux"
             }
         },
         {
             "name": "VCPKG - Release MacOS",
             "hidden": true,
             "cacheVariables": {
-                "VCPKG_TARGET_TRIPLET": "release-macos"
+                "VCPKG_TARGET_TRIPLET": "x64-osx-release"
             }
         },
         {
             "name": "VCPKG - Debug MacOS",
             "hidden": true,
             "cacheVariables": {
-                "VCPKG_TARGET_TRIPLET": "debug-macos"
+                "VCPKG_TARGET_TRIPLET": "x64-osx"
             }
         }
     ],
     "buildPresets": [
-        {
-            "name": "Clang Ninja - Release Windows",
-            "configurePreset": "Clang Ninja - Release Windows"
-        },
-        {
-            "name": "Clang Ninja - Debug Windows",
-            "configurePreset": "Clang Ninja - Debug Windows"
-        },
         {
             "name": "Clang Ninja - Release Linux",
             "configurePreset": "Clang Ninja - Release Linux"

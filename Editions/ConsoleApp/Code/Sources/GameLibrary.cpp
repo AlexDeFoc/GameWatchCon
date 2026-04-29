@@ -1,8 +1,12 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// Copyright (C) 2026 Sava Alexandru-Andrei
+// License: GNU AGPL v3 or later - see LICENSE file
+
 #include "Pch.h"
 #include "GameLibrary.h"
 
 gw::GameLibrary::GameLibrary(DiskManager& disk_manager, AppSettings& app_settings) : app_settings_{app_settings}, disk_manager_{disk_manager} {
-    autosave_thread_ = std::jthread([this](std::stop_token stop_token) { SaveJob(stop_token); });
+    autosave_thread_ = std::jthread([this](const std::stop_token& stop_token) { SaveJob(stop_token); });
 }
 
 gw::GameLibrary::~GameLibrary() {
@@ -32,44 +36,47 @@ auto gw::GameLibrary::IsAnyGameActive() const noexcept -> bool {
     }
 }
 
-auto gw::GameLibrary::ActiveGameTitle() const noexcept -> std::string {
-    return disk_manager_.GetGameTitle(active_game_id_);
+auto gw::GameLibrary::ActiveGameTitle() const noexcept -> std::string_view {
+    assert(active_game_id_ - 1 >= 0 && "Active game id was <= 0");
+    return games_[static_cast<std::size_t>(active_game_id_.load(std::memory_order_acquire) - 1)].GetTitle(); // TODO: Check if we can relax the memory order
 }
 
 auto gw::GameLibrary::IsEmpty() const noexcept -> bool {
-    return disk_manager_.GameCount() == 0;
+    return games_.size() == 0;
 }
 
-auto gw::GameLibrary::GetGameCount() const noexcept -> int {
-    return disk_manager_.GameCount();
+auto gw::GameLibrary::GetGameCount() const noexcept -> std::int64_t {
+    return static_cast<std::int64_t>(games_.size());
 }
 
-auto gw::GameLibrary::GetActiveGameId() const noexcept -> int {
+auto gw::GameLibrary::GetActiveGameId() const noexcept -> std::int64_t {
     return active_game_id_.load(std::memory_order_acquire);
 }
 
-auto gw::GameLibrary::GetAllGames() const noexcept -> std::vector<gw::DiskManager::GameInStorage> {
-    return disk_manager_.GetAllGames();
+auto gw::GameLibrary::AddNewGame(std::string&& game_title) noexcept -> void {
+    games_.emplace_back(std::move(game_title));
+    // TODO: Add writing to disk
 }
 
-auto gw::GameLibrary::AddNewGame(std::string&& game_title) const noexcept -> void {
-    disk_manager_.AddNewGame(std::move(game_title));
+auto gw::GameLibrary::SetGameTitle(const std::int64_t game_id, std::string&& game_title) noexcept -> void {
+    assert(game_id - 1 >= 0 && "Game id <= 0");
+    games_[static_cast<std::size_t>(game_id - 1)].SetGameTitle(std::move(game_title));
+    // TODO: Add writing to disk
 }
 
-// TODO: Fix params inconsistencies
-auto gw::GameLibrary::SetGameTitle(int game_id, std::string&& game_title) const noexcept -> void {
-    disk_manager_.SetGameTitle(game_id, std::move(game_title));
+auto gw::GameLibrary::ResetGamePlaytime(const std::int64_t game_id) noexcept -> void {
+    assert(game_id - 1 >= 0 && "Game id <= 0");
+    games_[static_cast<std::size_t>(game_id - 1)].ResetPlaytime();
+    // TODO: Add writing to disk
 }
 
-auto gw::GameLibrary::ResetGamePlaytime(const int game_id) const noexcept -> void {
-    disk_manager_.ResetGamePlaytime(game_id);
+auto gw::GameLibrary::DeleteGame(const std::int64_t game_id) noexcept -> void {
+    assert(game_id - 1 >= 0 && "Game id <= 0");
+    games_.erase(games_.begin() + game_id - 1);
+    // TODO: Add writing to disk
 }
 
-auto gw::GameLibrary::DeleteGame(const int game_id) const noexcept -> void {
-    disk_manager_.DeleteGame(game_id);
-}
-
-auto gw::GameLibrary::ToggleGameClock(const int game_id) noexcept -> void {
+auto gw::GameLibrary::ToggleGameClock(const std::int64_t game_id) noexcept -> void {
     active_game_id_.store(game_id, std::memory_order_release);
 
     if (!app_settings_.IsAutoSaveEnabled()) {
@@ -82,11 +89,12 @@ auto gw::GameLibrary::ToggleGameClock(const int game_id) noexcept -> void {
     autosave_cv_.notify_all();
 }
 
-auto gw::GameLibrary::AddGameTime(const std::chrono::steady_clock::duration time) const noexcept -> void {
-    disk_manager_.AddGamePlaytime(active_game_id_.load(std::memory_order_acquire), std::chrono::duration_cast<std::chrono::seconds>(time).count());
+auto gw::GameLibrary::AddGameTime(const std::chrono::steady_clock::duration time) noexcept -> void {
+    using namespace std::chrono;
+    games_[static_cast<std::size_t>(active_game_id_.load(std::memory_order_acquire))].AddPlaytime(duration_cast<gw::seconds>(time));
 }
 
-auto gw::GameLibrary::SaveJob(std::stop_token stop_token) noexcept -> void {
+auto gw::GameLibrary::SaveJob(const std::stop_token& stop_token) noexcept -> void {
     while (!stop_token.stop_requested()) {
         should_save_game_.wait(0, std::memory_order_acquire);
 
@@ -125,22 +133,23 @@ auto gw::GameLibrary::SaveJob(std::stop_token stop_token) noexcept -> void {
     }
 }
 
-auto gw::GameLibrary::GetPrintableGames(const Console& console) const noexcept -> std::string {
+auto gw::GameLibrary::GetPrintableGames(const Console& console) noexcept -> std::string {
     // clang-format off
-    const auto games = GetAllGames();
     const auto is_any_game_active = IsAnyGameActive();
     const auto active_game_id = GetActiveGameId();
 
-    return games | std::views::transform([is_any_game_active, active_game_id, &console](auto&& game) {
+    return games_ | std::views::enumerate | std::views::transform([&](auto&& pair) {
+        auto&& [game_index, game] = pair;
+
         using namespace std::chrono;
         using namespace std::string_view_literals;
 
-        auto s = seconds(game.playtime_in_sec);
+        auto s = game.GetPlaytime();
         const auto d = duration_cast<days>(s); s -= d;
         const auto h = duration_cast<hours>(s); s -= h;
         const auto m = duration_cast<minutes>(s); s -= m;
 
-        auto values = std::array<long long, 4>{d.count(), h.count(), m.count(), s.count()};
+        auto values = std::array<std::int64_t, 4>{d.count(), h.count(), m.count(), s.count()};
         auto labels = std::array<std::string_view, 4>{"day"sv, "h"sv, "min"sv, "s"sv};
 
         auto duration_str = std::views::zip(values, labels)
@@ -152,23 +161,27 @@ auto gw::GameLibrary::GetPrintableGames(const Console& console) const noexcept -
                           | std::views::join_with(" : "sv)
                           | std::ranges::to<std::string>();
 
-        const bool is_this_game_active = is_any_game_active && (game.id == active_game_id);
+        const bool is_this_game_active = is_any_game_active && (game_index + 1 == active_game_id);
         const std::string active_tag = is_this_game_active ? std::format(" - {}", console.ColorText(Console::Color::Red, "ACTIVE")) : "";
 
-        return std::format("{}. {} - {}{}", game.id, game.title, (duration_str.empty() ? "0 s" : duration_str), active_tag);
+        return std::format("{}. {} - {}{}", game_index + 1, game.GetTitle(), (duration_str.empty() ? "0 s" : duration_str), active_tag);
     })           | std::views::join_with('\n')
                  | std::ranges::to<std::string>();
     // clang-format on
 }
 
-auto gw::GameLibrary::DeleteAllGames() const noexcept -> void {
-    disk_manager_.DeleteAllGames();
+auto gw::GameLibrary::DeleteAllGames() noexcept -> void {
+    games_.clear();
+    // TODO: Add to disk
 }
 
-auto gw::GameLibrary::ResetAllGamesPlaytime() const noexcept -> void {
-    disk_manager_.ResetAllGamesPlaytime();
+auto gw::GameLibrary::ResetAllGamesPlaytime() noexcept -> void {
+    for (auto& game : games_)
+        game.ResetPlaytime();
+    // TODO: Add to disk
 }
 
+// TODO: Perform the action
 auto gw::GameLibrary::CreateGamesDatabaseBackup() const noexcept -> void {
-    disk_manager_.CreateGamesDatabaseBackup();
+    // disk_manager_.CreateGamesDatabaseBackup();
 }

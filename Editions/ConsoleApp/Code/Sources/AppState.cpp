@@ -1,3 +1,7 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// Copyright (C) 2026 Sava Alexandru-Andrei
+// License: GNU AGPL v3 or later - see LICENSE file
+
 #include "Pch.h"
 #include "AppState.h"
 
@@ -6,5 +10,5 @@
 }
 
 auto gw::AppState::ToggleAppRunningState() noexcept -> void {
-    keep_app_running_ ^= 1;
+    keep_app_running_.fetch_xor(1, std::memory_order_release);
 }

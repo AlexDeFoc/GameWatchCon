@@ -4,24 +4,10 @@
 
 #pragma once
 
-#include "WindowsHeader.h" // NOTE: Keep this as the first header, to get priority for defined macros inside
-
-#ifdef _MSC_VER
-    #pragma warning(push, 0)
-    #pragma warning(disable: 4242) // sqlite_orm warning
-    #pragma warning(disable: 4868) // sqlite_orm warning
-    #pragma warning(disable: 4866) // sqlite_orm warning
-    #pragma warning(disable: 5045) // sqlite_orm warning
-    #pragma warning(disable: 6246) // sqlite_orm warning
-    #include <sqlite_orm/sqlite_orm.h>
-    #include <cpr/cpr.h>
-    #pragma warning(pop)
-#else
-    #include <sqlite_orm/sqlite_orm.h>
-    #include <cpr/cpr.h>
-#endif
-
 // IWYU pragma: begin_exports
+#include "WindowsHeader.h" // NOTE: Keep this as the first header, to get priority for defined macros inside
+#include <glaze/glaze.hpp>
+#include <cpr/cpr.h>
 #include <optional>
 #include <string>
 #include <format>

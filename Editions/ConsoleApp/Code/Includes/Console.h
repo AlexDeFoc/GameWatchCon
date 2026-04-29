@@ -37,7 +37,7 @@ public:
     ~Console();
 
     // TODO: add comment
-    [[nodiscard]] auto RequestUserGameIDChoice(std::string, int, bool = true, int = 0, bool = true) -> std::pair<int, InputStatus>;
+    [[nodiscard]] auto RequestUserGameIDChoice(std::string, std::int64_t, bool = true, std::int64_t = 0, bool = true) -> std::pair<std::int64_t, InputStatus>;
 
     /*!
      * @brief Requests from the user to choose Yes or No
@@ -418,7 +418,7 @@ template <std::size_t ArrSize>
             try {
                 std::size_t selected_opt_index = std::stoull(input);
 
-                if ((selected_opt_index < 1 || selected_opt_index > ArrSize) && (menu_opts_contain_special_index && special_index_val != selected_opt_index)) {
+                if ((selected_opt_index < 1 || selected_opt_index > ArrSize - 1) && (menu_opts_contain_special_index && special_index_val != selected_opt_index)) {
                     WriteLineToCache(Tag::Error, "Input out of range!");
                     continue;
                 } else

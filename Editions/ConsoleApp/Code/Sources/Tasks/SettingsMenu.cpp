@@ -1,3 +1,7 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// Copyright (C) 2026 Sava Alexandru-Andrei
+// License: GNU AGPL v3 or later - see LICENSE file
+
 #include "Pch.h"
 #include "Console.h"
 #include "AppSettings.h"
@@ -15,7 +19,7 @@ namespace {
 }
 
 auto gw::tasks::SettingsMenu(gw::Console& console, gw::AppState&, gw::AppSettings& app_settings, gw::GameLibrary&) -> Task {
-    auto menu_opts = [&] -> const std::array<std::string, 7> {
+    auto menu_opts = [&] -> std::array<std::string, 7> {
         return {std::format("Toggle game auto save: {}", app_settings.IsAutoSaveEnabled() == true ? console.ColorText(Console::Color::Green, "enabled") : console.ColorText(Console::Color::Red, "disabled")),
                 std::format("Change game auto save interval: {}", console.ColorText(gw::Console::Color::Green, GetFormattedInterval(app_settings.GetAutoSaveInterval()))),
                 "Restore Settings Default",

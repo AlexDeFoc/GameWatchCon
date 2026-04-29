@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include "GameClockTimeTypes.h"
 #include "DiskManager.h"
 
 namespace gw {
@@ -20,7 +21,7 @@ public:
     auto operator=(AppSettings&&) noexcept -> AppSettings& = delete;
 
     // TODO: Add docs
-    auto RestoreSettingsDefaults() const noexcept -> void;
+    auto RestoreSettingsDefaults() noexcept -> void;
 
     /*!
      * @brief Returns whether auto save is enabled or not (loads status from disk)
@@ -32,20 +33,22 @@ public:
      * @brief Returns the auto save interval (loads interval from disk)
      * @return Auto save interval
      */
-    [[nodiscard]] auto GetAutoSaveInterval() const noexcept -> std::chrono::minutes;
+    [[nodiscard]] auto GetAutoSaveInterval() const noexcept -> gw::minutes;
 
     /*!
-    * @brief Toggles auto save status
-    */
-    auto ToggleAutoSaveStatus() const noexcept -> void;
+     * @brief Toggles auto save status
+     */
+    auto ToggleAutoSaveStatus() noexcept -> void;
 
     /*!
-    * @brief Changes auto save interval
-    * @param new_interval Interval in seconds
-    */
-    auto SetAutoSaveInterval(std::chrono::minutes) const noexcept -> void;
+     * @brief Changes auto save interval
+     * @param new_interval Interval in seconds
+     */
+    auto SetAutoSaveInterval(gw::minutes) noexcept -> void;
 
 private:
-    DiskManager& disk_manager_;
+    [[maybe_unused]] DiskManager& disk_manager_; // TODO: Remove the nodiscard attribute
+    std::atomic<std::int8_t> auto_save_enabled_status_{AppSettingsDefaults::auto_save_status_default};
+    std::atomic<gw::minutes> auto_save_interval_{AppSettingsDefaults::auto_save_interval_default};
 };
 } // namespace gw

@@ -1,3 +1,7 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// Copyright (C) 2026 Sava Alexandru-Andrei
+// License: GNU AGPL v3 or later - see LICENSE file
+
 #include "Pch.h"
 #include "Tasks/CheckForUpdates.h"
 #include "Tasks/MainMenu.h"
@@ -87,11 +91,10 @@ auto GetVersionFromRepoAsText() noexcept -> std::optional<std::string> {
 }
 
 auto ExtractVersionFromText(const std::string_view ver_text) noexcept -> std::optional<Version> {
-    auto parts = ver_text | std::views::split('.')
-                          | std::views::transform([](auto&& sub_range) {
-                              return std::string_view{sub_range};
-                          })
-                          | std::ranges::to<std::vector<std::string_view>>();
+    auto parts = ver_text | std::views::split('.') | std::views::transform([](auto&& sub_range) {
+                     return std::string_view{sub_range};
+                 }) |
+        std::ranges::to<std::vector<std::string_view>>();
 
     if (parts.size() != 3)
         return std::nullopt;
