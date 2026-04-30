@@ -4,6 +4,7 @@
 
 #include "Pch.h"
 #include "DiskManager.h"
+#include "GamesLibraryFile.h"
 
 // Public
 gw::DiskManager::DiskManager() : settings_file_path_{GetSettingsFilepath()}, games_library_file_path_{GetGamesLibraryFilepath()}, settings_backup_file_path_{GetSettingsBackupFilepath()}, games_library_backup_file_path_{GetGamesLibraryBackupFilepath()} {}
@@ -49,25 +50,46 @@ auto gw::DiskManager::LoadSettingsFile() const noexcept -> std::optional<Setting
     return file;
 }
 
-auto gw::DiskManager::LoadGamesLibraryFile() const noexcept -> void {
-    // GamesLibraryCopyFile file{.file_version = 1, .games{}};
+auto gw::DiskManager::LoadGamesLibraryFile() const noexcept -> std::optional<std::vector<GameEntry>> {
+    glz::generic file_as_json;
+    std::string buffer;
 
-    // file.games.emplace_back("Among Us", 300);
+    auto err = glz::read_file_json(file_as_json, games_library_file_path_, buffer);
+    if (err || !file_as_json.is_object())
+        return {};
 
-    // constexpr auto pretty_opts = glz::opts{.prettify = true};
-    // auto _ = glz::write_file_json<pretty_opts>(file, games_library_file_path_, std::string{});
+    // NOTE: The following comments have been copied from 'LoadSettingsFile()'
+    /* NOTE: Code to be used when migrating future fields
+    std::array<std::string_view> migratable_fields = {"auto_save_enabled_status_version_older"};
+    auto& file_as_json_obj = file_as_json.get_object();
+    std::unordered_map<std::string_view, glz::generic> unknown_fields;
+    for (const auto& [key, value] : file_as_json_obj) {
+        if (!std::ranges::contains(migratable_fields, key))
+            unknown_fields.insert({key, value});
+    }
+    */
+
+    GamesLibraryCpyFile file{};
+    err = glz::read<glz::opts{.error_on_unknown_keys = false, .error_on_missing_keys = false}>(file, buffer);
+
+    /* NOTE: Code to be used when migrating future fields
+    if (file.file_version == 2) {
+        if (unknown_fields.contains("auto_save_enabled_status_version_older")) {
+            file.auto_save_enabled_status = unknown_fields.at("auto_save_enabled_status_version_older").get<bool>();
+        }
+    }
+    */
+
+    if (err)
+        return {};
+
+    return file.games;
 }
 
-// TODO: Maybe add more context upon failure? a bool?
-auto gw::DiskManager::ResetAllGamesPlaytime() const noexcept -> void {
-}
-
-// TODO: Maybe add more context upon failure? a bool?
-auto gw::DiskManager::DeleteAllGames() const noexcept -> void {
-}
-
-auto gw::DiskManager::AddNewGame([[maybe_unused]] std::string&& game_title) const noexcept -> void {
-    std::lock_guard<std::mutex> lck{mutex_};
+auto gw::DiskManager::UpdateGamesLibraryFile(std::vector<GameEntry>& local_games_library) const noexcept -> void {
+    GamesLibraryRefFile file{&local_games_library};
+    constexpr auto pretty_opts = glz::opts{.prettify = true};
+    [[maybe_unused]] auto _ = glz::write_file_json<pretty_opts>(file, games_library_file_path_, std::string{});
 }
 
 auto gw::DiskManager::ToggleAutoSaveStatus(const bool new_value) const noexcept -> void {
@@ -94,24 +116,6 @@ auto gw::DiskManager::SetAutoSaveInterval(const gw::minutes new_interval) const 
 
     constexpr auto pretty_opts = glz::opts{.prettify = true};
     [[maybe_unused]] auto _ = glz::write_file_json<pretty_opts>(file, settings_file_path_, std::string{});
-}
-
-// TODO: Optimize process
-auto gw::DiskManager::SetGameTitle([[maybe_unused]] const int game_id, [[maybe_unused]] std::string&& game_title) const noexcept -> void {
-    std::lock_guard<std::mutex> lck{mutex_};
-}
-
-// TODO: Optimize process
-auto gw::DiskManager::ResetGamePlaytime([[maybe_unused]] const int game_id) const noexcept -> void {
-    std::lock_guard<std::mutex> lck{mutex_};
-}
-
-auto gw::DiskManager::DeleteGame([[maybe_unused]] const int game_id) const noexcept -> void {
-    std::lock_guard<std::mutex> lck{mutex_};
-}
-
-auto gw::DiskManager::AddGamePlaytime([[maybe_unused]] const int game_id, [[maybe_unused]] const long long elapsed_time) const noexcept -> void {
-    std::lock_guard<std::mutex> lck{mutex_};
 }
 
 // Private

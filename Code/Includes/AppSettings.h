@@ -7,7 +7,6 @@
 #include "GameClockTimeTypes.h"
 #include "DiskManager.h"
 #include "AppSettingsDefaults.h"
-#include "Console.h"
 
 namespace gw {
 class AppSettings {

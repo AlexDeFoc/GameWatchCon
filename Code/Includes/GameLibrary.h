@@ -10,6 +10,7 @@
 #include <string_view>
 #include "AppSettings.h"
 #include "GameEntry.h"
+#include "Console.h"
 
 namespace gw {
 class GameLibrary {
@@ -26,7 +27,7 @@ public:
     [[nodiscard]] auto IsEmpty() const noexcept -> bool;
     [[nodiscard]] auto GetGameCount() const noexcept -> std::int64_t;
     [[nodiscard]] auto GetActiveGameId() const noexcept -> std::int64_t;
-    auto AddNewGame(std::string&&) noexcept -> void;
+    auto AddNewGame(std::string&& game_title) noexcept -> void;
     auto SetGameTitle(std::int64_t, std::string&&) noexcept -> void;
     auto ResetGamePlaytime(std::int64_t) noexcept -> void;
     auto DeleteGame(std::int64_t) noexcept -> void;
@@ -41,7 +42,7 @@ private:
     auto SaveJob(const std::stop_token&) noexcept -> void;
 
     AppSettings& app_settings_;
-    [[maybe_unused]] DiskManager& disk_manager_; // TODO: Remove the nodiscard attribute
+    DiskManager& disk_manager_;
 
     std::atomic<std::int64_t> should_save_game_{0};
     std::atomic<bool> took_snapshot_already_{false};

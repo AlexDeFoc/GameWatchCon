@@ -5,8 +5,10 @@
 #pragma once
 
 #include <string_view>
+#include <vector>
 #include "GameClockTimeTypes.h"
 #include "AppSettingsFile.h"
+#include "GameEntry.h"
 
 namespace gw {
 class DiskManager {
@@ -21,20 +23,13 @@ public:
     auto operator=(const DiskManager&) noexcept -> DiskManager& = delete;
     auto operator=(DiskManager&&) noexcept -> DiskManager& = delete;
 
-    // TODO: Add docs
     auto RestoreSettingsDefaults() const noexcept -> void;
-
-    // TODO: Add docs
-    auto ResetAllGamesPlaytime() const noexcept -> void;
-
-    // TODO: Add documentation
-    auto DeleteAllGames() const noexcept -> void;
 
     [[nodiscard]] auto LoadSettingsFile() const noexcept -> std::optional<SettingsFile>;
 
-    auto LoadGamesLibraryFile() const noexcept -> void; // TODO: Void temporarly, same with nodiscard abscense
+    [[nodiscard]] auto LoadGamesLibraryFile() const noexcept -> std::optional<std::vector<GameEntry>>;
 
-    auto AddNewGame(std::string&&) const noexcept -> void;
+    auto UpdateGamesLibraryFile(std::vector<GameEntry>& local_games_library) const noexcept -> void;
 
     /*!
      * @brief Toggles auto save status in settings table in storage
@@ -46,28 +41,6 @@ public:
      * @param new_interval Interval in seconds
      */
     auto SetAutoSaveInterval(gw::minutes new_interval) const noexcept -> void;
-
-    /*!
-     * @brief Sets game title for a given game id in games table in storage
-     * @param game_id
-     * @param game_title
-     */
-    auto SetGameTitle(int, std::string&&) const noexcept -> void;
-
-    // TODO: Remake other doxygen comments like this one! Simple and clear
-    /*!
-     * @brief Resets game playtime of a given game id
-     * @param game_id
-     */
-    auto ResetGamePlaytime(int) const noexcept -> void;
-
-    /*!
-     * @brief Deletes game based on given game id
-     * @param game_id
-     */
-    auto DeleteGame(int) const noexcept -> void;
-
-    auto AddGamePlaytime(int, long long) const noexcept -> void;
 
 private:
     [[nodiscard]] static auto GetExeDirPath() noexcept -> std::string;

@@ -5,7 +5,7 @@
 #include "Pch.h"
 #include "GameEntry.h"
 
-gw::GameEntry::GameEntry(std::string&& new_title) noexcept : GameEntryBase{.title = std::move(new_title), .playtime = {}} {}
+gw::GameEntry::GameEntry(std::string&& new_title) noexcept : title{std::move(new_title)} {}
 
 auto gw::GameEntry::GetPlaytime() const noexcept -> seconds {
     return gw::seconds(playtime);

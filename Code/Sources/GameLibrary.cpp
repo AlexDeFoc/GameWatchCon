@@ -6,7 +6,11 @@
 #include "GameLibrary.h"
 
 gw::GameLibrary::GameLibrary(DiskManager& disk_manager, AppSettings& app_settings) : app_settings_{app_settings}, disk_manager_{disk_manager} {
-    disk_manager_.LoadGamesLibraryFile();
+    auto result = disk_manager_.LoadGamesLibraryFile();
+
+    if (result.has_value())
+        games_ = result.value();
+
     autosave_thread_ = std::jthread([this](const std::stop_token& stop_token) { SaveJob(stop_token); });
 }
 
@@ -43,7 +47,7 @@ auto gw::GameLibrary::ActiveGameTitle() const noexcept -> std::string_view {
 }
 
 auto gw::GameLibrary::IsEmpty() const noexcept -> bool {
-    return games_.size() == 0;
+    return games_.empty();
 }
 
 auto gw::GameLibrary::GetGameCount() const noexcept -> std::int64_t {
@@ -56,25 +60,25 @@ auto gw::GameLibrary::GetActiveGameId() const noexcept -> std::int64_t {
 
 auto gw::GameLibrary::AddNewGame(std::string&& game_title) noexcept -> void {
     games_.emplace_back(std::move(game_title));
-    // TODO: Add writing to disk
+    disk_manager_.UpdateGamesLibraryFile(games_);
 }
 
 auto gw::GameLibrary::SetGameTitle(const std::int64_t game_id, std::string&& game_title) noexcept -> void {
     assert(game_id - 1 >= 0 && "Game id <= 0");
     games_[static_cast<std::size_t>(game_id - 1)].SetGameTitle(std::move(game_title));
-    // TODO: Add writing to disk
+    disk_manager_.UpdateGamesLibraryFile(games_);
 }
 
 auto gw::GameLibrary::ResetGamePlaytime(const std::int64_t game_id) noexcept -> void {
     assert(game_id - 1 >= 0 && "Game id <= 0");
     games_[static_cast<std::size_t>(game_id - 1)].ResetPlaytime();
-    // TODO: Add writing to disk
+    disk_manager_.UpdateGamesLibraryFile(games_);
 }
 
 auto gw::GameLibrary::DeleteGame(const std::int64_t game_id) noexcept -> void {
     assert(game_id - 1 >= 0 && "Game id <= 0");
     games_.erase(games_.begin() + game_id - 1);
-    // TODO: Add writing to disk
+    disk_manager_.UpdateGamesLibraryFile(games_);
 }
 
 auto gw::GameLibrary::ToggleGameClock(const std::int64_t game_id) noexcept -> void {
@@ -92,7 +96,8 @@ auto gw::GameLibrary::ToggleGameClock(const std::int64_t game_id) noexcept -> vo
 
 auto gw::GameLibrary::AddGameTime(const std::chrono::steady_clock::duration time) noexcept -> void {
     using namespace std::chrono;
-    games_[static_cast<std::size_t>(active_game_id_.load(std::memory_order_acquire))].AddPlaytime(duration_cast<gw::seconds>(time));
+    games_[static_cast<std::size_t>(active_game_id_.load(std::memory_order_acquire) - 1)].AddPlaytime(duration_cast<gw::seconds>(time));
+    disk_manager_.UpdateGamesLibraryFile(games_);
 }
 
 auto gw::GameLibrary::SaveJob(const std::stop_token& stop_token) noexcept -> void {
@@ -173,13 +178,13 @@ auto gw::GameLibrary::GetPrintableGames(const Console& console) noexcept -> std:
 
 auto gw::GameLibrary::DeleteAllGames() noexcept -> void {
     games_.clear();
-    // TODO: Add to disk
+    disk_manager_.UpdateGamesLibraryFile(games_);
 }
 
 auto gw::GameLibrary::ResetAllGamesPlaytime() noexcept -> void {
     for (auto& game : games_)
         game.ResetPlaytime();
-    // TODO: Add to disk
+    disk_manager_.UpdateGamesLibraryFile(games_);
 }
 
 // TODO: Perform the action
