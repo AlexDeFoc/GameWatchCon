@@ -6,6 +6,7 @@
 #include "GameLibrary.h"
 
 gw::GameLibrary::GameLibrary(DiskManager& disk_manager, AppSettings& app_settings) : app_settings_{app_settings}, disk_manager_{disk_manager} {
+    disk_manager_.LoadGamesLibraryFile();
     autosave_thread_ = std::jthread([this](const std::stop_token& stop_token) { SaveJob(stop_token); });
 }
 

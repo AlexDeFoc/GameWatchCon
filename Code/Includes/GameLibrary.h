@@ -9,6 +9,7 @@
 #include <thread>
 #include <string_view>
 #include "AppSettings.h"
+#include "GameEntry.h"
 
 namespace gw {
 class GameLibrary {

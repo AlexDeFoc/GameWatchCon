@@ -4,28 +4,58 @@
 
 #include "Pch.h"
 #include "DiskManager.h"
-#include "Console.h"
 
 // Public
-gw::DiskManager::DiskManager(Console& console) : settings_file_path_{GetSettingsFilepath()}, console_{console}, storage_backup_path_{GetStorageBackupPath()} {
-}
+gw::DiskManager::DiskManager() : settings_file_path_{GetSettingsFilepath()}, games_library_file_path_{GetGamesLibraryFilepath()}, settings_backup_file_path_{GetSettingsBackupFilepath()}, games_library_backup_file_path_{GetGamesLibraryBackupFilepath()} {}
 
-// TODO: Maybe add more context upon failure? a bool?
-auto gw::DiskManager::CreateGamesDatabaseBackup() noexcept -> void {
-    std::lock_guard<std::mutex> lck{mutex_};
-
-    // if (!std::filesystem::exists(storage_path_))
-    // return;
-
-    try {
-        // std::filesystem::copy_file(storage_path_, GetStorageBackupPath(), std::filesystem::copy_options::overwrite_existing);
-    } catch (...) {
-        return;
-    }
-}
-
-// TODO: Maybe add more context upon failure? a bool?
 auto gw::DiskManager::RestoreSettingsDefaults() const noexcept -> void {
+    SettingsFile file{};
+    constexpr auto pretty_opts = glz::opts{.prettify = true};
+    [[maybe_unused]] auto _ = glz::write_file_json<pretty_opts>(file, settings_file_path_, std::string{});
+}
+
+auto gw::DiskManager::LoadSettingsFile() const noexcept -> std::optional<SettingsFile> {
+    glz::generic file_as_json;
+    std::string buffer;
+
+    auto err = glz::read_file_json(file_as_json, settings_file_path_, buffer);
+    if (err || !file_as_json.is_object())
+        return {};
+
+    /* NOTE: Code to be used when migrating future fields
+    std::array<std::string_view> migratable_fields = {"auto_save_enabled_status_version_older"};
+    auto& file_as_json_obj = file_as_json.get_object();
+    std::unordered_map<std::string_view, glz::generic> unknown_fields;
+    for (const auto& [key, value] : file_as_json_obj) {
+        if (!std::ranges::contains(migratable_fields, key))
+            unknown_fields.insert({key, value});
+    }
+    */
+
+    SettingsFile file{};
+    err = glz::read<glz::opts{.error_on_unknown_keys = false, .error_on_missing_keys = false}>(file, buffer);
+
+    /* NOTE: Code to be used when migrating future fields
+    if (file.file_version == 2) {
+        if (unknown_fields.contains("auto_save_enabled_status_version_older")) {
+            file.auto_save_enabled_status = unknown_fields.at("auto_save_enabled_status_version_older").get<bool>();
+        }
+    }
+    */
+
+    if (err)
+        return {};
+
+    return file;
+}
+
+auto gw::DiskManager::LoadGamesLibraryFile() const noexcept -> void {
+    // GamesLibraryCopyFile file{.file_version = 1, .games{}};
+
+    // file.games.emplace_back("Among Us", 300);
+
+    // constexpr auto pretty_opts = glz::opts{.prettify = true};
+    // auto _ = glz::write_file_json<pretty_opts>(file, games_library_file_path_, std::string{});
 }
 
 // TODO: Maybe add more context upon failure? a bool?
@@ -36,47 +66,34 @@ auto gw::DiskManager::ResetAllGamesPlaytime() const noexcept -> void {
 auto gw::DiskManager::DeleteAllGames() const noexcept -> void {
 }
 
-auto gw::DiskManager::GetAutoSaveEnabledStatusValue() noexcept -> long long {
-    std::lock_guard<std::mutex> lck{mutex_};
-    return 0;
-}
-
-auto gw::DiskManager::GetAutoSaveIntervalValue() const noexcept -> long long {
-    std::lock_guard<std::mutex> lck{mutex_};
-
-
-    return 0;
-}
-
 auto gw::DiskManager::AddNewGame([[maybe_unused]] std::string&& game_title) const noexcept -> void {
     std::lock_guard<std::mutex> lck{mutex_};
 }
 
-auto gw::DiskManager::ToggleAutoSaveStatus(bool new_value) const noexcept -> void {
+auto gw::DiskManager::ToggleAutoSaveStatus(const bool new_value) const noexcept -> void {
     SettingsFile file{};
-    auto err = glz::read_file_json(file, settings_file_path_, std::string{});
+    auto err = glz::read_file_json<glz::opts{.error_on_unknown_keys = false, .error_on_missing_keys = false}>(file, settings_file_path_, std::string{});
 
-    // TODO: Make sure its not the fact that the file exists but some other file opening failure like readonly or smth else!
-    if (err && err.ec != glz::error_code::file_open_failure) {
-        // TODO: Maybe add more ctx for the user
+    if (err)
         return;
-    }
 
     file.auto_save_enabled_status = new_value;
 
     constexpr auto pretty_opts = glz::opts{.prettify = true};
-    auto write_err = glz::write_file_json<pretty_opts>(file, settings_file_path_, std::string{});
-
-    if (write_err) {
-        // TODO: Maybe add more ctx for the user
-        return;
-    }
-
-    // TODO: Add context on success maybe? by returning a bool
+    [[maybe_unused]] auto _ = glz::write_file_json<pretty_opts>(file, settings_file_path_, std::string{});
 }
 
-auto gw::DiskManager::SetAutoSaveIntervalValue([[maybe_unused]] long long new_interval) const noexcept -> void {
-    std::lock_guard<std::mutex> lck{mutex_};
+auto gw::DiskManager::SetAutoSaveInterval(const gw::minutes new_interval) const noexcept -> void {
+    SettingsFile file{};
+    auto err = glz::read_file_json<glz::opts{.error_on_unknown_keys = false, .error_on_missing_keys = false}>(file, settings_file_path_, std::string{});
+
+    if (err)
+        return;
+
+    file.auto_save_interval_in_minutes = new_interval.count();
+
+    constexpr auto pretty_opts = glz::opts{.prettify = true};
+    [[maybe_unused]] auto _ = glz::write_file_json<pretty_opts>(file, settings_file_path_, std::string{});
 }
 
 // TODO: Optimize process
@@ -98,7 +115,7 @@ auto gw::DiskManager::AddGamePlaytime([[maybe_unused]] const int game_id, [[mayb
 }
 
 // Private
-auto gw::DiskManager::GetExeDirPath() const noexcept -> std::string {
+auto gw::DiskManager::GetExeDirPath() noexcept -> std::string {
 #ifdef _WIN32
     DWORD path_length_capacity = MAX_PATH;
     std::wstring wide_path{};
@@ -140,68 +157,14 @@ auto gw::DiskManager::GetSettingsFilepath() noexcept -> std::string {
     return (std::filesystem::path(GetExeDirPath()) / settings_file_name_).string();
 }
 
-auto gw::DiskManager::GetStorageBackupPath() noexcept -> std::string {
-    return (std::filesystem::path(GetExeDirPath()) / storage_backup_filename_).string();
+auto gw::DiskManager::GetGamesLibraryFilepath() noexcept -> std::string {
+    return (std::filesystem::path(GetExeDirPath()) / games_library_file_name_).string();
 }
 
-auto gw::DiskManager::GetStorageTemporaryBackupPath() noexcept -> std::string {
-    return (std::filesystem::path(GetExeDirPath()) / storage_temp_backup_filename_).string();
+auto gw::DiskManager::GetSettingsBackupFilepath() noexcept -> std::string {
+    return (std::filesystem::path(GetExeDirPath()) / settings_backup_file_name_).string();
 }
 
-auto gw::DiskManager::GetDropDbColumnsConfirmationFilePath() const noexcept -> std::string {
-    return (std::filesystem::path(GetExeDirPath()) / drop_db_columns_confirmation_file_filename).string();
-}
-
-auto gw::DiskManager::BackupTemporarlyStorageFile() -> void {
-    /*
-    if (!std::filesystem::exists(storage_path_))
-        return;
-
-    try {
-        std::filesystem::copy_file(storage_path_, GetStorageTemporaryBackupPath(), std::filesystem::copy_options::overwrite_existing);
-    } catch (...) {
-        return;
-    }
-    */
-}
-
-auto gw::DiskManager::RestoreTempBackupStorageFile() noexcept -> void {
-    /*
-    if (!std::filesystem::exists(GetStorageTemporaryBackupPath()))
-        return;
-
-    try {
-        std::filesystem::remove(storage_path_);
-        std::filesystem::rename(GetStorageTemporaryBackupPath(), storage_path_);
-
-        std::ofstream confirmation_file_stream(GetDropDbColumnsConfirmationFilePath());
-        if (confirmation_file_stream.is_open())
-            confirmation_file_stream.close();
-    } catch (...) {
-        return;
-    }
-    */
-}
-
-auto gw::DiskManager::DeleteTempBackupStorageFile() noexcept -> void {
-    try {
-        if (std::filesystem::exists(GetStorageTemporaryBackupPath())) {
-            std::filesystem::remove(GetStorageTemporaryBackupPath());
-        }
-    } catch (...) {
-        return;
-    }
-}
-
-auto gw::DiskManager::UserIsSureToDropColumns() const noexcept -> bool {
-    try {
-        if (std::filesystem::exists(GetDropDbColumnsConfirmationFilePath())) {
-            std::filesystem::remove(GetDropDbColumnsConfirmationFilePath());
-            return true;
-        }
-    } catch (...) {
-        return false;
-    }
-
-    return false;
+auto gw::DiskManager::GetGamesLibraryBackupFilepath() noexcept -> std::string {
+    return (std::filesystem::path(GetExeDirPath()) / games_library_backup_file_name_).string();
 }

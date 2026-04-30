@@ -5,15 +5,10 @@
 #pragma once
 
 #include "GameClockTimeTypes.h"
+#include "GameEntryBase.h"
 #include <string>
 
 namespace gw {
-struct GameEntryBase {
-public:
-    std::string title;
-    std::int64_t playtime;
-};
-
 class GameEntry : private GameEntryBase {
 public:
     // GameEntry() noexcept;

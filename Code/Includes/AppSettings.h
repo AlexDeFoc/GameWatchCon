@@ -6,6 +6,8 @@
 
 #include "GameClockTimeTypes.h"
 #include "DiskManager.h"
+#include "AppSettingsDefaults.h"
+#include "Console.h"
 
 namespace gw {
 class AppSettings {
@@ -47,7 +49,7 @@ public:
     auto SetAutoSaveInterval(gw::minutes) noexcept -> void;
 
 private:
-    [[maybe_unused]] DiskManager& disk_manager_; // TODO: Remove the nodiscard attribute
+    DiskManager& disk_manager_;
     std::atomic<std::int8_t> auto_save_enabled_status_{AppSettingsDefaults::auto_save_status_default};
     std::atomic<gw::minutes> auto_save_interval_{AppSettingsDefaults::auto_save_interval_default};
 };
