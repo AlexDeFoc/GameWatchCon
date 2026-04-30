@@ -2,85 +2,257 @@
     "version": 9,
     "configurePresets": [
         {
-            "name": "msvc_x64_release",
-            "generator": "Visual Studio 18 2026",
-            "binaryDir": "Output/Release/MSVC",
+            "name": "Clang Ninja - Release Linux",
+            "inherits": ["Clang Compiler Base", "Ninja - Release Linux Base"],
+            "binaryDir": "Output/Release-Linux/Clang-Ninja"
+        },
+        {
+            "name": "Clang Ninja - Debug Linux",
+            "inherits": ["Clang Compiler Base", "Ninja - Debug Linux Base"],
+            "binaryDir": "Output/Debug-Linux/Clang-Ninja"
+        },
+        {
+            "name": "Clang Ninja - Release MacOS",
+            "inherits": ["Clang Compiler Base", "Ninja - Release MacOS Base"],
+            "binaryDir": "Output/Release-MacOS/Clang-Ninja"
+        },
+        {
+            "name": "Clang Ninja - Debug MacOS",
+            "inherits": ["Clang Compiler Base", "Ninja - Debug MacOS Base"],
+            "binaryDir": "Output/Debug-MacOS/Clang-Ninja"
+        },
+        {
+            "name": "ClangCL Ninja - Release Windows",
+            "inherits": ["ClangCL Compiler Base", "Ninja - Release Windows Base"],
+            "binaryDir": "Output/Release-Windows/ClangCL-Ninja"
+        },
+        {
+            "name": "ClangCL Ninja - Debug Windows",
+            "inherits": ["ClangCL Compiler Base", "Ninja - Debug Windows Base"],
+            "binaryDir": "Output/Debug-Windows/ClangCL-Ninja"
+        },
+        {
+            "name": "MSVC VS2026 - Release Windows",
+            "inherits": ["VS2026 - Release Windows Base"],
+            "binaryDir": "Output/Release-Windows/MSVC-VS2026"
+        },
+        {
+            "name": "MSVC VS2026 - Debug Windows",
+            "inherits": ["VS2026 - Debug Windows Base"],
+            "binaryDir": "Output/Debug-Windows/MSVC-VS2026"
+        },
+        {
+            "name": "VS2026 - Release Windows Base",
+            "hidden": true,
+            "inherits": ["VS2026 Base", "VCPKG - Release Windows"]
+        },
+        {
+            "name": "VS2026 - Debug Windows Base",
+            "hidden": true,
+            "inherits": ["VS2026 Base", "VCPKG - Debug Windows"]
+        },
+        {
+            "name": "Ninja - Release Windows Base",
+            "hidden": true,
+            "inherits": ["Ninja Base", "Release Build Base", "VCPKG - Release Windows"]
+        },
+        {
+            "name": "Ninja - Debug Windows Base",
+            "hidden": true,
+            "inherits": ["Ninja Base", "Debug Build Base", "VCPKG - Debug Windows"]
+        },
+        {
+            "name": "Ninja - Release Linux Base",
+            "hidden": true,
+            "inherits": ["Ninja Base", "Release Build Base", "VCPKG - Release Linux"]
+        },
+        {
+            "name": "Ninja - Debug Linux Base",
+            "hidden": true,
+            "inherits": ["Ninja Base", "Debug Build Base", "VCPKG - Debug Linux"]
+        },
+        {
+            "name": "Ninja - Release MacOS Base",
+            "hidden": true,
+            "inherits": ["Ninja Base", "Release Build Base", "VCPKG - Release MacOS"]
+        },
+        {
+            "name": "Ninja - Debug MacOS Base",
+            "hidden": true,
+            "inherits": ["Ninja Base", "Debug Build Base", "VCPKG - Debug MacOS"]
+        },
+        {
+            "name": "VS2026 Base",
+            "hidden": true,
+            "inherits": ["Generic Base", "Arch Set"],
+            "generator": "Visual Studio 18 2026"
+        },
+        {
+            "name": "Ninja Base",
+            "hidden": true,
+            "inherits": ["Generic Base", "Export Compile CMDS to file", "Arch External"],
+            "generator": "Ninja"
+        },
+        {
+            "name": "Clang Compiler Base",
+            "hidden": true,
+            "cacheVariables": {
+                "CMAKE_C_COMPILER": "clang",
+                "CMAKE_CXX_COMPILER": "clang++"
+            }
+        },
+        {
+            "name": "ClangCL Compiler Base",
+            "hidden": true,
+            "cacheVariables": {
+                "CMAKE_C_COMPILER": "clang-cl",
+                "CMAKE_CXX_COMPILER": "clang-cl"
+            }
+        },
+        {
+            "name": "Generic Base",
+            "hidden": true,
+            "inherits": "VCPKG Base",
+            "cacheVariables": {
+                "BUILD_SHARED_LIBS": "OFF"
+            }
+        },
+        {
+            "name": "Export Compile CMDS to file",
+            "hidden": true,
+            "cacheVariables": {
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON" 
+            }
+        },
+        {
+            "name": "Debug Build Base",
+            "hidden": true,
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        },
+        {
+            "name": "Release Build Base",
+            "hidden": true,
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release"
+            }
+        },
+        {
+            "name": "Arch Set",
+            "hidden": true,
+            "architecture": {
+                "value": "x64",
+                "strategy": "set"
+            }
+        },
+        {
+            "name": "Arch External",
+            "hidden": true,
             "architecture": {
                 "value": "x64",
                 "strategy": "external"
-            },
+            }
+        },
+        {
+            "name": "VCPKG Base",
+            "hidden": true,
             "cacheVariables": {
-                "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
-                "VCPKG_TARGET_TRIPLET": "x64-windows",
                 "VCPKG_MANIFEST_MODE": "ON",
-                "VCPKG_MANIFEST_DIR": "${sourceDir}"
+                "VCPKG_INSTALLED_DIR": "${sourceDir}/vcpkg_packages",
+                "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
             },
             "environment": {
                 "VCPKG_BINARY_SOURCES": "clear;files,${sourceDir}/.vcpkg_cache,readwrite"
             }
         },
         {
-            "name": "msvc_x64_debug",
-            "generator": "Visual Studio 18 2026",
-            "binaryDir": "Output/Debug/MSVC",
-            "architecture": {
-                "value": "x64",
-                "strategy": "external"
-            },
+            "name": "VCPKG - Release Windows",
+            "hidden": true,
             "cacheVariables": {
-                "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
-                "VCPKG_TARGET_TRIPLET": "x64-windows",
-                "VCPKG_MANIFEST_MODE": "ON",
-                "VCPKG_MANIFEST_DIR": "${sourceDir}"
+                "VCPKG_TARGET_TRIPLET": "x64-windows-static-md-release"
             }
         },
         {
-            "name": "clang_x64_release_windows",
-            "generator": "Ninja",
-            "binaryDir": "Output/Release/Clang",
+            "name": "VCPKG - Debug Windows",
+            "hidden": true,
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Release",
-                "CMAKE_C_COMPILER": "clang",
-                "CMAKE_CXX_COMPILER": "clang++",
-                "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
-                "VCPKG_TARGET_TRIPLET": "x64-windows",
-                "VCPKG_MANIFEST_MODE": "ON",
-                "VCPKG_MANIFEST_DIR": "${sourceDir}"
+                "VCPKG_TARGET_TRIPLET": "x64-windows-static-md"
             }
         },
         {
-            "name": "clang_x64_debug_windows",
-            "generator": "Ninja",
-            "binaryDir": "Output/Debug/Clang",
+            "name": "VCPKG - Release Linux",
+            "hidden": true,
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug",
-                "CMAKE_C_COMPILER": "clang",
-                "CMAKE_CXX_COMPILER": "clang++",
-                "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
-                "VCPKG_TARGET_TRIPLET": "x64-windows",
-                "VCPKG_MANIFEST_MODE": "ON",
-                "VCPKG_MANIFEST_DIR": "${sourceDir}"
+                "VCPKG_TARGET_TRIPLET": "x64-linux-release"
+            }
+        },
+        {
+            "name": "VCPKG - Debug Linux",
+            "hidden": true,
+            "cacheVariables": {
+                "VCPKG_TARGET_TRIPLET": "x64-linux"
+            }
+        },
+        {
+            "name": "VCPKG - Release MacOS",
+            "hidden": true,
+            "cacheVariables": {
+                "VCPKG_TARGET_TRIPLET": "x64-osx-release"
+            }
+        },
+        {
+            "name": "VCPKG - Debug MacOS",
+            "hidden": true,
+            "cacheVariables": {
+                "VCPKG_TARGET_TRIPLET": "x64-osx"
             }
         }
     ],
     "buildPresets": [
         {
-            "name": "msvc_x64_release",
-            "configurePreset": "msvc_x64_release",
-            "configuration": "Release"
+            "name": "Clang Ninja - Release Linux",
+            "configurePreset": "Clang Ninja - Release Linux"
         },
         {
-            "name": "msvc_x64_debug",
-            "configurePreset": "msvc_x64_debug",
+            "name": "Clang Ninja - Debug Linux",
+            "configurePreset": "Clang Ninja - Debug Linux"
+        },
+        {
+            "name": "Clang Ninja - Release MacOS",
+            "configurePreset": "Clang Ninja - Release MacOS"
+        },
+        {
+            "name": "Clang Ninja - Debug MacOS",
+            "configurePreset": "Clang Ninja - Debug MacOS"
+        },
+        {
+            "name": "ClangCL Ninja - Release Windows",
+            "configurePreset": "ClangCL Ninja - Release Windows"
+        },
+        {
+            "name": "ClangCL Ninja - Debug Windows",
+            "configurePreset": "ClangCL Ninja - Debug Windows"
+        },
+        {
+            "name": "MSVC VS2026 - Release Windows",
+            "inherits": "Release Build Base",
+            "configurePreset": "MSVC VS2026 - Release Windows"
+        },
+        {
+            "name": "MSVC VS2026 - Debug Windows",
+            "inherits": "Debug Build Base",
+            "configurePreset": "MSVC VS2026 - Debug Windows"
+        },
+        {
+            "name": "Debug Build Base",
+            "hidden": true,
             "configuration": "Debug"
         },
         {
-            "name": "clang_x64_release_windows",
-            "configurePreset": "clang_x64_release_windows"
-        },
-        {
-            "name": "clang_x64_debug_windows",
-            "configurePreset": "clang_x64_debug_windows"
+            "name": "Release Build Base",
+            "hidden": true,
+            "configuration": "Release"
         }
     ]
 }
