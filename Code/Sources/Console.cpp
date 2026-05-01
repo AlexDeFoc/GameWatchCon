@@ -2,8 +2,8 @@
 // Copyright (C) 2026 Sava Alexandru-Andrei
 // License: GNU AGPL v3 or later - see LICENSE file
 
-#include "Pch.h"
-#include "Console.h"
+#include "Pch.hpp"
+#include "Console.hpp"
 
 // Public
 gw::Console::Console() noexcept {
@@ -37,7 +37,7 @@ gw::Console::Console() noexcept {
             cout_supports_colored_text_ = true;
     }();
 #else
-    cout_supports_colored_text_ = ConColorSupport::Status::Supported; // TODO: Fix for linux
+    cout_supports_colored_text_ = CheckSupportForANSIEscapes();
 #endif
 }
 
@@ -72,7 +72,7 @@ auto gw::Console::RequestUserGameIDChoice(std::string printable_games, std::int6
 
         if (std::string input{}; std::getline(std::cin, input)) {
             try {
-                auto selected_game_id = std::stoi(input);
+                std::int64_t selected_game_id = std::stoll(input);
 
                 if (selected_game_id < 1 || selected_game_id > games_count) {
                     WriteLineToCache(Tag::Error, "Input out of range!");
@@ -111,14 +111,14 @@ auto gw::Console::RequestUserConfirmation() -> std::pair<bool, InputStatus> {
 
         std::puts("Are you sure");
         std::puts("1. Yes");
-        std::puts("2. No");
+        std::puts("0. No");
         Write(Tag::Request, "Enter option index: ");
 
         if (std::string input{}; std::getline(std::cin, input)) {
             try {
-                std::size_t selected_opt_index = std::stoull(input);
+                const std::int64_t selected_opt_index = std::stoll(input);
 
-                if (selected_opt_index != 1 && selected_opt_index != 2) {
+                if (selected_opt_index != 1 && selected_opt_index != 0) {
                     WriteLineToCache(Tag::Error, "Input out of range!");
                     continue;
                 } else
@@ -154,13 +154,10 @@ auto gw::Console::RequestNewAutoSaveInterval(std::string formatted_current_inter
 
         if (std::string input{}; std::getline(std::cin, input)) {
             try {
-                const auto new_interval = std::stoll(input);
+                std::int64_t new_interval = std::stoll(input);
 
                 if (new_interval < 1) {
                     WriteLineToCache(Tag::Error, "Interval needs to be at least 1 minute!");
-                    continue;
-                } else if (new_interval > std::numeric_limits<std::chrono::minutes::rep>::max()) {
-                    WriteLineToCache(Tag::Error, "Please enter an interval less then 4083 years!"); // TODO: Fix this value! it has changed... i think
                     continue;
                 } else
                     return {std::chrono::minutes(new_interval), InputStatus::Success};
@@ -270,9 +267,42 @@ auto gw::Console::RequestKeyPress() noexcept -> void {
         std::string dummy_input;
         std::getline(std::cin, dummy_input);
     }
-#else // TODO: add proper linux & mac support
-    std::string dummy_input;
-    std::getline(std::cin, dummy_input);
+
+#else
+    // RAII guard for terminal settings
+    struct termios_guard {
+        int fd;
+        termios original;
+        bool valid;
+
+        termios_guard() noexcept : fd{STDIN_FILENO}, valid{false} {
+            if (::tcgetattr(fd, &original) == 0) {
+                termios raw = original;
+                raw.c_lflag &= ~static_cast<tcflag_t>(ECHO | ICANON);
+                raw.c_cc[VMIN] = 1;
+                raw.c_cc[VTIME] = 0;
+                if (::tcsetattr(fd, TCSAFLUSH, &raw) == 0) {
+                    valid = true;
+                    return;
+                }
+            }
+        }
+        ~termios_guard() noexcept {
+            if (valid) {
+                ::tcsetattr(fd, TCSAFLUSH, &original);
+            }
+        }
+    } guard;
+
+    if (!guard.valid) {
+        std::string dummy;
+        std::getline(std::cin, dummy);
+        return;
+    }
+
+    char ch;
+    while (::read(STDIN_FILENO, &ch, 1) == -1 && errno == EINTR)
+        ;
 #endif
 }
 
@@ -328,6 +358,10 @@ auto gw::Console::WriteToCache(const Color msg_color, const std::string_view msg
         std::format_to(it, "{}", msg);
 }
 
+auto gw::Console::WriteLine(std::string msg) noexcept -> void {
+    std::println("{}", std::move(msg));
+}
+
 auto gw::Console::WriteLine(const std::string_view msg) noexcept -> void {
     std::println("{}", msg);
 }
@@ -370,6 +404,31 @@ auto gw::Console::WriteLineToCache(const Color msg_color, const std::string_view
 }
 
 // Private
+auto gw::Console::CheckSupportForANSIEscapes() const noexcept -> bool {
+#ifdef _WIN32
+    return cout_supports_colored_text_;
+#else
+    // 1. Must be a real terminal
+    if (!isatty(STDOUT_FILENO))
+        return false;
+
+    // 2. Respect NO_COLOR convention (https://no-color.org/)
+    if (const char* no_color = std::getenv("NO_COLOR"))
+        if (no_color[0] != '\0') // variable exists and is non-empty
+            return false;
+
+    // 3. Check TERM (ignore case for safety)
+    const char* term = std::getenv("TERM");
+    if (term == nullptr || term[0] == '\0')
+        return false;
+    if (std::strcmp(term, "dumb") == 0)
+        return false;
+
+    // All checks passed – assume 16‑colour ANSI support.
+    return true;
+#endif
+}
+
 auto gw::Console::GetTagAsColor(const Tag tag_type) const -> gw::Console::Color {
     switch (tag_type) {
         case Tag::Tip:

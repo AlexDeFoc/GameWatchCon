@@ -6,13 +6,18 @@
 
 #include <string_view>
 #include <vector>
-#include "GameClockTimeTypes.h"
-#include "AppSettingsFile.h"
-#include "GameEntry.h"
+#include "GameClockTimeTypes.hpp"
+#include "AppSettingsFile.hpp"
+#include "GameEntry.hpp"
 
 namespace gw {
 class DiskManager {
 public:
+    enum class CreateGamesLibraryFileBackupResult {
+        GamesLibraryFileNotFound,
+        UnknownError
+    };
+
     /*!
      * @brief Constructs disk manager instance
      * @param console Console ref, used to print error msgs or logs
@@ -41,6 +46,8 @@ public:
      * @param new_interval Interval in seconds
      */
     auto SetAutoSaveInterval(gw::minutes new_interval) const noexcept -> void;
+
+    [[nodiscard]] auto CreateGamesLibraryFileBackup() const noexcept -> std::optional<CreateGamesLibraryFileBackupResult>;
 
 private:
     [[nodiscard]] static auto GetExeDirPath() noexcept -> std::string;

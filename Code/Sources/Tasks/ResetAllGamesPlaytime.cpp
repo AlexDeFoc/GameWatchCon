@@ -2,11 +2,11 @@
 // Copyright (C) 2026 Sava Alexandru-Andrei
 // License: GNU AGPL v3 or later - see LICENSE file
 
-#include "Pch.h"
-#include "Console.h"
-#include "GameLibrary.h"
-#include "Tasks/ResetAllGamesPlaytime.h"
-#include "Tasks/SettingsMenu.h"
+#include "Pch.hpp"
+#include "Console.hpp"
+#include "GameLibrary.hpp"
+#include "Tasks/ResetAllGamesPlaytime.hpp"
+#include "Tasks/SettingsMenu.hpp"
 
 auto gw::tasks::ResetAllGamesPlaytime(gw::Console& console, gw::AppState&, gw::AppSettings&, gw::GameLibrary& game_library) -> Task {
     if (game_library.IsEmpty()) {
@@ -32,3 +32,4 @@ auto gw::tasks::ResetAllGamesPlaytime(gw::Console& console, gw::AppState&, gw::A
 
     return Task{gw::tasks::SettingsMenu};
 }
+

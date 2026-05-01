@@ -2,11 +2,12 @@
 // Copyright (C) 2026 Sava Alexandru-Andrei
 // License: GNU AGPL v3 or later - see LICENSE file
 
-#include "Pch.h"
-#include "Tasks/StopApp.h"
-#include "AppState.h"
+#include "Pch.hpp"
+#include "Tasks/StopApp.hpp"
+#include "AppState.hpp"
 
 auto gw::tasks::StopApp(gw::Console&, gw::AppState& app_state, gw::AppSettings&, gw::GameLibrary&) -> Task {
     app_state.ToggleAppRunningState();
     return Task{};
 }
+

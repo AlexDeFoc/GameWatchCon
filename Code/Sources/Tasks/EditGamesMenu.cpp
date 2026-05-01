@@ -2,15 +2,15 @@
 // Copyright (C) 2026 Sava Alexandru-Andrei
 // License: GNU AGPL v3 or later - see LICENSE file
 
-#include "Pch.h"
-#include "Console.h"
-#include "AppSettings.h"
-#include "GameLibrary.h"
-#include "Tasks/EditGamesMenu.h"
-#include "Tasks/MainMenu.h"
-#include "Tasks/ChangeGameTitle.h"
-#include "Tasks/ResetGamePlaytime.h"
-#include "Tasks/DeleteGame.h"
+#include "Pch.hpp"
+#include "Console.hpp"
+#include "AppSettings.hpp"
+#include "GameLibrary.hpp"
+#include "Tasks/EditGamesMenu.hpp"
+#include "Tasks/MainMenu.hpp"
+#include "Tasks/ChangeGameTitle.hpp"
+#include "Tasks/ResetGamePlaytime.hpp"
+#include "Tasks/DeleteGame.hpp"
 
 auto gw::tasks::EditGamesMenu(gw::Console& console, gw::AppState&, gw::AppSettings&, gw::GameLibrary& game_library) -> Task {
     if (game_library.IsEmpty()) {
@@ -54,3 +54,4 @@ auto gw::tasks::EditGamesMenu(gw::Console& console, gw::AppState&, gw::AppSettin
             console.ThrowOnUnhandledCase();
     }
 }
+

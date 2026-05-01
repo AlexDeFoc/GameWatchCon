@@ -2,11 +2,11 @@
 // Copyright (C) 2026 Sava Alexandru-Andrei
 // License: GNU AGPL v3 or later - see LICENSE file
 
-#include "Pch.h"
-#include "Console.h"
-#include "GameLibrary.h"
-#include "Tasks/DeleteGame.h"
-#include "Tasks/EditGamesMenu.h"
+#include "Pch.hpp"
+#include "Console.hpp"
+#include "GameLibrary.hpp"
+#include "Tasks/DeleteGame.hpp"
+#include "Tasks/EditGamesMenu.hpp"
 
 auto gw::tasks::DeleteGame(gw::Console& console, gw::AppState&, gw::AppSettings&, gw::GameLibrary& game_library) -> Task {
     assert(game_library.GetGameCount() != 0 && "Attemted to delete game while no games exist");
@@ -43,3 +43,4 @@ auto gw::tasks::DeleteGame(gw::Console& console, gw::AppState&, gw::AppSettings&
 
     return Task{gw::tasks::EditGamesMenu};
 }
+

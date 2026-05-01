@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "GameEntry.h"
+#include "GameEntry.hpp"
 #include <vector>
 
 namespace gw {

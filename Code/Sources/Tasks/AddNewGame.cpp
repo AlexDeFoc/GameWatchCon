@@ -2,11 +2,11 @@
 // Copyright (C) 2026 Sava Alexandru-Andrei
 // License: GNU AGPL v3 or later - see LICENSE file
 
-#include "Pch.h"
-#include "Console.h"
-#include "GameLibrary.h"
-#include "Tasks/AddNewGame.h"
-#include "Tasks/MainMenu.h"
+#include "Pch.hpp"
+#include "Console.hpp"
+#include "GameLibrary.hpp"
+#include "Tasks/AddNewGame.hpp"
+#include "Tasks/MainMenu.hpp"
 
 auto gw::tasks::AddNewGame(gw::Console& console, gw::AppState&, gw::AppSettings&, gw::GameLibrary& game_library) -> Task {
     auto [new_game_title, input_status] = console.RequestGameTitle();
@@ -29,3 +29,4 @@ auto gw::tasks::AddNewGame(gw::Console& console, gw::AppState&, gw::AppSettings&
 
     return Task{gw::tasks::MainMenu};
 }
+

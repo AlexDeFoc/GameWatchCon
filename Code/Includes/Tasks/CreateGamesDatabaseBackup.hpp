@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "TaskType.h"
+#include "TaskType.hpp"
 
 namespace gw {
 class Console;
@@ -14,5 +14,5 @@ class GameLibrary;
 } // namespace gw
 
 namespace gw::tasks {
-[[nodiscard]] auto ResetAllGamesPlaytime(gw::Console&, gw::AppState&, gw::AppSettings&, gw::GameLibrary&) -> Task;
+[[nodiscard]] auto CreateGamesDatabaseBackup(gw::Console&, gw::AppState&, gw::AppSettings&, gw::GameLibrary&) -> Task;
 } // namespace gw::tasks

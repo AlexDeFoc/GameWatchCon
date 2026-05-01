@@ -4,7 +4,7 @@
 //
 #pragma once
 
-#include "AppSettingsDefaults.h"
+#include "AppSettingsDefaults.hpp"
 
 namespace gw {
 struct SettingsFile {

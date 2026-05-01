@@ -4,7 +4,7 @@ project(GameWatch LANGUAGES CXX)
 # GameWatch - Console Edition
 add_executable(GameWatchCon)
 
-target_precompile_headers(GameWatchCon PRIVATE "Code/Includes/Pch.h")
+target_precompile_headers(GameWatchCon PRIVATE "Code/Includes/Pch.hpp")
 
 target_sources(GameWatchCon PRIVATE
     "Code/Sources/Main.cpp"

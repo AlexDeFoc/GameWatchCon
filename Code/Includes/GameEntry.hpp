@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "GameClockTimeTypes.h"
+#include "GameClockTimeTypes.hpp"
 #include <string>
 #include <glaze/glaze.hpp>
 

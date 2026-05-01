@@ -2,11 +2,11 @@
 // Copyright (C) 2026 Sava Alexandru-Andrei
 // License: GNU AGPL v3 or later - see LICENSE file
 
-#include "Pch.h"
-#include "Console.h"
-#include "GameLibrary.h"
-#include "Tasks/DeleteAllGames.h"
-#include "Tasks/SettingsMenu.h"
+#include "Pch.hpp"
+#include "Console.hpp"
+#include "GameLibrary.hpp"
+#include "Tasks/DeleteAllGames.hpp"
+#include "Tasks/SettingsMenu.hpp"
 
 auto gw::tasks::DeleteAllGames(gw::Console& console, gw::AppState&, gw::AppSettings&, gw::GameLibrary& game_library) -> Task {
     if (game_library.IsEmpty()) {
@@ -37,3 +37,4 @@ auto gw::tasks::DeleteAllGames(gw::Console& console, gw::AppState&, gw::AppSetti
 
     return Task{gw::tasks::SettingsMenu};
 }
+

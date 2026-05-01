@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "GameClockTimeTypes.h"
+#include "GameClockTimeTypes.hpp"
 
 using namespace std::chrono_literals;
 

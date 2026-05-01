@@ -2,10 +2,10 @@
 // Copyright (C) 2026 Sava Alexandru-Andrei
 // License: GNU AGPL v3 or later - see LICENSE file
 
-#include "Pch.h"
-#include "GameLibrary.h"
+#include "Pch.hpp"
+#include "GameLibrary.hpp"
 
-gw::GameLibrary::GameLibrary(DiskManager& disk_manager, AppSettings& app_settings) : app_settings_{app_settings}, disk_manager_{disk_manager} {
+gw::GameLibrary::GameLibrary(Console& console, DiskManager& disk_manager, AppSettings& app_settings) : console_{console}, app_settings_{app_settings}, disk_manager_{disk_manager} {
     auto result = disk_manager_.LoadGamesLibraryFile();
 
     if (result.has_value())
@@ -187,7 +187,25 @@ auto gw::GameLibrary::ResetAllGamesPlaytime() noexcept -> void {
     disk_manager_.UpdateGamesLibraryFile(games_);
 }
 
-// TODO: Perform the action
 auto gw::GameLibrary::CreateGamesDatabaseBackup() const noexcept -> void {
-    // disk_manager_.CreateGamesDatabaseBackup();
+    const auto err = disk_manager_.CreateGamesLibraryFileBackup();
+
+    using ResType = gw::DiskManager::CreateGamesLibraryFileBackupResult;
+
+    if (err) {
+        switch (*err) {
+            case ResType::GamesLibraryFileNotFound:
+                console_.WriteLineToCache(Console::Tag::Error, "Failed to create games library backup, file doesn't exist!");
+                break;
+
+            case ResType::UnknownError:
+                console_.WriteLineToCache(Console::Tag::FatalError, "Failed to create games library backup, unknown filesystem error occured!");
+                break;
+
+            default:
+                console_.ThrowOnUnhandledCase();
+        }
+    } else {
+        console_.WriteLineToCache(Console::Tag::Success, "Created games library backup");
+    }
 }

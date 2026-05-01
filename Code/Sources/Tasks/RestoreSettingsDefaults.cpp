@@ -2,12 +2,12 @@
 // Copyright (C) 2026 Sava Alexandru-Andrei
 // License: GNU AGPL v3 or later - see LICENSE file
 
-#include "Pch.h"
-#include "Console.h"
-#include "GameLibrary.h"
-#include "AppSettings.h"
-#include "Tasks/RestoreSettingsDefaults.h"
-#include "Tasks/SettingsMenu.h"
+#include "Pch.hpp"
+#include "Console.hpp"
+#include "GameLibrary.hpp"
+#include "AppSettings.hpp"
+#include "Tasks/RestoreSettingsDefaults.hpp"
+#include "Tasks/SettingsMenu.hpp"
 
 auto gw::tasks::RestoreSettingsDefaults(gw::Console& console, gw::AppState&, gw::AppSettings& app_settings, gw::GameLibrary& game_library) -> Task {
     if (game_library.IsAnyGameActive()) {
@@ -33,3 +33,4 @@ auto gw::tasks::RestoreSettingsDefaults(gw::Console& console, gw::AppState&, gw:
 
     return Task{gw::tasks::SettingsMenu};
 }
+

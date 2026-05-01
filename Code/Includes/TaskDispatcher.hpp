@@ -4,12 +4,12 @@
 
 #pragma once
 
-#include "AppState.h"
-#include "Console.h"
-#include "DiskManager.h"
-#include "AppSettings.h"
-#include "GameLibrary.h"
-#include "TaskType.h"
+#include "AppState.hpp"
+#include "Console.hpp"
+#include "DiskManager.hpp"
+#include "AppSettings.hpp"
+#include "GameLibrary.hpp"
+#include "TaskType.hpp"
 
 namespace gw {
 class TaskDispatcher {

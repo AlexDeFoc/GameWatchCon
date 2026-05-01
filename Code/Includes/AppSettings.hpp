@@ -4,9 +4,9 @@
 
 #pragma once
 
-#include "GameClockTimeTypes.h"
-#include "DiskManager.h"
-#include "AppSettingsDefaults.h"
+#include "GameClockTimeTypes.hpp"
+#include "DiskManager.hpp"
+#include "AppSettingsDefaults.hpp"
 
 namespace gw {
 class AppSettings {

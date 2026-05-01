@@ -137,6 +137,8 @@ public:
      */
     auto WriteToCache(Color, std::string_view) -> void;
 
+    static auto WriteLine(std::string msg) noexcept -> void;
+
     /*!
      * @brief Writes message into stdout with a new line
      * @param msg Message which to write
@@ -177,7 +179,10 @@ public:
      */
     auto WriteLineToCache(Color, std::string_view) -> void;
 
-    // TODO: Add concept for the lambda
+    template <typename... Args>
+    auto ColorText(Color txt_color, std::format_string<Args...> fmt, Args&&... args) const -> std::string;
+
+    // TODO: Add concept for the lambda, to restrict its scope
     /*!
      * @brief Requests from the user to choose a game id from a list printed in cout
      * @param list_games_func Function which lists games for the user to choose the game id from
@@ -187,7 +192,7 @@ public:
      * @param is_request_cancellable Statement whether the request is cancellable
      */
     template <typename ListingFunc>
-    [[nodiscard]] auto RequestUserGameIDChoice(ListingFunc, int, bool = true, int = 0, bool = true) -> std::pair<int, InputStatus>;
+    [[nodiscard]] auto RequestUserGameIDChoice(ListingFunc, std::int64_t, bool = true, std::int64_t = 0, bool = true) -> std::pair<std::int64_t, InputStatus>;
 
     /*!
      * @brief Lists menu options then requests user input
@@ -198,7 +203,7 @@ public:
      * @return Index selected and InputStatus pair
      */
     template <std::size_t ArrSize>
-    [[nodiscard]] auto RequestUserMenuChoice(std::array<std::string, ArrSize>, bool = true, bool = true, std::size_t = 0) -> std::pair<std::size_t, InputStatus>;
+    [[nodiscard]] auto RequestUserMenuChoice(std::array<std::string, ArrSize>, bool = true, bool = true, std::int64_t = 0) -> std::pair<std::int64_t, InputStatus>;
 
     /*!
      * @brief Logs bug location and requests user to press any key, after which exit app
@@ -235,6 +240,7 @@ public:
     template <typename... Args>
     auto Write(Color, std::format_string<Args...>, Args&&...) const -> void;
 
+
     /*!
      * @brief Adds formated message to cache, which later will be written to stdout with a call to WriteCachedMsgs()
      * @param fmt Formatting string, tells how should the message be formatted from args
@@ -251,6 +257,7 @@ public:
      */
     template <typename... Args>
     auto WriteToCache(Tag, std::format_string<Args...>, Args&&...) -> void;
+
 
     /*!
      * @brief Colors formatted message and adds it to cache, which later will be written to stdout with a call to WriteCachedMsgs()
@@ -315,6 +322,8 @@ public:
 
 
 private:
+    [[nodiscard]] auto CheckSupportForANSIEscapes() const noexcept -> bool;
+
     /*!
      * @brief Gets message color from a message tag
      * @param tag Message tag
@@ -342,16 +351,24 @@ private:
     UINT cin_codepage_original{};
     UINT cout_codepage_original{};
     DWORD cout_mode_original{};
-    bool cout_supports_colored_text_{false};
 #endif
 
+    bool cout_supports_colored_text_{false};
     std::string cached_msgs_{};
 };
 } // namespace gw
 
+template <typename... Args>
+auto gw::Console::ColorText(const Color txt_color, std::format_string<Args...> fmt, Args&&... args) const -> std::string {
+    if (cout_supports_colored_text_)
+        return std::format("{}{}{}", GetColorAsText(txt_color), std::format(fmt, std::forward<Args>(args)...), "\x1b[0m");
+    else
+        return std::format(fmt, std::forward<Args>(args)...);
+}
+
 // TODO: Check if it even has anymore usage!
 template <typename ListingFunc>
-auto gw::Console::RequestUserGameIDChoice(ListingFunc list_games_func, int games_count, bool is_active_game_id_valid_choice, int active_game_id, bool is_request_cancellable) -> std::pair<int, InputStatus> {
+auto gw::Console::RequestUserGameIDChoice(ListingFunc list_games_func, std::int64_t games_count, bool is_active_game_id_valid_choice, std::int64_t active_game_id, bool is_request_cancellable) -> std::pair<std::int64_t, InputStatus> {
     while (true) {
         ClearCout();
         list_games_func();
@@ -364,7 +381,7 @@ auto gw::Console::RequestUserGameIDChoice(ListingFunc list_games_func, int games
 
         if (std::string input{}; std::getline(std::cin, input)) {
             try {
-                auto selected_game_id = std::stoi(input);
+                std::int64_t selected_game_id = std::stoll(input);
 
                 if (selected_game_id < 1 || selected_game_id > games_count) {
                     WriteLineToCache(Tag::Error, "Input out of range!");
@@ -397,7 +414,7 @@ auto gw::Console::RequestUserGameIDChoice(ListingFunc list_games_func, int games
 }
 
 template <std::size_t ArrSize>
-[[nodiscard]] auto gw::Console::RequestUserMenuChoice(std::array<std::string, ArrSize> menu_opts, bool is_request_cancellable, bool menu_opts_contain_special_index, std::size_t special_index_val) -> std::pair<std::size_t, InputStatus> {
+[[nodiscard]] auto gw::Console::RequestUserMenuChoice(std::array<std::string, ArrSize> menu_opts, bool is_request_cancellable, bool menu_opts_contain_special_index, std::int64_t special_index_val) -> std::pair<std::int64_t, InputStatus> {
     while (true) {
         ClearCout();
         WriteCachedMsgs();
@@ -416,9 +433,9 @@ template <std::size_t ArrSize>
 
         if (std::string input{}; std::getline(std::cin, input)) {
             try {
-                std::size_t selected_opt_index = std::stoull(input);
+                std::int64_t selected_opt_index = std::stoll(input);
 
-                if ((selected_opt_index < 1 || selected_opt_index > ArrSize - 1) && (menu_opts_contain_special_index && special_index_val != selected_opt_index)) {
+                if ((selected_opt_index < 1 || selected_opt_index > static_cast<std::int64_t>(ArrSize) - 1) && (menu_opts_contain_special_index && special_index_val != selected_opt_index)) {
                     WriteLineToCache(Tag::Error, "Input out of range!");
                     continue;
                 } else

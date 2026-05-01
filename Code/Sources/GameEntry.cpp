@@ -2,8 +2,8 @@
 // Copyright (C) 2026 Sava Alexandru-Andrei
 // License: GNU AGPL v3 or later - see LICENSE file
 
-#include "Pch.h"
-#include "GameEntry.h"
+#include "Pch.hpp"
+#include "GameEntry.hpp"
 
 gw::GameEntry::GameEntry(std::string&& new_title) noexcept : title{std::move(new_title)} {}
 
@@ -26,3 +26,4 @@ auto gw::GameEntry::SetGameTitle(std::string&& new_title) noexcept -> void {
 auto gw::GameEntry::ResetPlaytime() noexcept -> void {
     playtime = 0;
 }
+
