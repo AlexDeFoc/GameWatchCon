@@ -2,11 +2,11 @@
 // Copyright (C) 2026 Sava Alexandru-Andrei
 // License: GNU AGPL v3 or later - see LICENSE file
 
-#include "Pch.h"
-#include "Console.h"
-#include "GameLibrary.h"
-#include "Tasks/ChangeGameTitle.h"
-#include "Tasks/EditGamesMenu.h"
+#include "Pch.hpp"
+#include "Console.hpp"
+#include "GameLibrary.hpp"
+#include "Tasks/ChangeGameTitle.hpp"
+#include "Tasks/EditGamesMenu.hpp"
 
 auto gw::tasks::ChangeGameTitle(gw::Console& console, gw::AppState&, gw::AppSettings&, gw::GameLibrary& game_library) -> Task {
     assert(game_library.GetGameCount() != 0 && "Attemted to game title while no games exist");
@@ -46,3 +46,4 @@ auto gw::tasks::ChangeGameTitle(gw::Console& console, gw::AppState&, gw::AppSett
 
     return Task{gw::tasks::EditGamesMenu};
 }
+

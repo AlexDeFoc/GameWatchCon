@@ -2,8 +2,8 @@
 // Copyright (C) 2026 Sava Alexandru-Andrei
 // License: GNU AGPL v3 or later - see LICENSE file
 
-#include "Pch.h"
-#include "AppSettings.h"
+#include "Pch.hpp"
+#include "AppSettings.hpp"
 
 gw::AppSettings::AppSettings(DiskManager& disk_manager) : disk_manager_{disk_manager} {
     const auto result = disk_manager_.LoadSettingsFile();

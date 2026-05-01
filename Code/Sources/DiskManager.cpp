@@ -2,9 +2,9 @@
 // Copyright (C) 2026 Sava Alexandru-Andrei
 // License: GNU AGPL v3 or later - see LICENSE file
 
-#include "Pch.h"
-#include "DiskManager.h"
-#include "GamesLibraryFile.h"
+#include "Pch.hpp"
+#include "DiskManager.hpp"
+#include "GamesLibraryFile.hpp"
 
 // Public
 gw::DiskManager::DiskManager() : settings_file_path_{GetSettingsFilepath()}, games_library_file_path_{GetGamesLibraryFilepath()}, settings_backup_file_path_{GetSettingsBackupFilepath()}, games_library_backup_file_path_{GetGamesLibraryBackupFilepath()} {}
@@ -235,3 +235,4 @@ auto gw::DiskManager::GetSettingsBackupFilepath() noexcept -> std::string {
 auto gw::DiskManager::GetGamesLibraryBackupFilepath() noexcept -> std::string {
     return (std::filesystem::path(GetExeDirPath()) / games_library_backup_file_name_).string();
 }
+

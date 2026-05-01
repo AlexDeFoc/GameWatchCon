@@ -2,10 +2,11 @@
 // Copyright (C) 2026 Sava Alexandru-Andrei
 // License: GNU AGPL v3 or later - see LICENSE file
 
-#include "Pch.h"
-#include "Tasks/StartApp.h"
-#include "Tasks/MainMenu.h"
+#include "Pch.hpp"
+#include "Tasks/StartApp.hpp"
+#include "Tasks/MainMenu.hpp"
 
 auto gw::tasks::StartApp(gw::Console&, gw::AppState&, gw::AppSettings&, gw::GameLibrary&) -> Task {
     return Task{gw::tasks::MainMenu};
 }
+

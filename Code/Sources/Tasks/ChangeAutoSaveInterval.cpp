@@ -2,12 +2,12 @@
 // Copyright (C) 2026 Sava Alexandru-Andrei
 // License: GNU AGPL v3 or later - see LICENSE file
 
-#include "Pch.h"
-#include "Console.h"
-#include "GameLibrary.h"
-#include "AppSettings.h"
-#include "Tasks/ChangeAutoSaveInterval.h"
-#include "Tasks/SettingsMenu.h"
+#include "Pch.hpp"
+#include "Console.hpp"
+#include "GameLibrary.hpp"
+#include "AppSettings.hpp"
+#include "Tasks/ChangeAutoSaveInterval.hpp"
+#include "Tasks/SettingsMenu.hpp"
 
 namespace {
 [[nodiscard]] auto GetFormattedInterval(std::chrono::seconds) noexcept -> std::string;
@@ -69,3 +69,4 @@ namespace {
     return formatted_clock.empty() ? "0 s" : formatted_clock;
 }
 } // namespace
+

@@ -2,8 +2,8 @@
 // Copyright (C) 2026 Sava Alexandru-Andrei
 // License: GNU AGPL v3 or later - see LICENSE file
 
-#include "Pch.h"
-#include "TaskDispatcher.h"
+#include "Pch.hpp"
+#include "TaskDispatcher.hpp"
 
 int main() {
     try {
@@ -15,3 +15,4 @@ int main() {
 
     return 0;
 }
+

@@ -6,9 +6,9 @@
 
 #include <string_view>
 #include <vector>
-#include "GameClockTimeTypes.h"
-#include "AppSettingsFile.h"
-#include "GameEntry.h"
+#include "GameClockTimeTypes.hpp"
+#include "AppSettingsFile.hpp"
+#include "GameEntry.hpp"
 
 namespace gw {
 class DiskManager {

@@ -137,6 +137,8 @@ public:
      */
     auto WriteToCache(Color, std::string_view) -> void;
 
+    static auto WriteLine(std::string msg) noexcept -> void;
+
     /*!
      * @brief Writes message into stdout with a new line
      * @param msg Message which to write
@@ -177,7 +179,10 @@ public:
      */
     auto WriteLineToCache(Color, std::string_view) -> void;
 
-    // TODO: Add concept for the lambda
+    template <typename... Args>
+    auto ColorText(Color txt_color, std::format_string<Args...> fmt, Args&&... args) const -> std::string;
+
+    // TODO: Add concept for the lambda, to restrict its scope
     /*!
      * @brief Requests from the user to choose a game id from a list printed in cout
      * @param list_games_func Function which lists games for the user to choose the game id from
@@ -235,6 +240,7 @@ public:
     template <typename... Args>
     auto Write(Color, std::format_string<Args...>, Args&&...) const -> void;
 
+
     /*!
      * @brief Adds formated message to cache, which later will be written to stdout with a call to WriteCachedMsgs()
      * @param fmt Formatting string, tells how should the message be formatted from args
@@ -251,6 +257,7 @@ public:
      */
     template <typename... Args>
     auto WriteToCache(Tag, std::format_string<Args...>, Args&&...) -> void;
+
 
     /*!
      * @brief Colors formatted message and adds it to cache, which later will be written to stdout with a call to WriteCachedMsgs()
@@ -350,6 +357,14 @@ private:
     std::string cached_msgs_{};
 };
 } // namespace gw
+
+template <typename... Args>
+auto gw::Console::ColorText(const Color txt_color, std::format_string<Args...> fmt, Args&&... args) const -> std::string {
+    if (cout_supports_colored_text_)
+        return std::format("{}{}{}", GetColorAsText(txt_color), std::format(fmt, std::forward<Args>(args)...), "\x1b[0m");
+    else
+        return std::format(fmt, std::forward<Args>(args)...);
+}
 
 // TODO: Check if it even has anymore usage!
 template <typename ListingFunc>

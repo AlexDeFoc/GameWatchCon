@@ -2,12 +2,12 @@
 // Copyright (C) 2026 Sava Alexandru-Andrei
 // License: GNU AGPL v3 or later - see LICENSE file
 
-#include "Pch.h"
-#include "Console.h"
-#include "AppSettings.h"
-#include "GameLibrary.h"
-#include "Tasks/ToggleAutoSaveStatus.h"
-#include "Tasks/SettingsMenu.h"
+#include "Pch.hpp"
+#include "Console.hpp"
+#include "AppSettings.hpp"
+#include "GameLibrary.hpp"
+#include "Tasks/ToggleAutoSaveStatus.hpp"
+#include "Tasks/SettingsMenu.hpp"
 
 auto gw::tasks::ToggleAutoSaveStatus(gw::Console& console, gw::AppState&, gw::AppSettings& app_settings, gw::GameLibrary& game_library) -> Task {
     if (game_library.IsAnyGameActive()) {
@@ -18,3 +18,4 @@ auto gw::tasks::ToggleAutoSaveStatus(gw::Console& console, gw::AppState&, gw::Ap
     app_settings.ToggleAutoSaveStatus();
     return Task{gw::tasks::SettingsMenu};
 }
+

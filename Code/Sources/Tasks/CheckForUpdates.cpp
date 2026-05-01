@@ -2,12 +2,12 @@
 // Copyright (C) 2026 Sava Alexandru-Andrei
 // License: GNU AGPL v3 or later - see LICENSE file
 
-#include "Pch.h"
-#include "Tasks/CheckForUpdates.h"
-#include "Tasks/MainMenu.h"
-#include "AppState.h"
-#include "Console.h"
-#include "AppVersionFile.h"
+#include "Pch.hpp"
+#include "Tasks/CheckForUpdates.hpp"
+#include "Tasks/MainMenu.hpp"
+#include "AppState.hpp"
+#include "Console.hpp"
+#include "RepoMetadata.hpp"
 
 namespace {
 struct VersionAsNumbers {
@@ -20,6 +20,7 @@ struct VersionAsNumbers {
 
 [[nodiscard]] auto CanUserConnectToTheInternet() noexcept -> bool;
 [[nodiscard]] auto GetVersionFromRepoAsText() noexcept -> std::string;
+[[nodiscard]] auto GetChangesFromRepo(std::string_view latest_version_found) noexcept -> std::optional<std::vector<gw::AppUpdateChangeInFile>>;
 [[nodiscard]] auto ExtractVersionFromText(std::string_view ver_text) noexcept -> std::optional<VersionAsNumbers>;
 [[nodiscard]] auto IsThereAnUpdateAvailable(const VersionAsNumbers&, const VersionAsNumbers&) noexcept -> bool;
 } // namespace
@@ -29,10 +30,10 @@ auto gw::tasks::CheckForUpdates(gw::Console& console, gw::AppState&, gw::AppSett
     static VersionAsNumbers current_version{};
 
     console.ClearCout();
-    console.WriteLineToCache(Console::Tag::Info, "Current version: {}.{}.{}", current_version.Major, current_version.Minor, current_version.Patch);
+    console.WriteLine(Console::Tag::Info, "Current version: {}.{}.{}", current_version.Major, current_version.Minor, current_version.Patch);
 
     if (!CanUserConnectToTheInternet()) {
-        console.WriteLineToCache(Console::Tag::Error, "It looks like you're disconnected from the internet");
+        console.WriteLine(Console::Tag::Error, "It looks like you're disconnected from the internet");
         return Task{gw::tasks::MainMenu};
     }
 
@@ -41,16 +42,34 @@ auto gw::tasks::CheckForUpdates(gw::Console& console, gw::AppState&, gw::AppSett
     const auto online_version = ExtractVersionFromText(online_version_as_text);
 
     if (online_version == std::nullopt) {
-        console.WriteLineToCache(Console::Tag::Error, "Version file on the GitHub repo isn't formatted correctly");
+        console.WriteLine(Console::Tag::Error, "Version file on the GitHub repo isn't formatted correctly");
         return Task{gw::tasks::MainMenu};
     }
 
-    console.WriteLineToCache(Console::Tag::Info, "Online version: {}.{}.{}", online_version->Major, online_version->Minor, online_version->Patch);
+    console.WriteLine(Console::Tag::Info, "Online version: {}.{}.{}", online_version->Major, online_version->Minor, online_version->Patch);
 
     if (IsThereAnUpdateAvailable(current_version, *online_version))
-        console.WriteLineToCache(Console::Tag::Tip, "There exist available updates");
+        console.WriteLine(Console::Tag::Tip, "There exist available updates");
     else
-        console.WriteLineToCache(Console::Tag::Tip, "There are no available updates");
+        console.WriteLine(Console::Tag::Tip, "There are no available updates");
+
+    const auto result = GetChangesFromRepo(online_version_as_text);
+
+    if (result == std::nullopt) {
+        console.WriteLine(Console::Tag::Info, "No changes found in change log");
+    } else {
+        const auto& latest_changes_in_log = *result;
+        const auto changes_version = latest_changes_in_log[0].version;
+        Console::WriteLine(console.ColorText(Console::Color::Red, "Changes in version {}:", changes_version));
+        for (const auto& change : latest_changes_in_log) {
+            Console::WriteLine("Change type: {}", change.type);
+            Console::WriteLine("Change description: {}", change.description);
+            std::println();
+        }
+    }
+
+    console.WriteLine(Console::Tag::Tip, "Press any key to go back");
+    Console::RequestKeyPress();
 
     return Task{gw::tasks::MainMenu};
 }
@@ -126,5 +145,37 @@ auto IsThereAnUpdateAvailable(const VersionAsNumbers& current_ver, const Version
         available_update_status = true;
 
     return available_update_status;
+}
+
+auto GetChangesFromRepo(const std::string_view latest_version_found) noexcept -> std::optional<std::vector<gw::AppUpdateChangeInFile>> {
+    // Cache-Busting: Append random text at the end to make sure we don't get cached results from CDN
+    const auto timestamp = std::chrono::system_clock::now().time_since_epoch().count();
+    const std::string url = "https://raw.githubusercontent.com/AlexDeFoc/GameWatchCon/main/Metadata/changes_log.json?t=" + std::to_string(timestamp);
+    const auto response = cpr::Get(
+        cpr::Url{url},
+        cpr::Header{{"User-Agent", "GameWatchCon-CheckerForUpdates"}},
+        cpr::ConnectTimeout(3000), // timeout to find the server (user loses connection while connecting)
+        cpr::Timeout{7000} // timeout to download file
+    );
+
+    if (response.status_code != 200 || response.error)
+        return std::nullopt;
+
+    const auto changes_log_as_raw_json = response.text;
+
+    gw::AppChangesLogFile file{};
+    const auto err = glz::read<glz::opts{.error_on_unknown_keys = false, .error_on_missing_keys = false}>(file, changes_log_as_raw_json);
+    if (err)
+        return std::nullopt;
+
+    // clang-format off
+    auto latest_changes = file.changes | std::views::filter([&](auto&& change) { return change.version == latest_version_found; })
+                                       | std::ranges::to<std::vector<gw::AppUpdateChangeInFile>>();
+    // clang-format on
+
+    if (latest_changes.empty())
+        return std::nullopt;
+
+    return latest_changes;
 }
 } // namespace

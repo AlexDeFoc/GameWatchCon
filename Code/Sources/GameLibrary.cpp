@@ -2,8 +2,8 @@
 // Copyright (C) 2026 Sava Alexandru-Andrei
 // License: GNU AGPL v3 or later - see LICENSE file
 
-#include "Pch.h"
-#include "GameLibrary.h"
+#include "Pch.hpp"
+#include "GameLibrary.hpp"
 
 gw::GameLibrary::GameLibrary(Console& console, DiskManager& disk_manager, AppSettings& app_settings) : console_{console}, app_settings_{app_settings}, disk_manager_{disk_manager} {
     auto result = disk_manager_.LoadGamesLibraryFile();

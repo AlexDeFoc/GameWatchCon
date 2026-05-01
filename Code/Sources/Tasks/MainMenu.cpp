@@ -2,17 +2,17 @@
 // Copyright (C) 2026 Sava Alexandru-Andrei
 // License: GNU AGPL v3 or later - see LICENSE file
 
-#include "Pch.h"
-#include "Console.h"
-#include "GameLibrary.h"
-#include "Tasks/MainMenu.h"
-#include "Tasks/StopApp.h"
-#include "Tasks/ListGames.h"
-#include "Tasks/EditGamesMenu.h"
-#include "Tasks/AddNewGame.h"
-#include "Tasks/SettingsMenu.h"
-#include "Tasks/CheckForUpdates.h"
-#include "Tasks/ToggleGameClock.h"
+#include "Pch.hpp"
+#include "Console.hpp"
+#include "GameLibrary.hpp"
+#include "Tasks/MainMenu.hpp"
+#include "Tasks/StopApp.hpp"
+#include "Tasks/ListGames.hpp"
+#include "Tasks/EditGamesMenu.hpp"
+#include "Tasks/AddNewGame.hpp"
+#include "Tasks/SettingsMenu.hpp"
+#include "Tasks/CheckForUpdates.hpp"
+#include "Tasks/ToggleGameClock.hpp"
 
 auto gw::tasks::MainMenu(gw::Console& console, gw::AppState&, gw::AppSettings&, gw::GameLibrary& game_library) -> Task {
     std::array<std::string, 7> menu_opts = {"List games",
@@ -64,3 +64,4 @@ auto gw::tasks::MainMenu(gw::Console& console, gw::AppState&, gw::AppSettings&, 
             console.ThrowOnUnhandledCase();
     }
 }
+

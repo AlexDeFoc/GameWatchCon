@@ -5,7 +5,7 @@
 #pragma once
 
 // IWYU pragma: begin_exports
-#include "PlatformSpecificHeaders.h" // NOTE: Keep this as the first header, to get priority for defined macros inside
+#include "PlatformSpecificHeaders.hpp" // NOTE: Keep this as the first header, to get priority for defined macros inside
 #include <glaze/glaze.hpp>
 #include <cpr/cpr.h>
 #include <climits> // PATH_MAX

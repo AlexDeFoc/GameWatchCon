@@ -2,17 +2,17 @@
 // Copyright (C) 2026 Sava Alexandru-Andrei
 // License: GNU AGPL v3 or later - see LICENSE file
 
-#include "Pch.h"
-#include "Console.h"
-#include "AppSettings.h"
-#include "Tasks/SettingsMenu.h"
-#include "Tasks/MainMenu.h"
-#include "Tasks/ToggleAutoSaveStatus.h"
-#include "Tasks/ChangeAutoSaveInterval.h"
-#include "Tasks/RestoreSettingsDefaults.h"
-#include "Tasks/CreateGamesDatabaseBackup.h"
-#include "Tasks/ResetAllGamesPlaytime.h"
-#include "Tasks/DeleteAllGames.h"
+#include "Pch.hpp"
+#include "Console.hpp"
+#include "AppSettings.hpp"
+#include "Tasks/SettingsMenu.hpp"
+#include "Tasks/MainMenu.hpp"
+#include "Tasks/ToggleAutoSaveStatus.hpp"
+#include "Tasks/ChangeAutoSaveInterval.hpp"
+#include "Tasks/RestoreSettingsDefaults.hpp"
+#include "Tasks/CreateGamesDatabaseBackup.hpp"
+#include "Tasks/ResetAllGamesPlaytime.hpp"
+#include "Tasks/DeleteAllGames.hpp"
 
 namespace {
 [[nodiscard]] auto GetFormattedInterval(std::chrono::seconds) noexcept -> std::string;
@@ -92,3 +92,4 @@ namespace {
     return duration_str.empty() ? "0 s" : duration_str;
 }
 } // namespace
+

@@ -2,8 +2,8 @@
 // Copyright (C) 2026 Sava Alexandru-Andrei
 // License: GNU AGPL v3 or later - see LICENSE file
 
-#include "Pch.h"
-#include "Console.h"
+#include "Pch.hpp"
+#include "Console.hpp"
 
 // Public
 gw::Console::Console() noexcept {
@@ -356,6 +356,10 @@ auto gw::Console::WriteToCache(const Color msg_color, const std::string_view msg
         std::format_to(it, "{}{}{}", GetColorAsText(msg_color), msg, "\x1b[0m");
     else
         std::format_to(it, "{}", msg);
+}
+
+auto gw::Console::WriteLine(std::string msg) noexcept -> void {
+    std::println("{}", std::move(msg));
 }
 
 auto gw::Console::WriteLine(const std::string_view msg) noexcept -> void {

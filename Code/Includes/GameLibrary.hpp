@@ -8,9 +8,9 @@
 #include <condition_variable>
 #include <thread>
 #include <string_view>
-#include "AppSettings.h"
-#include "GameEntry.h"
-#include "Console.h"
+#include "AppSettings.hpp"
+#include "GameEntry.hpp"
+#include "Console.hpp"
 
 namespace gw {
 class GameLibrary {
