@@ -5,7 +5,7 @@
 #pragma once
 
 // IWYU pragma: begin_exports
-#include "WindowsHeader.h" // NOTE: Keep this as the first header, to get priority for defined macros inside
+#include "PlatformSpecificHeaders.h" // NOTE: Keep this as the first header, to get priority for defined macros inside
 #include <glaze/glaze.hpp>
 #include <cpr/cpr.h>
 #include <span>

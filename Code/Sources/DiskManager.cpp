@@ -118,43 +118,83 @@ auto gw::DiskManager::SetAutoSaveInterval(const gw::minutes new_interval) const 
     [[maybe_unused]] auto _ = glz::write_file_json<pretty_opts>(file, settings_file_path_, std::string{});
 }
 
+// TODO: Replace all #ifdef with #if defined() in the codebase
 // Private
 auto gw::DiskManager::GetExeDirPath() noexcept -> std::string {
-#ifdef _WIN32
-    DWORD path_length_capacity = MAX_PATH;
-    std::wstring wide_path{};
+    std::filesystem::path exe_path{};
 
-    do {
-        wide_path.resize(path_length_capacity);
-        auto actual_path_length = ::GetModuleFileNameW(nullptr, wide_path.data(), path_length_capacity);
+    auto safe_current_path = []() noexcept -> std::string {
+        std::error_code ec;
+        auto p = std::filesystem::current_path(ec);
+        return ec ? std::string{"."} : p.string();
+    };
 
-        if (actual_path_length == 0)
-            return std::filesystem::current_path().string();
+    try {
+#if defined(_WIN32)
+        DWORD path_length_capacity = MAX_PATH;
+        std::wstring wide_path{};
 
-        if (actual_path_length < path_length_capacity) {
-            wide_path.resize(actual_path_length);
-            break;
+        do {
+            wide_path.resize(path_length_capacity);
+            auto actual_path_length = ::GetModuleFileNameW(nullptr, wide_path.data(), path_length_capacity);
+
+            if (actual_path_length == 0)
+                return safe_current_path();
+
+            if (actual_path_length < path_length_capacity) {
+                wide_path.resize(actual_path_length);
+                break;
+            }
+
+            path_length_capacity *= 2;
+        } while (true);
+
+        auto utf8_bytes_needed = ::WideCharToMultiByte(CP_UTF8, 0, wide_path.c_str(), -1, nullptr, 0, nullptr, nullptr);
+
+        if (utf8_bytes_needed == 0)
+            return safe_current_path();
+
+        std::string utf8_path(static_cast<std::size_t>(utf8_bytes_needed - 1), '\0'); // -1 to exclude null terminator
+
+        auto utf8_bytes_written = ::WideCharToMultiByte(CP_UTF8, 0, wide_path.c_str(), -1, utf8_path.data(), utf8_bytes_needed, nullptr, nullptr);
+
+        if (utf8_bytes_written == 0)
+            return safe_current_path();
+
+        exe_path = std::filesystem::path{utf8_path};
+#elif defined(__linux__)
+        char buf[PATH_MAX];
+        ssize_t len = readlink("/proc/self/exe", buf, sizeof(buf) - 1);
+
+        if (len != -1) {
+            buf[len] = '\0';
+            exe_path = buf;
+        } else {
+            return safe_current_path();
+        }
+#elif defined(__APPLE__)
+        char buf[PROC_PIDPATHINFO_MAXSIZE]; // typically 4096
+
+        if (proc_pidpath(getpid(), buf, sizeof(buf)) > 0) {
+            exe_path = buf;
+        } else {
+            return safe_current_path();
+        }
+#else
+        return safe_current_path();
+#endif
+        // Resolve any symlinks to get the real path
+        std::error_code ec;
+        auto canonical = std::filesystem::canonical(exe_path, ec);
+        if (!ec) {
+            return canonical.parent_path().string();
         }
 
-        path_length_capacity *= 2;
-    } while (true);
-
-    auto utf8_bytes_needed = ::WideCharToMultiByte(CP_UTF8, 0, wide_path.c_str(), -1, nullptr, 0, nullptr, nullptr);
-
-    if (utf8_bytes_needed == 0)
-        return std::filesystem::current_path().string();
-
-    std::string utf8_path(static_cast<std::size_t>(utf8_bytes_needed - 1), '\0'); // -1 to exclude null terminator
-
-    auto utf8_bytes_written = ::WideCharToMultiByte(CP_UTF8, 0, wide_path.c_str(), -1, utf8_path.data(), utf8_bytes_needed, nullptr, nullptr);
-
-    if (utf8_bytes_written == 0)
-        return std::filesystem::current_path().string();
-
-    return std::filesystem::path{utf8_path}.parent_path().string();
-#else
-    return std::filesystem::current_path().string(); // TODO: Impl corrent way for linux & mac
-#endif
+        // If canonical failed, fall back to the unresolved path
+        return exe_path.parent_path().string();
+    } catch (...) {
+        return safe_current_path();
+    }
 }
 
 auto gw::DiskManager::GetSettingsFilepath() noexcept -> std::string {
