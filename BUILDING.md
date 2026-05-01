@@ -1,17 +1,25 @@
-# Contributing/Developing - Tips
+# Dependencies
+* CMake `4.3`
+* Compatible toolchains/compilers that can compiler c++23 code -> [Toolchains section](#supported-toolchains)
+* Vcpkg - at least `2026-04-08-e0612b42ce44e55a0e630f2ee9d3c533a63d8bc1`
 
-## Clagd intellisense
+# Supported toolchains
+## Windows
+* MSVC - Visual Studio 2026 (may work with older version, but you must add the cmake presets yourself, and i haven't tried with older versions)
+* ClangCL - at least `Version 22.1.4` (may work with older versions, but i haven't tried)
+## Linux
+* Clang - `(unknown version)` (because i haven't tested on the platform)
+## MacOS
+* Clang - `(unknown version)` (because i haven't tested on the platform)
 
-* Keep one preset always build once at least when developing. This ensures there is only one location for the file 'compile\_commands.json'
+*NOTE: If you want more toolchains you will need to add them to the 'CMakePresets.json' file!*
 
-* Modify the '.clangd' file so it targets the cmake preset output path which you will primary work with. THIS doesn't imply that you cannot compile on other presets, but when you develop you should use that primary one you chose.
+# Steps to build
+* Clone the repository
+* Go into the GameWatchCon directory
+* Run the following commands (replace $ with whatever preset you want):
+    * `cmake --preset a` <- this will list all available presets (optional)
+    * `cmake --preset '$'`
+    * `cmake --build --preset '$'`
 
-## Speed up CMake configuration
-
-Run the wished preset from CMakePresets.json inside this command (replace the triplet value):
-`vcpkg install --triplet=x64-windows-static-md cpr cpr[ssl] glaze glaze[ssl]`
-
-NOTE: Run the command outside the project folder (to be able to use classic mode).
-
-Reason: This installs the project dependencies on whole system, and when you configure the project cmake preset, vcpkg will pull the cached
-binaries from the system.
+*NOTE: The output binary is in the `Output/` folder
