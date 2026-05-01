@@ -7,26 +7,26 @@
 #include "Tasks/MainMenu.h"
 #include "AppState.h"
 #include "Console.h"
-
-// TODO: Make everything cleaner
+#include "AppVersionFile.h"
 
 namespace {
-struct Version {
-    std::int64_t Major;
-    std::int64_t Minor;
-    std::int64_t Patch;
+struct VersionAsNumbers {
+    std::int64_t Major{1};
+    std::int64_t Minor{0};
+    std::int64_t Patch{0};
 
-    auto operator<=>(const Version&) const noexcept = default;
+    auto operator<=>(const VersionAsNumbers&) const noexcept = default;
 };
 
 [[nodiscard]] auto CanUserConnectToTheInternet() noexcept -> bool;
-[[nodiscard]] auto GetVersionFromRepoAsText() noexcept -> std::optional<std::string>;
-[[nodiscard]] auto ExtractVersionFromText(std::string_view ver_text) noexcept -> std::optional<Version>;
-[[nodiscard]] auto IsThereAnUpdateAvailable(const Version&, const Version&) noexcept -> bool;
+[[nodiscard]] auto GetVersionFromRepoAsText() noexcept -> std::string;
+[[nodiscard]] auto ExtractVersionFromText(std::string_view ver_text) noexcept -> std::optional<VersionAsNumbers>;
+[[nodiscard]] auto IsThereAnUpdateAvailable(const VersionAsNumbers&, const VersionAsNumbers&) noexcept -> bool;
 } // namespace
 
+// TODO: Clean up the namings
 auto gw::tasks::CheckForUpdates(gw::Console& console, gw::AppState&, gw::AppSettings&, gw::GameLibrary&) -> Task {
-    static Version current_version{.Major = 1, .Minor = 0, .Patch = 0};
+    static VersionAsNumbers current_version{};
 
     console.ClearCout();
     console.WriteLineToCache(Console::Tag::Info, "Current version: {}.{}.{}", current_version.Major, current_version.Minor, current_version.Patch);
@@ -38,12 +38,7 @@ auto gw::tasks::CheckForUpdates(gw::Console& console, gw::AppState&, gw::AppSett
 
     const auto online_version_as_text = GetVersionFromRepoAsText();
 
-    if (online_version_as_text == std::nullopt) {
-        console.WriteLineToCache(Console::Tag::Error, "Something went wrong while connecting to the repository from GitHub");
-        return Task{gw::tasks::MainMenu};
-    }
-
-    const auto online_version = ExtractVersionFromText(*online_version_as_text);
+    const auto online_version = ExtractVersionFromText(online_version_as_text);
 
     if (online_version == std::nullopt) {
         console.WriteLineToCache(Console::Tag::Error, "Version file on the GitHub repo isn't formatted correctly");
@@ -71,36 +66,43 @@ auto CanUserConnectToTheInternet() noexcept -> bool {
     return (response.status_code == 204);
 }
 
-auto GetVersionFromRepoAsText() noexcept -> std::optional<std::string> {
+auto GetVersionFromRepoAsText() noexcept -> std::string {
+    gw::AppVersionFile file{};
+
     // Cache-Busting: Append random text at the end to make sure we don't get cached results from CDN
     const auto timestamp = std::chrono::system_clock::now().time_since_epoch().count();
-    const std::string url = "https://raw.githubusercontent.com/AlexDeFoc/GameWatchCon/main/current_app_version.txt?t=" + std::to_string(timestamp);
+    const std::string url = "https://raw.githubusercontent.com/AlexDeFoc/GameWatchCon/main/Metadata/app_version.json?t=" + std::to_string(timestamp);
     const auto response = cpr::Get(
         cpr::Url{url},
-        cpr::Header{{"User-Agent", "GameWatchCon-App-VersionCheckerForUpdates"}},
+        cpr::Header{{"User-Agent", "GameWatchCon-CheckerForUpdates"}},
         cpr::ConnectTimeout(3000), // timeout to find the server (user loses connection while connecting)
         cpr::Timeout{7000} // timeout to download file
     );
 
     if (response.status_code != 200 || response.error)
-        return std::nullopt; // TODO: maybe check each error code? to give the user more context
+        return file.version;
 
-    auto cleaned_version = response.text;
-    cleaned_version.erase(std::ranges::remove_if(cleaned_version, ::isspace).begin(), cleaned_version.end());
-    return cleaned_version;
+    const auto version_as_raw_json = response.text;
+
+    const auto err = glz::read<glz::opts{.error_on_unknown_keys = false, .error_on_missing_keys = false}>(file, version_as_raw_json);
+    if (err)
+        return file.version;
+
+    return file.version;
 }
 
-auto ExtractVersionFromText(const std::string_view ver_text) noexcept -> std::optional<Version> {
-    auto parts = ver_text | std::views::split('.') | std::views::transform([](auto&& sub_range) {
-                     return std::string_view{sub_range};
-                 }) |
-        std::ranges::to<std::vector<std::string_view>>();
+auto ExtractVersionFromText(const std::string_view ver_text) noexcept -> std::optional<VersionAsNumbers> {
+    // clang-format off
+    auto parts = ver_text | std::views::split('.')
+                          | std::views::transform([](auto&& sub_range) { return std::string_view{sub_range}; })
+                          | std::ranges::to<std::vector<std::string_view>>();
+    // clang-format on
 
     if (parts.size() != 3)
         return std::nullopt;
 
     try {
-        Version v{};
+        VersionAsNumbers v{};
 
         // clang-format off
         // helper - convert string_view to int
@@ -117,7 +119,7 @@ auto ExtractVersionFromText(const std::string_view ver_text) noexcept -> std::op
     }
 }
 
-auto IsThereAnUpdateAvailable(const Version& current_ver, const Version& online_ver) noexcept -> bool {
+auto IsThereAnUpdateAvailable(const VersionAsNumbers& current_ver, const VersionAsNumbers& online_ver) noexcept -> bool {
     bool available_update_status{false};
 
     if (current_ver < online_ver)
