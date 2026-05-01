@@ -5,6 +5,10 @@
 * Linux (not tested)
 * MacOS (not tested)
 
+**NOTE**: Linux & MacOS platforms aren't available as prebuilt binaries in the Releases page of the repository for now. You will need to build the app yourself.
+
+**NOTE 2**: To build the app yourself go to the building section: [BUILDING section](#building-from-source)
+
 # How to install
 * Go to Link -> [Releases page](https://github.com/AlexDeFoc/GameWatchCon/releases)
 * Choose the version you want - *(The latest version is recommended)*
