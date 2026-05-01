@@ -16,7 +16,7 @@ namespace gw {
 class GameLibrary {
 public:
     // TODO: Add doxygen comments for all methods in the app
-    GameLibrary(DiskManager&, AppSettings&);
+    GameLibrary(Console&, DiskManager&, AppSettings&);
     GameLibrary(const GameLibrary&) noexcept = delete;
     GameLibrary(GameLibrary&&) noexcept = delete;
     auto operator=(const GameLibrary&) noexcept -> GameLibrary& = delete;
@@ -41,10 +41,11 @@ private:
     auto AddGameTime(std::chrono::steady_clock::duration) noexcept -> void;
     auto SaveJob(const std::stop_token&) noexcept -> void;
 
+    Console& console_;
     AppSettings& app_settings_;
     DiskManager& disk_manager_;
 
-    std::atomic<std::int64_t> should_save_game_{0};
+    std::atomic<std::int8_t> should_save_game_{0};
     std::atomic<bool> took_snapshot_already_{false};
     std::atomic<std::int64_t> active_game_id_{0};
     std::chrono::steady_clock::time_point last_snaphot{};

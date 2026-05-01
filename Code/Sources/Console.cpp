@@ -72,7 +72,7 @@ auto gw::Console::RequestUserGameIDChoice(std::string printable_games, std::int6
 
         if (std::string input{}; std::getline(std::cin, input)) {
             try {
-                auto selected_game_id = std::stoi(input);
+                std::int64_t selected_game_id = std::stoll(input);
 
                 if (selected_game_id < 1 || selected_game_id > games_count) {
                     WriteLineToCache(Tag::Error, "Input out of range!");
@@ -111,14 +111,14 @@ auto gw::Console::RequestUserConfirmation() -> std::pair<bool, InputStatus> {
 
         std::puts("Are you sure");
         std::puts("1. Yes");
-        std::puts("2. No");
+        std::puts("0. No");
         Write(Tag::Request, "Enter option index: ");
 
         if (std::string input{}; std::getline(std::cin, input)) {
             try {
-                std::size_t selected_opt_index = std::stoull(input);
+                const std::int64_t selected_opt_index = std::stoll(input);
 
-                if (selected_opt_index != 1 && selected_opt_index != 2) {
+                if (selected_opt_index != 1 && selected_opt_index != 0) {
                     WriteLineToCache(Tag::Error, "Input out of range!");
                     continue;
                 } else
@@ -154,13 +154,10 @@ auto gw::Console::RequestNewAutoSaveInterval(std::string formatted_current_inter
 
         if (std::string input{}; std::getline(std::cin, input)) {
             try {
-                const auto new_interval = std::stoll(input);
+                std::int64_t new_interval = std::stoll(input);
 
                 if (new_interval < 1) {
                     WriteLineToCache(Tag::Error, "Interval needs to be at least 1 minute!");
-                    continue;
-                } else if (new_interval > std::numeric_limits<std::chrono::minutes::rep>::max()) {
-                    WriteLineToCache(Tag::Error, "Please enter an interval less then 4083 years!"); // TODO: Fix this value! it has changed... i think
                     continue;
                 } else
                     return {std::chrono::minutes(new_interval), InputStatus::Success};
@@ -270,9 +267,42 @@ auto gw::Console::RequestKeyPress() noexcept -> void {
         std::string dummy_input;
         std::getline(std::cin, dummy_input);
     }
-#else // TODO: add proper linux & mac support
-    std::string dummy_input;
-    std::getline(std::cin, dummy_input);
+
+#else
+    // RAII guard for terminal settings
+    struct termios_guard {
+        int fd;
+        termios original;
+        bool valid;
+
+        termios_guard() noexcept : fd{STDIN_FILENO}, valid{false} {
+            if (::tcgetattr(fd, &original) == 0) {
+                termios raw = original;
+                raw.c_lflag &= ~static_cast<tcflag_t>(ECHO | ICANON);
+                raw.c_cc[VMIN] = 1;
+                raw.c_cc[VTIME] = 0;
+                if (::tcsetattr(fd, TCSAFLUSH, &raw) == 0) {
+                    valid = true;
+                    return;
+                }
+            }
+        }
+        ~termios_guard() noexcept {
+            if (valid) {
+                ::tcsetattr(fd, TCSAFLUSH, &original);
+            }
+        }
+    } guard;
+
+    if (!guard.valid) {
+        std::string dummy;
+        std::getline(std::cin, dummy);
+        return;
+    }
+
+    char ch;
+    while (::read(STDIN_FILENO, &ch, 1) == -1 && errno == EINTR)
+        ;
 #endif
 }
 

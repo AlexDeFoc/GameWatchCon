@@ -118,6 +118,29 @@ auto gw::DiskManager::SetAutoSaveInterval(const gw::minutes new_interval) const 
     [[maybe_unused]] auto _ = glz::write_file_json<pretty_opts>(file, settings_file_path_, std::string{});
 }
 
+auto gw::DiskManager::CreateGamesLibraryFileBackup() const noexcept -> std::optional<CreateGamesLibraryFileBackupResult> {
+    using ResType = CreateGamesLibraryFileBackupResult;
+
+    try {
+        std::error_code err;
+
+        if (!std::filesystem::exists(games_library_file_path_, err))
+            return ResType::GamesLibraryFileNotFound;
+
+        if (err)
+            return ResType::UnknownError;
+
+        std::filesystem::copy_file(games_library_file_path_, games_library_backup_file_path_, std::filesystem::copy_options::overwrite_existing, err);
+
+        if (err)
+            return ResType::UnknownError;
+    } catch (...) {
+        return ResType::UnknownError;
+    }
+
+    return std::nullopt;
+}
+
 // TODO: Replace all #ifdef with #if defined() in the codebase
 // Private
 auto gw::DiskManager::GetExeDirPath() noexcept -> std::string {

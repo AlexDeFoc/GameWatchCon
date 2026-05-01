@@ -187,7 +187,7 @@ public:
      * @param is_request_cancellable Statement whether the request is cancellable
      */
     template <typename ListingFunc>
-    [[nodiscard]] auto RequestUserGameIDChoice(ListingFunc, int, bool = true, int = 0, bool = true) -> std::pair<int, InputStatus>;
+    [[nodiscard]] auto RequestUserGameIDChoice(ListingFunc, std::int64_t, bool = true, std::int64_t = 0, bool = true) -> std::pair<std::int64_t, InputStatus>;
 
     /*!
      * @brief Lists menu options then requests user input
@@ -198,7 +198,7 @@ public:
      * @return Index selected and InputStatus pair
      */
     template <std::size_t ArrSize>
-    [[nodiscard]] auto RequestUserMenuChoice(std::array<std::string, ArrSize>, bool = true, bool = true, std::size_t = 0) -> std::pair<std::size_t, InputStatus>;
+    [[nodiscard]] auto RequestUserMenuChoice(std::array<std::string, ArrSize>, bool = true, bool = true, std::int64_t = 0) -> std::pair<std::int64_t, InputStatus>;
 
     /*!
      * @brief Logs bug location and requests user to press any key, after which exit app
@@ -353,7 +353,7 @@ private:
 
 // TODO: Check if it even has anymore usage!
 template <typename ListingFunc>
-auto gw::Console::RequestUserGameIDChoice(ListingFunc list_games_func, int games_count, bool is_active_game_id_valid_choice, int active_game_id, bool is_request_cancellable) -> std::pair<int, InputStatus> {
+auto gw::Console::RequestUserGameIDChoice(ListingFunc list_games_func, std::int64_t games_count, bool is_active_game_id_valid_choice, std::int64_t active_game_id, bool is_request_cancellable) -> std::pair<std::int64_t, InputStatus> {
     while (true) {
         ClearCout();
         list_games_func();
@@ -366,7 +366,7 @@ auto gw::Console::RequestUserGameIDChoice(ListingFunc list_games_func, int games
 
         if (std::string input{}; std::getline(std::cin, input)) {
             try {
-                auto selected_game_id = std::stoi(input);
+                std::int64_t selected_game_id = std::stoll(input);
 
                 if (selected_game_id < 1 || selected_game_id > games_count) {
                     WriteLineToCache(Tag::Error, "Input out of range!");
@@ -399,7 +399,7 @@ auto gw::Console::RequestUserGameIDChoice(ListingFunc list_games_func, int games
 }
 
 template <std::size_t ArrSize>
-[[nodiscard]] auto gw::Console::RequestUserMenuChoice(std::array<std::string, ArrSize> menu_opts, bool is_request_cancellable, bool menu_opts_contain_special_index, std::size_t special_index_val) -> std::pair<std::size_t, InputStatus> {
+[[nodiscard]] auto gw::Console::RequestUserMenuChoice(std::array<std::string, ArrSize> menu_opts, bool is_request_cancellable, bool menu_opts_contain_special_index, std::int64_t special_index_val) -> std::pair<std::int64_t, InputStatus> {
     while (true) {
         ClearCout();
         WriteCachedMsgs();
@@ -418,9 +418,9 @@ template <std::size_t ArrSize>
 
         if (std::string input{}; std::getline(std::cin, input)) {
             try {
-                std::size_t selected_opt_index = std::stoull(input);
+                std::int64_t selected_opt_index = std::stoll(input);
 
-                if ((selected_opt_index < 1 || selected_opt_index > ArrSize - 1) && (menu_opts_contain_special_index && special_index_val != selected_opt_index)) {
+                if ((selected_opt_index < 1 || selected_opt_index > static_cast<std::int64_t>(ArrSize) - 1) && (menu_opts_contain_special_index && special_index_val != selected_opt_index)) {
                     WriteLineToCache(Tag::Error, "Input out of range!");
                     continue;
                 } else

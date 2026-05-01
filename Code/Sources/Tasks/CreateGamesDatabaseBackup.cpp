@@ -15,6 +15,5 @@ auto gw::tasks::CreateGamesDatabaseBackup(gw::Console& console, gw::AppState&, g
     }
 
     game_library.CreateGamesDatabaseBackup();
-    console.WriteLineToCache(Console::Tag::Success, "Created games database backup");
     return Task{gw::tasks::SettingsMenu};
 }

@@ -12,9 +12,9 @@
 
 namespace {
 struct Version {
-    int Major;
-    int Minor;
-    int Patch;
+    std::int64_t Major;
+    std::int64_t Minor;
+    std::int64_t Patch;
 
     auto operator<=>(const Version&) const noexcept = default;
 };
