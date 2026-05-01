@@ -55,6 +55,8 @@
 
 * Made efficiently, nicely in Modern C++23 
 
+**NOTE:** Game library file stores playtime in seconds!
+
 # Screenshots
 Go to the 'RepoMedia' to see the screenshots or go to this link -> [RepoMedia](https://github.com/AlexDeFoc/GameWatchCon/tree/main/RepoMedia)
 
