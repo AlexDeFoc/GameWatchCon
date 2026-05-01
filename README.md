@@ -19,9 +19,9 @@
 
 *TIP: Screenshot how the app folder looks after use -> [Link](https://github.com/AlexDeFoc/GameWatchCon/blob/main/RepoMedia/App%20folder%20overview.png)*
 
-*TIP: Screenshot how the `games_library.json` file looks: [Link](#)
+*TIP: Screenshot how the `games_library.json` file looks: [Link](https://github.com/AlexDeFoc/GameWatchCon/blob/main/RepoMedia/Games%20Library%20File%20Overview.png)
 
-*TIP: Screenshot how the `settings.json` file looks: [Link](#)
+*TIP: Screenshot how the `settings.json` file looks: [Link](https://github.com/AlexDeFoc/GameWatchCon/blob/main/RepoMedia/Settings%20File%20Overview.png)
 
 *NOTE: Check the screenshots folder for more stuff!* [Screenshots Section](#screenshots)
 
