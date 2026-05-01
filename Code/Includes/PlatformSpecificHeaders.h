@@ -27,10 +27,9 @@
         #define INCLUDED_WINDOWS_HEADER
         #include <Windows.h>
     #endif
+#elif defined(__linux__)
+    #include <unistd.h> // readlink
 #elif defined(__APPLE__)
     #include <unistd.h> // getpid (readlink not needed here)
     #include <libproc.h> // proc_pidpath, PROC_PIDPATHINFO_MAXSIZE
-#elif defined(__linux__)
-    #include <unistd.h> // readlink
-    #include <climits> // PATH_MAX
 #endif

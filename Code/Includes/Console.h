@@ -315,6 +315,8 @@ public:
 
 
 private:
+    [[nodiscard]] auto CheckSupportForANSIEscapes() const noexcept -> bool;
+
     /*!
      * @brief Gets message color from a message tag
      * @param tag Message tag
@@ -342,9 +344,9 @@ private:
     UINT cin_codepage_original{};
     UINT cout_codepage_original{};
     DWORD cout_mode_original{};
-    bool cout_supports_colored_text_{false};
 #endif
 
+    bool cout_supports_colored_text_{false};
     std::string cached_msgs_{};
 };
 } // namespace gw

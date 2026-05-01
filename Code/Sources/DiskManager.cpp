@@ -96,7 +96,7 @@ auto gw::DiskManager::ToggleAutoSaveStatus(const bool new_value) const noexcept 
     SettingsFile file{};
     auto err = glz::read_file_json<glz::opts{.error_on_unknown_keys = false, .error_on_missing_keys = false}>(file, settings_file_path_, std::string{});
 
-    if (err)
+    if (err && err != glz::error_code::file_open_failure)
         return;
 
     file.auto_save_enabled_status = new_value;
@@ -109,7 +109,7 @@ auto gw::DiskManager::SetAutoSaveInterval(const gw::minutes new_interval) const 
     SettingsFile file{};
     auto err = glz::read_file_json<glz::opts{.error_on_unknown_keys = false, .error_on_missing_keys = false}>(file, settings_file_path_, std::string{});
 
-    if (err)
+    if (err && err != glz::error_code::file_open_failure)
         return;
 
     file.auto_save_interval_in_minutes = new_interval.count();

@@ -37,7 +37,7 @@ gw::Console::Console() noexcept {
             cout_supports_colored_text_ = true;
     }();
 #else
-    cout_supports_colored_text_ = ConColorSupport::Status::Supported; // TODO: Fix for linux
+    cout_supports_colored_text_ = CheckSupportForANSIEscapes();
 #endif
 }
 
@@ -370,6 +370,31 @@ auto gw::Console::WriteLineToCache(const Color msg_color, const std::string_view
 }
 
 // Private
+auto gw::Console::CheckSupportForANSIEscapes() const noexcept -> bool {
+#ifdef _WIN32
+    return cout_supports_colored_text_;
+#else
+    // 1. Must be a real terminal
+    if (!isatty(STDOUT_FILENO))
+        return false;
+
+    // 2. Respect NO_COLOR convention (https://no-color.org/)
+    if (const char* no_color = std::getenv("NO_COLOR"))
+        if (no_color[0] != '\0') // variable exists and is non-empty
+            return false;
+
+    // 3. Check TERM (ignore case for safety)
+    const char* term = std::getenv("TERM");
+    if (term == nullptr || term[0] == '\0')
+        return false;
+    if (std::strcmp(term, "dumb") == 0)
+        return false;
+
+    // All checks passed – assume 16‑colour ANSI support.
+    return true;
+#endif
+}
+
 auto gw::Console::GetTagAsColor(const Tag tag_type) const -> gw::Console::Color {
     switch (tag_type) {
         case Tag::Tip:
