@@ -60,7 +60,7 @@ auto gw::tasks::CheckForUpdates(gw::Console& console, gw::AppState&, gw::AppSett
     } else {
         const auto& latest_changes_in_log = *result;
         const auto changes_version = latest_changes_in_log[0].version;
-        Console::WriteLine(console.ColorText(Console::Color::Red, "Changes in version {}:", changes_version));
+        Console::WriteLine(console.ColorText(Console::Color::Green, "Changes in version {}:", changes_version));
         for (const auto& change : latest_changes_in_log) {
             Console::WriteLine("Change type: {}", change.type);
             Console::WriteLine("Change description: {}", change.description);

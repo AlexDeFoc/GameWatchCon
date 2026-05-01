@@ -19,8 +19,7 @@ auto gw::tasks::ListGames(gw::Console& console, gw::AppState&, gw::AppSettings&,
     std::println("{}", game_library.GetPrintableGames(console));
 
     console.WriteLine(Console::Tag::Tip, "Press any key to go back");
-    console.RequestKeyPress();
+    Console::RequestKeyPress();
 
     return Task{gw::tasks::MainMenu};
 }
-
