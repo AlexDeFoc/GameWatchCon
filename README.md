@@ -18,7 +18,8 @@
 * You just have to follow the steps the requests have (for example: provide the listed menu option id)
 
 *NOTE: If you want to see how the folder of the app looks when you use it go to this screenshot link -> [Link](https://github.com/AlexDeFoc/GameWatchCon/blob/main/RepoMedia/App%20folder%20overview.png)*
-*NOTE: Check the screenshots for more stuff!* [Screenshots Section](#screenshots)
+
+*NOTE 2: Check the screenshots for more stuff!* [Screenshots Section](#screenshots)
 
 # Features
 * Extremely low resource usage:
