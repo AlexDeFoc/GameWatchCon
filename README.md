@@ -10,6 +10,9 @@
 **NOTE 2**: To build the app yourself go to the building section: [BUILDING section](#building-from-source)
 
 # How to install
+## Note: The text after the platform name doesn't matter that much so ignore it
+### Example: `x64_windows-MSVC_VS2026`, in this case `MSVC_VS2026` doesn't matter
+
 * Go to Link -> [Releases page](https://github.com/AlexDeFoc/GameWatchCon/releases)
 * Choose the version you want - *(The latest version is recommended)*
 * Download the archive file coresponding to your platform
