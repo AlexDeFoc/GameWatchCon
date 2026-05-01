@@ -31,7 +31,7 @@ auto gw::AppSettings::GetAutoSaveInterval() const noexcept -> gw::minutes {
 auto gw::AppSettings::ToggleAutoSaveStatus() noexcept -> void {
     assert((auto_save_enabled_status_.load(std::memory_order_acquire) == 1 || auto_save_enabled_status_.load(std::memory_order_acquire) == 0) && "Auto save enabled status different then a 1 or 0");
     auto_save_enabled_status_.fetch_xor(1, std::memory_order_release);
-    disk_manager_.ToggleAutoSaveStatus(auto_save_enabled_status_.load(std::memory_order_acquire));
+    disk_manager_.ToggleAutoSaveStatus(static_cast<bool>(auto_save_enabled_status_.load(std::memory_order_acquire)));
 }
 
 auto gw::AppSettings::SetAutoSaveInterval(gw::minutes new_interval) noexcept -> void {

@@ -48,6 +48,9 @@ if (MSVC AND NOT CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
     target_compile_options(GameWatchCon PRIVATE
         /wd4820 # -Wno-padded
         /wd4061 # -Wno-covered-switch-default
+        /wd4710 # - Compiler wanted to inline but the functio was too complex and abandoned the idea
+        /wd4711 # - Compiler is bragging about the it inlined a function while i the dev didnt inline the function
+        /wd5045 # - Compiler is saying: it would insert mitigations for a specific memory load if i the dev would have enabled /Qspectre
     )
 elseif (CMAKE_CXX_COMPILER_ID STREQUAL "Clang" AND MSVC)
     target_compile_options(GameWatchCon PRIVATE -Wall -Wextra -Wpedantic -Werror -Wdeprecated -Wunsafe-buffer-usage)

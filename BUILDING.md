@@ -7,10 +7,13 @@
 ## Windows
 * MSVC - Visual Studio 2026 (may work with older version, but you must add the cmake presets yourself, and i haven't tried with older versions)
 * ClangCL - at least `Version 22.1.4` (may work with older versions, but i haven't tried)
+    * Ninja - With clang cl you wil need ninja - at least `Version 1.13.2` (may work with older versions, but i haven't tried)
 ## Linux
 * Clang - `(unknown version)` (because i haven't tested on the platform)
+    * Ninja - With clang you wil need ninja - at least `Version 1.13.2` (may work with older versions, but i haven't tried)
 ## MacOS
 * Clang - `(unknown version)` (because i haven't tested on the platform)
+    * Ninja - With clang you wil need ninja - at least `Version 1.13.2` (may work with older versions, but i haven't tried)
 
 *NOTE: If you want more toolchains you will need to add them to the 'CMakePresets.json' file!*
 

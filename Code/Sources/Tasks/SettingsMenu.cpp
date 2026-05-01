@@ -76,8 +76,8 @@ namespace {
     const auto h = duration_cast<hours>(time_in_sec); time_in_sec -= h;
     const auto m = duration_cast<minutes>(time_in_sec); time_in_sec -= m;
 
-    auto values = std::array<long long, 4>{d.count(), h.count(), m.count(), time_in_sec.count()};
-    auto labels = std::array<std::string_view, 4>{"day"sv, "h"sv, "min"sv, "s"sv};
+    auto values = std::array<long long, 4>{{d.count(), h.count(), m.count(), time_in_sec.count()}};
+    auto labels = std::array<std::string_view, 4>{{"day"sv, "h"sv, "min"sv, "s"sv}};
 
     auto duration_str = std::views::zip(values, labels)
                       | std::views::filter([](auto&& tuple){ return std::get<0>(tuple) > 0; })
@@ -92,4 +92,3 @@ namespace {
     return duration_str.empty() ? "0 s" : duration_str;
 }
 } // namespace
-

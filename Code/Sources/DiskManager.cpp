@@ -235,4 +235,3 @@ auto gw::DiskManager::GetSettingsBackupFilepath() noexcept -> std::string {
 auto gw::DiskManager::GetGamesLibraryBackupFilepath() noexcept -> std::string {
     return (std::filesystem::path(GetExeDirPath()) / games_library_backup_file_name_).string();
 }
-
