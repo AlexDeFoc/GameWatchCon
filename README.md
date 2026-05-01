@@ -17,9 +17,13 @@
 * Options or requests will be listed
 * You just have to follow the steps the requests have (for example: provide the listed menu option id)
 
-*NOTE: If you want to see how the folder of the app looks when you use it go to this screenshot link -> [Link](https://github.com/AlexDeFoc/GameWatchCon/blob/main/RepoMedia/App%20folder%20overview.png)*
+*TIP: Screenshot how the app folder looks after use -> [Link](https://github.com/AlexDeFoc/GameWatchCon/blob/main/RepoMedia/App%20folder%20overview.png)*
 
-*NOTE 2: Check the screenshots for more stuff!* [Screenshots Section](#screenshots)
+*TIP: Screenshot how the `games_library.json` file looks: [Link](#)
+
+*TIP: Screenshot how the `settings.json` file looks: [Link](#)
+
+*NOTE: Check the screenshots folder for more stuff!* [Screenshots Section](#screenshots)
 
 # Features
 * Extremely low resource usage:
