@@ -1,18 +1,15 @@
 # GameWatchCon - Keep track of your in-game time
 
 # Platforms supported
-* Windows 11 (not tested on 10)
-* Linux (not tested)
-* MacOS (not tested)
+* Windows 11 64-bit (not tested on 10)
+* Linux 64-bit (not tested)
+* MacOS 64-bit (not tested)
 
 **NOTE**: Linux & MacOS platforms aren't available as prebuilt binaries in the Releases page of the repository for now. You will need to build the app yourself.
 
 **NOTE 2**: To build the app yourself go to the building section: [BUILDING section](#building-from-source)
 
 # How to install
-## Note: The text after the platform name doesn't matter that much so ignore it
-### Example: `x64_windows-MSVC_VS2026`, in this case `MSVC_VS2026` doesn't matter
-
 * Go to Link -> [Releases page](https://github.com/AlexDeFoc/GameWatchCon/releases)
 * Choose the version you want - *(The latest version is recommended)*
 * Download the archive file coresponding to your platform
