@@ -1,11 +1,11 @@
 # GameWatchCon - Keep track of your in-game time
 
 # Platforms supported
-* Windows 11 64-bit (not tested on 10)
-* Linux 64-bit (not tested)
+* Windows 11 64-bit
+* Linux 64-bit
 * MacOS 64-bit (not tested)
 
-**NOTE**: Linux & MacOS platforms aren't available as prebuilt binaries in the Releases page of the repository for now. You will need to build the app yourself.
+**NOTE**: MacOS doesn't have any available prebuilt binaries in the Releases page of the repository for now. You will need to build the app yourself.
 
 **NOTE 2**: To build the app yourself go to the building section: [BUILDING section](#building-from-source)
 
@@ -14,7 +14,6 @@
 * Choose the version you want - *(The latest version is recommended)*
 * Download the archive file coresponding to your platform
 * Decompress the archive and done!
-* If you have *missing dll issues on Windows*, go to this link, to download the latest redistributables -> [Microsoft Page Link](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170#latest-supported-redistributable-version)
 * Extra: you can create a shortcut to the 'GameWatchCon.exe' file then put it wherever you want.
 
 # How to use

@@ -8,6 +8,11 @@
         },
         {
             "version": "1.1.0",
+            "type": "User install support - Linux",
+            "description": "Fixed issue compiling on linux, termios.h was missing; also tested on Fedora 43 and it works"
+        },
+        {
+            "version": "1.1.0",
             "type": "Internal change - Development experience",
             "description": "Moved away completely from vcpkg. Now fetching using cmake from github directly"
         },
