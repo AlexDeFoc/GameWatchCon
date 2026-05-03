@@ -3,6 +3,9 @@
 * Compatible toolchains/compilers that can compiler c++23 code -> [Toolchains section](#supported-toolchains)
 * Vcpkg - at least `2026-04-08-e0612b42ce44e55a0e630f2ee9d3c533a63d8bc1`
 
+## For linux users
+* You gotta install an ssl-devel package if u don't have it already. Ussualy i choose openssl-devel
+
 # Supported toolchains
 ## Windows
 * MSVC - Visual Studio 2026 (may work with older version, but you must add the cmake presets yourself, and i haven't tried with older versions)
