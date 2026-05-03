@@ -12,7 +12,7 @@
 namespace {
 struct VersionAsNumbers {
     std::int64_t Major{1};
-    std::int64_t Minor{0};
+    std::int64_t Minor{1};
     std::int64_t Patch{0};
 
     auto operator<=>(const VersionAsNumbers&) const noexcept = default;

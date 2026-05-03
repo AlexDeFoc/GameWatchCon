@@ -10,11 +10,11 @@
 
 namespace gw {
 struct AppVersionFile {
-    std::string version{"1.0.0"};
+    std::string version{"1.1.0"};
 };
 
 struct AppUpdateChangeInFile {
-    std::string version{"1.0.0"};
+    std::string version{"1.1.0"};
     std::string type{"General"};
     std::string description{"Made the app a bit better"};
 };
