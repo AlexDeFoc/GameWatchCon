@@ -6,34 +6,9 @@ add_executable(GameWatchCon)
 
 target_precompile_headers(GameWatchCon PRIVATE "Code/Includes/Pch.hpp")
 
-target_sources(GameWatchCon PRIVATE
-    "Code/Sources/Main.cpp"
-    "Code/Sources/Console.cpp"
-    "Code/Sources/DiskManager.cpp"
-    "Code/Sources/AppSettings.cpp"
-    "Code/Sources/TaskDispatcher.cpp"
-    "Code/Sources/AppState.cpp"
-    "Code/Sources/GameEntry.cpp"
-    "Code/Sources/GameLibrary.cpp"
-    "Code/Sources/Tasks/StartApp.cpp"
-    "Code/Sources/Tasks/StopApp.cpp"
-    "Code/Sources/Tasks/MainMenu.cpp"
-    "Code/Sources/Tasks/ListGames.cpp"
-    "Code/Sources/Tasks/AddNewGame.cpp"
-    "Code/Sources/Tasks/SettingsMenu.cpp"
-    "Code/Sources/Tasks/ToggleAutoSaveStatus.cpp"
-    "Code/Sources/Tasks/ChangeAutoSaveInterval.cpp"
-    "Code/Sources/Tasks/CheckForUpdates.cpp"
-    "Code/Sources/Tasks/EditGamesMenu.cpp"
-    "Code/Sources/Tasks/ChangeGameTitle.cpp"
-    "Code/Sources/Tasks/ResetGamePlaytime.cpp"
-    "Code/Sources/Tasks/DeleteGame.cpp"
-    "Code/Sources/Tasks/ToggleGameClock.cpp"
-    "Code/Sources/Tasks/RestoreSettingsDefaults.cpp"
-    "Code/Sources/Tasks/CreateGamesDatabaseBackup.cpp"
-    "Code/Sources/Tasks/ResetAllGamesPlaytime.cpp"
-    "Code/Sources/Tasks/DeleteAllGames.cpp"
-)
+file(GLOB_RECURSE GW_CPP_SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/Code/Sources/*.cpp")
+
+target_sources(GameWatchCon PRIVATE "${GW_CPP_SOURCES}")
 
 target_include_directories(GameWatchCon PRIVATE Code/Includes)
 
